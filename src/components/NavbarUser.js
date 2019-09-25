@@ -31,17 +31,14 @@ export default function ButtonAppBar() {
             Coding the Collection
           </Typography>
           {/* <Button color="inherit">Login</Button> */}
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <Button color="inherit">Home</Button>
+          </Link>
           <Link
             to="/signin/"
             style={{ textDecoration: "none", color: "white" }}
           >
-            <Button color="inherit">Sign In</Button>
-          </Link>
-          <Link
-            to="/register/"
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            <Button color="inherit">Register</Button>
+            <Button color="inherit">Logout</Button>
           </Link>
         </Toolbar>
       </AppBar>

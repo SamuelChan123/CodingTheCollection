@@ -1,12 +1,23 @@
-import React from 'react';
+import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import Register from './components/Register';
-import Signin from './components/Signin';
-import Navbar from './components/Navbar';
-import './App.css';
+import Register from "./components/Register";
+import { Link } from "react-router-dom";
+import Signin from "./components/Signin";
+import Button from "@material-ui/core/Button";
+import Navbar from "./components/Navbar";
+import "./App.css";
 
 function Index() {
-  return <h2>Home</h2>;
+  return (
+    <div>
+      <br />
+      <Button type="submit" variant="contained" color="primary">
+        <Link to="/signin" style={{ textDecoration: "none", color: "white" }}>
+          Sign In
+        </Link>
+      </Button>
+    </div>
+  );
 }
 
 function AppRouter() {
