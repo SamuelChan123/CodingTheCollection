@@ -9,14 +9,14 @@ import "./App.css";
 
 function Index() {
   return (
-    <div>
+    <App-header>
       <br />
       <Button type="submit" variant="contained" color="primary">
         <Link to="/signin" style={{ textDecoration: "none", color: "white" }}>
           Sign In
         </Link>
       </Button>
-    </div>
+    </App-header>
   );
 }
 
