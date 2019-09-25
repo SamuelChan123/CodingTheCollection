@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Signin from "./components/Signin";
 import Button from "@material-ui/core/Button";
 import Navbar from "./components/Navbar";
+import AllProjects from "./components/AllProjects.js";
 import "./App.css";
 
 function Index() {
@@ -12,7 +13,10 @@ function Index() {
     <App-header>
       <br />
       <Button type="submit" variant="contained" color="primary">
-        <Link to="/signin" style={{ textDecoration: "none", color: "white" }}>
+        <Link
+          to="/allprojects"
+          style={{ textDecoration: "none", color: "white" }}
+        >
           Sign In
         </Link>
       </Button>
@@ -26,8 +30,9 @@ function AppRouter() {
       <div>
         <Navbar />
         <Route path="/" exact component={Index} />
-        <Route path="/signin/" component={Signin} />
-        <Route path="/register/" component={Register} />
+        <Route path="/signin" component={Signin} />
+        <Route path="/register" component={Register} />
+        <Route path="/allprojects" component={AllProjects} />
       </div>
     </Router>
   );

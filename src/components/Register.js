@@ -94,6 +94,7 @@ export default function Register() {
             id="confirmpassword"
             autoComplete="current-password"
           />
+
           <Button
             type="submit"
             fullWidth
