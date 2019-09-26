@@ -53,46 +53,46 @@ export default function AllProjects() {
           {tileData.map(tile => (
             <GridListTile key={tile.img}>
               <img src={tile.img} alt={tile.title} />
-              <GridListTileBar
-                title={tile.title}
-                actionIcon={
-                  <IconButton
-                    aria-label={`info about ${tile.title}`}
-                    className={classes.icon}
-                  >
-                    <Link
-                      to="/project"
-                      style={{
-                        textDecoration: "none",
-                        color: "rgba(255, 255, 255, 0.54)"
-                      }}
+              <Link
+                to="/project"
+                style={{
+                  textDecoration: "none",
+                  color: "rgba(255, 255, 255, 0.54)"
+                }}
+              >
+                <GridListTileBar
+                  title={tile.title}
+                  actionIcon={
+                    <IconButton
+                      aria-label={`info about ${tile.title}`}
+                      className={classes.icon}
                     >
                       <InfoIcon />
-                    </Link>
-                  </IconButton>
-                }
-              />
+                    </IconButton>
+                  }
+                />
+              </Link>
             </GridListTile>
           ))}
           {
             <GridListTile>
               {/*<img src={add} />*/}
-              <GridListTileBar
-                title="Add New Project"
-                actionIcon={
-                  <IconButton className={classes.icon}>
-                    <Link
-                      to="/project/new"
-                      style={{
-                        textDecoration: "none",
-                        color: "rgba(255, 255, 255, 0.54)"
-                      }}
-                    >
+              <Link
+                to="/project/new"
+                style={{
+                  textDecoration: "none",
+                  color: "rgba(255, 255, 255, 0.54)"
+                }}
+              >
+                <GridListTileBar
+                  title="Add New Project"
+                  actionIcon={
+                    <IconButton className={classes.icon}>
                       <AddCircle />
-                    </Link>
-                  </IconButton>
-                }
-              />
+                    </IconButton>
+                  }
+                />
+              </Link>
             </GridListTile>
           }
         </GridList>

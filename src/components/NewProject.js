@@ -50,7 +50,7 @@ class NewProject extends React.Component {
 
   onDrop(pictureFiles, pictureDataURLs) {
     this.setState({
-      pictures: this.state.pictures.concat(pictureFiles),
+      pictures: pictureFiles,
       pictureURLs: pictureDataURLs
     });
   }
@@ -58,8 +58,6 @@ class NewProject extends React.Component {
   render() {
     console.log(this.state);
     const classes = this.useStyles();
-
-    console.log(this.state);
 
     return (
       <React.Fragment>
@@ -102,14 +100,17 @@ class NewProject extends React.Component {
                 {this.state.pictures.length === 0 ? (
                   <p></p>
                 ) : (
-                  <img
-                    src={this.state.pictureURLs[0]}
-                    alt="Cannot be displayed"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%"
-                    }}
-                  />
+                  this.state.pictureURLs.map(picture => (
+                    <img
+                      src={picture}
+                      alt="Cannot be displayed"
+                      key={picture}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%"
+                      }}
+                    />
+                  ))
                 )}
               </div>
               <br />
