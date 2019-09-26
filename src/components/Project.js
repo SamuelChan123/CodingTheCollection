@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Link } from "react-router-dom";
 
 import {
@@ -6,11 +7,12 @@ import {
   GridListTileBar,
   GridListTile,
   GridList,
+  Button,
   makeStyles
 } from "@material-ui/core";
-import { Info as InfoIcon, AddCircle } from "@material-ui/icons/";
+import { Edit as EditIcon, AddCircle } from "@material-ui/icons/";
 
-import tileData from "../sample/AllProjectsSample";
+import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
 
 const useStyles = makeStyles(theme => ({
@@ -23,15 +25,16 @@ const useStyles = makeStyles(theme => ({
   },
   gridList: {
     width: 1000,
-    height: 450
+    height: 500
   },
   icon: {
     color: "rgba(255, 255, 255, 0.54)"
   }
 }));
 
-export default function AllProjects() {
+export default function Project() {
   const classes = useStyles();
+  const exhibit = "Art of the Americas";
 
   return (
     <React.Fragment>
@@ -40,15 +43,35 @@ export default function AllProjects() {
       <div className={classes.root}>
         <GridList cellHeight={180} cols={4} className={classes.gridList}>
           <GridListTile key="Subheader" cols={4} style={{ height: "auto" }}>
-            <h1
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingBottom: 10
+              }}
+            >
+              <h1
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                {exhibit}
+              </h1>
+            </div>
+            <div
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center"
               }}
             >
-              All Projects
-            </h1>
+              <Button variant="contained" color="primary">
+                Present Project
+              </Button>
+            </div>
           </GridListTile>
           {tileData.map(tile => (
             <GridListTile key={tile.img}>
@@ -60,15 +83,7 @@ export default function AllProjects() {
                     aria-label={`info about ${tile.title}`}
                     className={classes.icon}
                   >
-                    <Link
-                      to="/project"
-                      style={{
-                        textDecoration: "none",
-                        color: "rgba(255, 255, 255, 0.54)"
-                      }}
-                    >
-                      <InfoIcon />
-                    </Link>
+                    <EditIcon />
                   </IconButton>
                 }
               />
@@ -78,11 +93,11 @@ export default function AllProjects() {
             <GridListTile>
               {/*<img src={add} />*/}
               <GridListTileBar
-                title="Add New Project"
+                title="Add New Artwork"
                 actionIcon={
                   <IconButton className={classes.icon}>
                     <Link
-                      to="/project/new"
+                      to="/artwork"
                       style={{
                         textDecoration: "none",
                         color: "rgba(255, 255, 255, 0.54)"
