@@ -1,10 +1,9 @@
-# CS 408
 # Coding the Collection: Central American Art
 
-Coding the Collection is a project that our team is partnering with the Nasher Museum of Art to streamline, contexualize, and 
+Coding the Collection is a CS 408 (Delivering Software to Clients) project that our team is partnering with the Nasher Museum of Art to streamline, contexualize, and 
 create a better interactive experience for both visitors and curators.
 
-## Running the Application
+## Usage/Running the App
 
 Either npm or yarn is needed for this project. 
 
@@ -31,19 +30,17 @@ yarn start
 - Javascript
 - Node.js/NPM
 
-## Usage
+## Roadmap
 
-```python
-import foobar
+## Team Members
+- Samuel (Sam) Chan
+- Edward Zhuang
+- Santo Grillo
+- William Ye
 
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 
 ## License
 [MIT](LICENSE)
