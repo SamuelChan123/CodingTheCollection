@@ -97,7 +97,7 @@ export default function Project() {
                 actionIcon={
                   <IconButton className={classes.icon}>
                     <Link
-                      to="/artwork"
+                      to="/artwork/new"
                       style={{
                         textDecoration: "none",
                         color: "rgba(255, 255, 255, 0.54)"
