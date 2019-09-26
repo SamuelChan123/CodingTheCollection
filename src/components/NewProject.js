@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
@@ -10,7 +9,6 @@ import {
   makeStyles,
   Container
 } from "@material-ui/core";
-import { Add as AddIcon } from "@material-ui/icons";
 import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
@@ -19,7 +17,7 @@ import Navbar from "./Navbar";
 class NewProject extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { pictures: {} };
+    this.state = { pictures: [], pictureURLs: [] };
     this.onDrop = this.onDrop.bind(this);
   }
 
@@ -50,15 +48,18 @@ class NewProject extends React.Component {
     }));
   }
 
-  onDrop(picture) {
+  onDrop(pictureFiles, pictureDataURLs) {
     this.setState({
-      pictures: this.state.pictures[0]
+      pictures: this.state.pictures.concat(pictureFiles),
+      pictureURLs: pictureDataURLs
     });
   }
 
   render() {
     console.log(this.state);
     const classes = this.useStyles();
+
+    console.log(this.state);
 
     return (
       <React.Fragment>
@@ -92,11 +93,26 @@ class NewProject extends React.Component {
               />
               <ImageUploader
                 withIcon={true}
-                buttonText="Choose images"
+                buttonText="Choose Images"
                 onChange={this.onDrop}
                 imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                 maxFileSize={5242880}
               />
+              <div>
+                {this.state.pictures.length === 0 ? (
+                  <p></p>
+                ) : (
+                  <img
+                    src={this.state.pictureURLs[0]}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
+                )}
+              </div>
+              <br />
               <Link
                 to="/allprojects"
                 style={{ textDecoration: "none", color: "white" }}
