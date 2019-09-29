@@ -12,7 +12,7 @@ For npm:
 ```bash
 npm update
 npm install
-npm run
+npm start
 ```
 
 For yarn:
