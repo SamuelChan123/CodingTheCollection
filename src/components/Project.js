@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
     width: 1000,
     height: 500
   },
+  button: {
+    margin: theme.spacing(0.5)
+  },
   icon: {
     color: "rgba(255, 255, 255, 0.54)"
   }
@@ -48,7 +51,7 @@ export default function Project() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                paddingBottom: 10
+                paddingBottom: 5
               }}
             >
               <h1
@@ -65,11 +68,33 @@ export default function Project() {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
+                paddingBottom: 10
               }}
             >
-              <Button variant="contained" color="primary">
-                Present Project
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                <Link
+                  to="/project/present"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  Present Project
+                </Link>
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                <Link
+                  to="/project/edit"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  Edit Project
+                </Link>
               </Button>
             </div>
           </GridListTile>
