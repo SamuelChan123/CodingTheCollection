@@ -69,7 +69,15 @@ export default function Project() {
               }}
             >
               <Button variant="contained" color="primary">
-                Present Project
+                <Link
+                  to="/present"
+                  style={{
+                    textDecoration: "none",
+                    color: "rgba(255, 255, 255, 0.54)"
+                  }}
+                >
+                  Present Project
+                </Link>
               </Button>
             </div>
           </GridListTile>
