@@ -1,33 +1,36 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Register from "./components/Register";
-import { Link } from "react-router-dom";
-import Signin from "./components/Signin";
-import Button from "@material-ui/core/Button";
-import Navbar from "./components/Navbar";
-import "./App.css";
 
-function Index() {
-  return (
-    <div>
-      <br />
-      <Button type="submit" variant="contained" color="primary">
-        <Link to="/signin" style={{ textDecoration: "none", color: "white" }}>
-          Sign In
-        </Link>
-      </Button>
-    </div>
-  );
-}
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
+
+import Register from "./components/Register";
+import Signin from "./components/Signin.js";
+import AllProjects from "./components/AllProjects.js";
+import Project from "./components/Project.js";
+import NewProject from "./components/NewProject.js";
+import Home from "./components/Home.js";
+
+import "./App.css";
 
 function AppRouter() {
   return (
     <Router>
       <div>
-        <Navbar />
-        <Route path="/" exact component={Index} />
-        <Route path="/signin/" component={Signin} />
-        <Route path="/register/" component={Register} />
+        <Switch>
+          <Route path="/welcome" component={Home} />
+          <Route path="/signin" component={Signin} />
+          <Route path="/register" component={Register} />
+          <Route path="/allprojects" component={AllProjects} />
+          <Route path="/project" exact component={Project} />
+          <Route path="/project/new" exact component={NewProject} />
+          {/* <Route path="/artwork" exact component={Artwork} />
+          <Route path="/artwork/new" exact component={NewArtwork} /> */}
+          <Redirect exact from="/" to="/welcome" />
+        </Switch>
       </div>
     </Router>
   );
