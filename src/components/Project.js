@@ -10,7 +10,7 @@ import {
   Button,
   makeStyles
 } from "@material-ui/core";
-import { Edit as EditIcon, AddCircle } from "@material-ui/icons/";
+import { Edit as EditIcon } from "@material-ui/icons/";
 
 import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";

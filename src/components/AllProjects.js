@@ -8,7 +8,7 @@ import {
   GridList,
   makeStyles
 } from "@material-ui/core";
-import { Info as InfoIcon, AddCircle } from "@material-ui/icons/";
+import { Info as InfoIcon } from "@material-ui/icons/";
 
 import tileData from "../sample/AllProjectsSample";
 import Navbar from "./NavbarUser";
@@ -77,22 +77,15 @@ export default function AllProjects() {
           {
             <GridListTile>
               {/*<img src={add} />*/}
-              <GridListTileBar
-                title="Add New Project"
-                actionIcon={
-                  <IconButton className={classes.icon}>
-                    <Link
-                      to="/project/new"
-                      style={{
-                        textDecoration: "none",
-                        color: "rgba(255, 255, 255, 0.54)"
-                      }}
-                    >
-                      <AddCircle />
-                    </Link>
-                  </IconButton>
-                }
-              />
+              <Link
+                to="/project/new"
+                style={{
+                  textDecoration: "none",
+                  color: "rgba(255, 255, 255, 0.54)"
+                }}
+              >
+                <GridListTileBar title="Add New Project" />
+              </Link>
             </GridListTile>
           }
         </GridList>
