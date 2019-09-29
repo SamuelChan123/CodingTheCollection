@@ -10,7 +10,7 @@ import {
   Button,
   makeStyles
 } from "@material-ui/core";
-import { Edit as EditIcon, AddCircle } from "@material-ui/icons/";
+import { Edit as EditIcon } from "@material-ui/icons/";
 
 import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
@@ -108,33 +108,33 @@ export default function Project() {
                     aria-label={`info about ${tile.title}`}
                     className={classes.icon}
                   >
-                    <EditIcon />
-                  </IconButton>
-                }
-              />
-            </GridListTile>
-          ))}
-          {
-            <GridListTile>
-              {/*<img src={add} />*/}
-              <GridListTileBar
-                title="Add New Artwork"
-                actionIcon={
-                  <IconButton className={classes.icon}>
                     <Link
-                      to="/artwork/new"
+                      to="/project/some_id_here/artwork/some_id_here/edit"
                       style={{
                         textDecoration: "none",
                         color: "rgba(255, 255, 255, 0.54)"
                       }}
                     >
-                      <AddCircle />
+                      <EditIcon />
                     </Link>
                   </IconButton>
                 }
               />
             </GridListTile>
-          }
+          ))}
+
+          <GridListTile>
+            {/*<img src={add} />*/}
+            <Link
+              to="/project/some_id_here/artwork/new"
+              style={{
+                textDecoration: "none",
+                color: "rgba(255, 255, 255, 0.54)"
+              }}
+            >
+              <GridListTileBar title="Add New Artwork" />
+            </Link>
+          </GridListTile>
         </GridList>
       </div>
     </React.Fragment>

@@ -12,6 +12,8 @@ import Signin from "./components/Signin.js";
 import AllProjects from "./components/AllProjects.js";
 import Project from "./components/Project.js";
 import NewProject from "./components/NewProject.js";
+import NewArtwork from "./components/NewArtwork.js"
+import EditArtwork from "./components/EditArtwork.js"
 import EditProject from "./components/EditProject.js";
 import PresentProject from "./components/NewProject.js";
 import Home from "./components/Home.js";
@@ -29,6 +31,8 @@ function AppRouter() {
           <Route path="/allprojects" component={AllProjects} />
           <Route path="/project" exact component={Project} />
           <Route path="/project/new" exact component={NewProject} />
+          <Route path="/project/:projectId/artwork/new" exact component={NewArtwork} />
+          <Route path="/project/:projectId/artwork/:artworkId/edit" exact component={EditArtwork} />
           <Route path="/project/edit" exact component={EditProject} />
           <Route path="/project/present" exact component={PresentProject} />
           {/* <Route path="/artwork" exact component={Artwork} />
