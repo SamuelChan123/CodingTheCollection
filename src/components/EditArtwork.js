@@ -132,7 +132,7 @@ class EditArtwork extends React.Component {
                   color="primary"
                   className={classes.submit}
                 >
-                  EditArtwork
+                  Edit Artwork
                 </Button>
               </Link>
             </form>

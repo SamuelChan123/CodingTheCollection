@@ -10,7 +10,7 @@ import {
   Button,
   makeStyles
 } from "@material-ui/core";
-import { Edit as EditIcon } from "@material-ui/icons/";
+import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 
 import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
@@ -132,7 +132,14 @@ export default function Project() {
                 color: "rgba(255, 255, 255, 0.54)"
               }}
             >
-              <GridListTileBar title="Add New Artwork" />
+              <GridListTileBar
+                title="Add New Artwork"
+                actionIcon={
+                  <IconButton className={classes.icon}>
+                    <AddIcon />
+                  </IconButton>
+                }
+              />
             </Link>
           </GridListTile>
         </GridList>
