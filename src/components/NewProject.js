@@ -100,17 +100,14 @@ class NewProject extends React.Component {
                 {this.state.pictures.length === 0 ? (
                   <p></p>
                 ) : (
-                  this.state.pictureURLs.map(picture => (
-                    <img
-                      src={picture}
-                      alt="Cannot be displayed"
-                      key={picture}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%"
-                      }}
-                    />
-                  ))
+                  <img
+                    src={this.state.pictureURLs[0]}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
                 )}
               </div>
               <br />
