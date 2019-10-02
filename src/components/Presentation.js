@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import tileData from "../sample/ArtOfAmericas";
+import dummyData from "../sample/DummyProject";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -70,7 +70,7 @@ export default function Presentation() {
             <div className={classes.root}>
                 <div className = {classes.artSelection}>
                     <GridList cellHeight={160} className={classes.gridList} cols={2}>
-                        {tileData.map(tile => (
+                        {dummyData.map(tile => (
                         <GridListTile key={tile.img} cols={tile.cols || 1}>
                             <img src={tile.img} alt={tile.title} />
                         </GridListTile>
@@ -79,7 +79,7 @@ export default function Presentation() {
                 </div>
                 <div className={classes.mainDisplay}>
                     <Carousel showStatus={false} showIndicators={false} emulateTouch>
-                    {tileData.map(tile => (
+                    {dummyData.map(tile => (
                         <div className={classes.carouselTile}>
                             <img src={tile.img} className={classes.carouselImage}/>
                         </div>
