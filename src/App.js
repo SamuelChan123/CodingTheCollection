@@ -31,7 +31,7 @@ function AppRouter() {
           <Route path="/allprojects" component={AllProjects} />
           <Route path="/project" exact component={Project} />
           <Route path="/project/new" exact component={NewProject} />
-          <Route path="/presentation" component={Presentation} />
+          <Route path="/project/presentation" component={Presentation} />
           <Route path="/model" component={Model} />
           <Route path="/project/:projectId/artwork/new" exact component={NewArtwork} />
           <Route path="/project/:projectId/artwork/:artworkId/edit" exact component={EditArtwork} />

@@ -64,7 +64,7 @@ export default function Model() {
                 </p>
                 <Button variant="contained" color="primary">
                 <Link
-                  to="/presentation"
+                  to="/project/presentation"
                   style={{
                     textDecoration: "none",
                     color: "rgba(255, 255, 255, 0.54)"
