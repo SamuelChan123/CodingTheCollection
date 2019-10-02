@@ -78,7 +78,7 @@ export default function Project() {
                 className={classes.button}
               >
                 <Link
-                  to="/project/present"
+                  to="/project/presentation"
                   style={{ textDecoration: "none", color: "white" }}
                 >
                   Present Project

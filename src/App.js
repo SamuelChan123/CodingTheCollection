@@ -17,8 +17,8 @@ import EditArtwork from "./components/EditArtwork.js"
 import EditProject from "./components/EditProject.js";
 import PresentProject from "./components/NewProject.js";
 import Home from "./components/Home.js";
-
-import "./App.css";
+import Presentation from "./components/Presentation.js";
+import Model from "./components/Model";
 
 function AppRouter() {
   return (
@@ -31,10 +31,11 @@ function AppRouter() {
           <Route path="/allprojects" component={AllProjects} />
           <Route path="/project" exact component={Project} />
           <Route path="/project/new" exact component={NewProject} />
+          <Route path="/presentation" component={Presentation} />
+          <Route path="/model" component={Model} />
           <Route path="/project/:projectId/artwork/new" exact component={NewArtwork} />
           <Route path="/project/:projectId/artwork/:artworkId/edit" exact component={EditArtwork} />
           <Route path="/project/edit" exact component={EditProject} />
-          <Route path="/project/present" exact component={PresentProject} />
           {/* <Route path="/artwork" exact component={Artwork} />
           <Route path="/artwork/new" exact component={NewArtwork} /> */}
           <Redirect exact from="/" to="/welcome" />
