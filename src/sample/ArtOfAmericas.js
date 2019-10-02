@@ -8,6 +8,60 @@ const tileData = [
     title: "Whistling Double Vessel",
     cols: 2,
     featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
+  },
+  {
+    img: doublevessel,
+    title: "Whistling Double Vessel",
+    cols: 2,
+    featured: true
   }
 ];
 

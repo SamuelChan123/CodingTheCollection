@@ -70,7 +70,7 @@ export default function Project() {
             >
               <Button variant="contained" color="primary">
                 <Link
-                  to="/present"
+                  to="/presentation"
                   style={{
                     textDecoration: "none",
                     color: "rgba(255, 255, 255, 0.54)"
