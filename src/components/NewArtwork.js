@@ -14,7 +14,7 @@ import ImageUploader from "react-images-upload";
 import Copyright from "./Copyright";
 import Navbar from "./Navbar";
 
-class NewProject extends React.Component {
+class NewArtwork extends React.Component {
   constructor(props) {
     super(props);
     this.state = { pictures: [], pictureURLs: [] };
@@ -50,7 +50,7 @@ class NewProject extends React.Component {
 
   onDrop(pictureFiles, pictureDataURLs) {
     this.setState({
-      pictures: pictureFiles,
+      pictures: this.state.pictures.concat(pictureFiles),
       pictureURLs: pictureDataURLs
     });
   }
@@ -58,6 +58,8 @@ class NewProject extends React.Component {
   render() {
     console.log(this.state);
     const classes = this.useStyles();
+
+    console.log(this.state);
 
     return (
       <React.Fragment>
@@ -73,7 +75,7 @@ class NewProject extends React.Component {
             }}
           >
             <Typography component="h1" variant="h5">
-              New Project
+              Add Artwork
             </Typography>
           </div>
           <div className={classes.paper}>
@@ -84,10 +86,18 @@ class NewProject extends React.Component {
                 required
                 fullWidth
                 id="name"
-                label="Project Name"
+                label="Name"
                 name="name"
-                autoComplete="Project Name"
                 autoFocus
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="desc"
+                label="Description"
+                name="desc"
               />
               <ImageUploader
                 withIcon={true}
@@ -100,22 +110,19 @@ class NewProject extends React.Component {
                 {this.state.pictures.length === 0 ? (
                   <p></p>
                 ) : (
-                  this.state.pictureURLs.map(picture => (
-                    <img
-                      src={picture}
-                      alt="Cannot be displayed"
-                      key={picture}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%"
-                      }}
-                    />
-                  ))
+                  <img
+                    src={this.state.pictureURLs[0]}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
                 )}
               </div>
               <br />
               <Link
-                to="/allprojects"
+                to="/project"
                 style={{ textDecoration: "none", color: "white" }}
               >
                 <Button
@@ -125,7 +132,7 @@ class NewProject extends React.Component {
                   color="primary"
                   className={classes.submit}
                 >
-                  Create New Project
+                  Upload new artwork
                 </Button>
               </Link>
             </form>
@@ -139,4 +146,4 @@ class NewProject extends React.Component {
   }
 }
 
-export default NewProject;
+export default NewArtwork;

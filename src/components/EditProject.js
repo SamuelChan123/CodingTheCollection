@@ -14,7 +14,7 @@ import ImageUploader from "react-images-upload";
 import Copyright from "./Copyright";
 import Navbar from "./Navbar";
 
-class NewProject extends React.Component {
+class EditProject extends React.Component {
   constructor(props) {
     super(props);
     this.state = { pictures: [], pictureURLs: [] };
@@ -73,7 +73,7 @@ class NewProject extends React.Component {
             }}
           >
             <Typography component="h1" variant="h5">
-              New Project
+              Edit Project
             </Typography>
           </div>
           <div className={classes.paper}>
@@ -114,20 +114,41 @@ class NewProject extends React.Component {
                 )}
               </div>
               <br />
-              <Link
-                to="/allprojects"
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
+              <div style={{ paddingBottom: 10 }}>
+                <Link
+                  to="/allprojects"
+                  style={{
+                    textDecoration: "none",
+                    color: "white"
+                  }}
                 >
-                  Create New Project
-                </Button>
-              </Link>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    Update Project
+                  </Button>
+                </Link>
+              </div>
+              <div>
+                <Link
+                  to="/allprojects"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    Delete Project
+                  </Button>
+                </Link>
+              </div>
             </form>
           </div>
           <Box mt={8}>
@@ -139,4 +160,4 @@ class NewProject extends React.Component {
   }
 }
 
-export default NewProject;
+export default EditProject;

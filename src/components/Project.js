@@ -10,7 +10,7 @@ import {
   Button,
   makeStyles
 } from "@material-ui/core";
-import { Edit as EditIcon, AddCircle } from "@material-ui/icons/";
+import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 
 import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   gridList: {
     width: 1000,
     height: 500
+  },
+  button: {
+    margin: theme.spacing(0.5)
   },
   icon: {
     color: "rgba(255, 255, 255, 0.54)"
@@ -48,7 +51,7 @@ export default function Project() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                paddingBottom: 10
+                paddingBottom: 5
               }}
             >
               <h1
@@ -65,18 +68,32 @@ export default function Project() {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
+                paddingBottom: 10
               }}
             >
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
                 <Link
-                  to="/presentation"
-                  style={{
-                    textDecoration: "none",
-                    color: "rgba(255, 255, 255, 0.54)"
-                  }}
+                  to="/project/presentation"
+                  style={{ textDecoration: "none", color: "white" }}
                 >
                   Present Project
+                </Link>
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+              >
+                <Link
+                  to="/project/edit"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  Edit Project
                 </Link>
               </Button>
             </div>
@@ -91,33 +108,40 @@ export default function Project() {
                     aria-label={`info about ${tile.title}`}
                     className={classes.icon}
                   >
-                    <EditIcon />
-                  </IconButton>
-                }
-              />
-            </GridListTile>
-          ))}
-          {
-            <GridListTile>
-              {/*<img src={add} />*/}
-              <GridListTileBar
-                title="Add New Artwork"
-                actionIcon={
-                  <IconButton className={classes.icon}>
                     <Link
-                      to="/artwork/new"
+                      to="/project/some_id_here/artwork/some_id_here/edit"
                       style={{
                         textDecoration: "none",
                         color: "rgba(255, 255, 255, 0.54)"
                       }}
                     >
-                      <AddCircle />
+                      <EditIcon />
                     </Link>
                   </IconButton>
                 }
               />
             </GridListTile>
-          }
+          ))}
+
+          <GridListTile>
+            {/*<img src={add} />*/}
+            <Link
+              to="/project/some_id_here/artwork/new"
+              style={{
+                textDecoration: "none",
+                color: "rgba(255, 255, 255, 0.54)"
+              }}
+            >
+              <GridListTileBar
+                title="Add New Artwork"
+                actionIcon={
+                  <IconButton className={classes.icon}>
+                    <AddIcon />
+                  </IconButton>
+                }
+              />
+            </Link>
+          </GridListTile>
         </GridList>
       </div>
     </React.Fragment>
