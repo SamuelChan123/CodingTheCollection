@@ -65,8 +65,7 @@ export default function Presentation() {
 
   return (
     <React.Fragment>
-      <Navbar />
-
+      {/* <Navbar /> */}
       <div className={classes.root}>
         <div className={classes.artSelection}>
           <GridList cellHeight={160} className={classes.gridList} cols={2}>
