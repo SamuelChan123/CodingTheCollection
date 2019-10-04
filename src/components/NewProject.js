@@ -10,7 +10,6 @@ import {
   Container
 } from "@material-ui/core";
 import ImageUploader from "react-images-upload";
-
 import Copyright from "./Copyright";
 import Navbar from "./Navbar";
 

@@ -11,6 +11,7 @@ import {
   makeStyles
 } from "@material-ui/core";
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
+import Copyright from "./Copyright";
 
 import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
@@ -143,6 +144,9 @@ export default function Project() {
             </Link>
           </GridListTile>
         </GridList>
+      </div>
+      <div>
+        <Copyright />
       </div>
     </React.Fragment>
   );

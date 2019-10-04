@@ -9,7 +9,7 @@ import {
   makeStyles
 } from "@material-ui/core";
 import { Info as InfoIcon, Add as AddIcon } from "@material-ui/icons/";
-
+import Copyright from "./Copyright";
 import tileData from "../sample/AllProjectsSample";
 import Navbar from "./NavbarUser";
 
@@ -96,6 +96,11 @@ export default function AllProjects() {
             </GridListTile>
           }
         </GridList>
+      </div>
+      <br />
+
+      <div>
+        <Copyright />
       </div>
     </React.Fragment>
   );

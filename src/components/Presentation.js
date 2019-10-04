@@ -15,6 +15,7 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import dummyData from "../sample/DummyProject";
 import Navbar from "./NavbarUser";
+import Copyright from "./Copyright";
 
 const useStyles = makeStyles(theme => ({
   root: {
