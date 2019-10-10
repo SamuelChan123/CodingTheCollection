@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  makeStyles,
   AppBar,
+  makeStyles,
   Toolbar,
   Typography,
   Button
@@ -33,19 +33,17 @@ export default function ButtonAppBar() {
               style={{ textDecoration: "none", color: "white" }}
             >
               CodingTheCollection
-            </Link>
+            </Link>{" "}
           </Typography>
+          {/* <Button color="inherit">Login</Button> */}
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <Button color="inherit">Home</Button>
+          </Link>
           <Link
             to="/signin/"
             style={{ textDecoration: "none", color: "white" }}
           >
-            <Button color="inherit">Sign In</Button>
-          </Link>
-          <Link
-            to="/register/"
-            style={{ textDecoration: "none", color: "white" }}
-          >
-            <Button color="inherit">Register</Button>
+            <Button color="inherit">Logout</Button>
           </Link>
         </Toolbar>
       </AppBar>
