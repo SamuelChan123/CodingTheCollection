@@ -8,7 +8,6 @@ import Copyright from "./Copyright";
 export default function Home() {
   return (
     <React.Fragment>
-      <Navbar />
       <br />
 
       <div

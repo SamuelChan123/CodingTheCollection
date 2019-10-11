@@ -35,7 +35,6 @@ export default function AllProjects() {
 
   return (
     <React.Fragment>
-      <Navbar />
       <br />
       <div className={classes.root}>
         <GridList cellHeight={180} cols={4} className={classes.gridList}>

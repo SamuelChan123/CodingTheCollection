@@ -7,6 +7,7 @@ import {
   Typography,
   Button
 } from "@material-ui/core";
+import SignOutButton from './SignOut';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,9 +21,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ButtonAppBar() {
-  const classes = useStyles();
+const Navbar = ({ authUser }) => (
+  <div>{authUser ? <NavbarAuth /> : <NavbarNonAuth />}</div>
+);
 
+function NavbarNonAuth() {
+  const classes = useStyles();
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{ backgroundColor: "#9ACD32" }}>
@@ -50,5 +54,37 @@ export default function ButtonAppBar() {
         </Toolbar>
       </AppBar>
     </div>
-  );
+  )
 }
+
+function NavbarAuth() {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" style={{ backgroundColor: '#9ACD32' }}>
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+            <Link
+              to="/welcome"
+              style={{ textDecoration: 'none', color: 'white' }}
+            >
+              CodingTheCollection
+            </Link>{' '}
+          </Typography>
+          {/* <Button color="inherit">Login</Button> */}
+          <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
+            <Button color="inherit">Home</Button>
+          </Link>
+          <Link
+            to="/welcome"
+            style={{ textDecoration: 'none', color: 'white' }}
+          >
+            <SignOutButton />
+          </Link>
+        </Toolbar>
+      </AppBar>
+    </div>
+  )
+}
+
+export default Navbar;

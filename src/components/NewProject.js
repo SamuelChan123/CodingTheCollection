@@ -60,7 +60,6 @@ class NewProject extends React.Component {
 
     return (
       <React.Fragment>
-        <Navbar />
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <br />
