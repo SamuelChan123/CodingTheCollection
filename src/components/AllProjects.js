@@ -1,24 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   IconButton,
   GridListTileBar,
   GridListTile,
   GridList,
   makeStyles
-} from "@material-ui/core";
-import { Info as InfoIcon, Add as AddIcon } from "@material-ui/icons/";
-import Copyright from "./Copyright";
-import tileData from "../sample/AllProjectsSample";
-import Navbar from "./NavbarUser";
+} from '@material-ui/core';
+import { Info as InfoIcon, Add as AddIcon } from '@material-ui/icons/';
+import Copyright from './Copyright';
+import tileData from '../sample/AllProjectsSample';
+import Navbar from './NavbarUser';
+import { withAuthorization } from './Session';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
     backgroundColor: theme.palette.background.paper
   },
   gridList: {
@@ -26,11 +26,11 @@ const useStyles = makeStyles(theme => ({
     height: 450
   },
   icon: {
-    color: "rgba(255, 255, 255, 0.54)"
+    color: 'rgba(255, 255, 255, 0.54)'
   }
 }));
 
-export default function AllProjects() {
+function AllProjects() {
   const classes = useStyles();
 
   return (
@@ -38,12 +38,12 @@ export default function AllProjects() {
       <br />
       <div className={classes.root}>
         <GridList cellHeight={180} cols={4} className={classes.gridList}>
-          <GridListTile key="Subheader" cols={4} style={{ height: "auto" }}>
+          <GridListTile key="Subheader" cols={4} style={{ height: 'auto' }}>
             <h1
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
               All Projects
@@ -55,8 +55,8 @@ export default function AllProjects() {
               <Link
                 to="/project"
                 style={{
-                  textDecoration: "none",
-                  color: "rgba(255, 255, 255, 0.54)"
+                  textDecoration: 'none',
+                  color: 'rgba(255, 255, 255, 0.54)'
                 }}
               >
                 <GridListTileBar
@@ -79,8 +79,8 @@ export default function AllProjects() {
               <Link
                 to="/project/new"
                 style={{
-                  textDecoration: "none",
-                  color: "rgba(255, 255, 255, 0.54)"
+                  textDecoration: 'none',
+                  color: 'rgba(255, 255, 255, 0.54)'
                 }}
               >
                 <GridListTileBar
@@ -104,3 +104,5 @@ export default function AllProjects() {
     </React.Fragment>
   );
 }
+
+export default withAuthorization(AllProjects);

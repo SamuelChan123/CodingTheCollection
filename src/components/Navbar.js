@@ -8,6 +8,7 @@ import {
   Button
 } from "@material-ui/core";
 import SignOutButton from './SignOut';
+import { AuthUserContext } from './Session';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,8 +22,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = ({ authUser }) => (
-  <div>{authUser ? <NavbarAuth /> : <NavbarNonAuth />}</div>
+const Navbar = () => (
+  <div>
+    <AuthUserContext.Consumer>
+      {authUser =>
+        authUser ? <NavbarAuth /> : <NavbarNonAuth />
+      }
+    </AuthUserContext.Consumer>
+  </div>
 );
 
 function NavbarNonAuth() {

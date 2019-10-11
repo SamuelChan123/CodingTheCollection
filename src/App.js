@@ -20,52 +20,33 @@ import PresentProject from './components/NewProject.js';
 import Home from './components/Home.js';
 import Presentation from './components/Presentation.js';
 import Model from './components/Model';
-import { withFirebase } from './components/Firebase';
+import { withAuthentication } from './components/Session';
 
 class AppRouter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      authUser: null,
-    };
-  }
-
-  componentDidMount() {
-    this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-      authUser
-        ? this.setState({ authUser })
-        : this.setState({ authUser: null });
-    });
-  }
-
-  componentWillUnmount() {
-    this.listener();
-  }
-
   render() {
     return (
-    <Router>
-      <div>
-        <Navbar authUser={this.state.authUser} />
-        <Switch>
-          <Route path="/welcome" component={Home} />
-          <Route path="/signin" component={Signin} />
-          <Route path="/register" component={Register} />
-          <Route path="/allprojects" component={AllProjects} />
-          <Route path="/project" exact component={Project} />
-          <Route path="/project/new" exact component={NewProject} />
-          <Route path="/project/presentation" component={Presentation} />
-          <Route path="/model" component={Model} />
-          <Route path="/project/:projectId/artwork/new" exact component={NewArtwork} />
-          <Route path="/project/:projectId/artwork/:artworkId/edit" exact component={EditArtwork} />
-          <Route path="/project/edit" exact component={EditProject} />
-          {/* <Route path="/artwork" exact component={Artwork} />
-          <Route path="/artwork/new" exact component={NewArtwork} /> */}
-          <Redirect exact from="/" to="/welcome" />
-        </Switch>
-      </div>
-    </Router>
+      <Router>
+        <div>
+          <Navbar/>
+          <Switch>
+            <Route path="/welcome" component={Home} />
+            <Route path="/signin" component={Signin} />
+            <Route path="/register" component={Register} />
+            <Route path="/allprojects" component={AllProjects} />
+            <Route path="/project" exact component={Project} />
+            <Route path="/project/new" exact component={NewProject} />
+            <Route path="/project/presentation" component={Presentation} />
+            <Route path="/model" component={Model} />
+            <Route path="/project/:projectId/artwork/new" exact component={NewArtwork} />
+            <Route path="/project/:projectId/artwork/:artworkId/edit" exact component={EditArtwork} />
+            <Route path="/project/edit" exact component={EditProject} />
+            {/* <Route path="/artwork" exact component={Artwork} />
+            <Route path="/artwork/new" exact component={NewArtwork} /> */}
+            <Redirect exact from="/" to="/welcome" />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
-export default withFirebase(AppRouter);
+export default withAuthentication(AppRouter);
