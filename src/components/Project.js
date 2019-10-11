@@ -15,6 +15,7 @@ import Copyright from "./Copyright";
 
 import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
+import { withAuthorization, withAuthentication } from './Session'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,13 +37,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Project() {
+function Project() {
   const classes = useStyles();
   const exhibit = "Art of the Americas";
 
   return (
     <React.Fragment>
-      <Navbar />
       <br />
       <div className={classes.root}>
         <GridList cellHeight={180} cols={4} className={classes.gridList}>
@@ -151,3 +151,5 @@ export default function Project() {
     </React.Fragment>
   );
 }
+
+export default withAuthorization(Project);

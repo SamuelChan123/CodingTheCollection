@@ -13,6 +13,7 @@ import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
 import Navbar from "./Navbar";
+import { withAuthorization } from './Session'
 
 class NewArtwork extends React.Component {
   constructor(props) {
@@ -63,7 +64,6 @@ class NewArtwork extends React.Component {
 
     return (
       <React.Fragment>
-        <Navbar />
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <br />
@@ -149,4 +149,4 @@ class NewArtwork extends React.Component {
   }
 }
 
-export default NewArtwork;
+export default withAuthorization(NewArtwork);

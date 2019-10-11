@@ -13,6 +13,7 @@ import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
 import Navbar from "./Navbar";
+import { withAuthorization } from "./Session"
 
 class EditProject extends React.Component {
   constructor(props) {
@@ -61,7 +62,6 @@ class EditProject extends React.Component {
 
     return (
       <React.Fragment>
-        <Navbar />
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <br />
@@ -160,4 +160,4 @@ class EditProject extends React.Component {
   }
 }
 
-export default EditProject;
+export default withAuthorization(EditProject);
