@@ -1,12 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   AppBar,
   makeStyles,
   Toolbar,
   Typography,
-  Button
-} from "@material-ui/core";
+  Button,
+} from '@material-ui/core';
+import SignOutButton from './SignOut';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,25 +26,25 @@ export default function ButtonAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{ backgroundColor: "#9ACD32" }}>
+      <AppBar position="static" style={{ backgroundColor: '#9ACD32' }}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link
               to="/welcome"
-              style={{ textDecoration: "none", color: "white" }}
+              style={{ textDecoration: 'none', color: 'white' }}
             >
               CodingTheCollection
-            </Link>{" "}
+            </Link>{' '}
           </Typography>
           {/* <Button color="inherit">Login</Button> */}
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+          <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
             <Button color="inherit">Home</Button>
           </Link>
           <Link
-            to="/signin/"
-            style={{ textDecoration: "none", color: "white" }}
+            to="/welcome"
+            style={{ textDecoration: 'none', color: 'white' }}
           >
-            <Button color="inherit">Logout</Button>
+            <SignOutButton />
           </Link>
         </Toolbar>
       </AppBar>
