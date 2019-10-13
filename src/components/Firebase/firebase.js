@@ -19,7 +19,7 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = app.database();
-    this.storage = app.storage();
+    this.store = app.storage();
   }
 
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -33,7 +33,7 @@ class Firebase {
   projects = () => this.db.ref("projects");
   users = () => this.db.ref("users");
   artworks = () => this.db.ref("artworks");
-  storage = () => this.storage.ref();
+  storage = () => this.store.ref();
 }
 
 export default Firebase;

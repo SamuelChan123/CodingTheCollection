@@ -35,25 +35,25 @@ class AllProjects extends React.Component {
   constructor(props) {
     super(props);
     this.state = { tileData: [] };
-    this.initalize();
+    this.projects = this.props.firebase.projects(); // get projects ref
+    this.storage = this.props.firebase.storage(); // get storage bucket for images
   }
 
-  initalize() {
-    console.log(this.props.firebase);
-    var projects = this.props.firebase.projects(); // get projects ref
-    var storage = this.props.firebase.store(); // get storage bucket for images
+  componentDidMount() {
     var tileDataTemp = [];
-    projects.on(
+    var storage = this.storage;
+
+    this.projects.on(
       "value",
       function(snapshot) {
         // for each project
         snapshot.forEach(function(project) {
           var projectId = project.key;
-          var projectImg = storage.child(project.val().image);
+          var projectImg = storage.child(project.val().image).getDownloadURL();
           var projectName = project.val().name;
           tileDataTemp.push({
-            image: projectImg,
-            name: projectName
+            name: projectName,
+            image: projectImg
           });
         });
       },
@@ -62,10 +62,8 @@ class AllProjects extends React.Component {
       }
     );
     this.setState({ tileData: tileDataTemp });
-    console.log(this.state.tileData);
+    console.log(JSON.stringify(tileDataTemp));
   }
-
-  componentDidMount() {}
 
   render() {
     return (
