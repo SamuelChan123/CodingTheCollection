@@ -40,29 +40,25 @@ class AllProjects extends React.Component {
   }
 
   componentDidMount() {
-    var tileDataTemp = [];
-    var storage = this.storage;
 
+    var setState = this.setState.bind(this);
+    var state = this.state;
+    var storage = this.storage;
     this.projects.on(
       "value",
       function(snapshot) {
-        // for each project
         snapshot.forEach(function(project) {
-          var projectId = project.key;
-          var projectImg = storage.child(project.val().image).getDownloadURL();
-          var projectName = project.val().name;
-          tileDataTemp.push({
-            name: projectName,
-            image: projectImg
+          storage.child(project.val().image).getDownloadURL().then(function(url) {
+            var projectId = project.key;
+            var projectName = project.val().name;
+            setState({ tileData: [...state.tileData, {name: projectName, image: url}] });
           });
-        });
+        })
       },
       function(errorObject) {
         return errorObject.code;
       }
     );
-    this.setState({ tileData: tileDataTemp });
-    console.log(JSON.stringify(tileDataTemp));
   }
 
   render() {
@@ -85,7 +81,7 @@ class AllProjects extends React.Component {
             {}
             {this.state.tileData.map(tile => (
               <GridListTile key={tile.image}>
-                <img src={tile.img} alt={tile.name} />
+                <img src={tile.image} alt={tile.name} />
                 <Link
                   to="/project"
                   style={{
