@@ -8,3 +8,7 @@ my_job:
 install:
   script:
     npm install
+
+run_tests:
+  script:
+    npm test
