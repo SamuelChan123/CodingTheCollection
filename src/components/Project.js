@@ -17,26 +17,6 @@ import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
 import { withAuthorization, withAuthentication } from "./Session";
 
-const classes = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
-    backgroundColor: theme.palette.background.paper
-  },
-  gridList: {
-    width: 1000,
-    height: 500
-  },
-  button: {
-    margin: theme.spacing(0.5)
-  },
-  icon: {
-    color: "rgba(255, 255, 255, 0.54)"
-  }
-}));
-
 class Project extends React.Component {
   constructor(props) {
     super(props);
@@ -49,6 +29,28 @@ class Project extends React.Component {
 
   getState() {
     return this.state;
+  }
+
+  useStyles() {
+    return makeStyles(theme => ({
+      root: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+        overflow: "hidden",
+        backgroundColor: theme.palette.background.paper
+      },
+      gridList: {
+        width: 1000,
+        height: 500
+      },
+      button: {
+        margin: theme.spacing(0.5)
+      },
+      icon: {
+        color: "rgba(255, 255, 255, 0.54)"
+      }
+    }));
   }
 
   componentDidMount() {
@@ -103,6 +105,7 @@ class Project extends React.Component {
   }
 
   render() {
+    const classes = this.useStyles();
     return (
       <React.Fragment>
         <br />

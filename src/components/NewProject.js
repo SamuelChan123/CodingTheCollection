@@ -17,6 +17,9 @@ class NewProject extends React.Component {
   constructor(props) {
     super(props);
     this.state = { pictures: [], pictureURLs: [] };
+    this.projects = this.props.firebase.projects(); // get projects ref
+    this.storage = this.props.firebase.storage(); // get storage bucket for images
+    this.artworks = this.props.firebase.artworks();
   }
 
   useStyles() {
@@ -48,9 +51,13 @@ class NewProject extends React.Component {
 
   onDrop = (pictureFiles, pictureDataURLs) => {
     this.setState({
-      pictures: pictureFiles,
-      pictureURLs: pictureDataURLs
+      pictures: pictureFiles[0],
+      pictureURLs: pictureDataURLs[0]
     });
+  };
+
+  onCreate = () => {
+    console.log("Hello");
   };
 
   render() {
@@ -108,20 +115,22 @@ class NewProject extends React.Component {
                 )}
               </div>
               <br />
-              <Link
-                to="/allprojects"
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
+              <div onClick={this.onCreate}>
+                <Link
+                  to="/allprojects"
+                  style={{ textDecoration: "none", color: "white" }}
                 >
-                  Create New Project
-                </Button>
-              </Link>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    Create New Project
+                  </Button>
+                </Link>
+              </div>
             </form>
           </div>
           <Box mt={8}>
