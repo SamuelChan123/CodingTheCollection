@@ -40,18 +40,49 @@ const classes = makeStyles(theme => ({
 class Project extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tileData: [] };
+    this.state = { tileData: [], exhibit: "" };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
+    this.artworks = this.props.firebase.artworks();
     this.projectId = this.props.location.state.projectId;
-    this.project = null;
   }
 
   componentDidMount() {
-    this.project = this.projects
+    var setState = this.setState.bind(this);
+    var state = this.state;
+    var storage = this.storage;
+    var getArtworks = this.artworks;
+
+    this.projects
       .child(this.projectId)
       .once("value")
-      .then(snapshot => console.log(snapshot.val()))
+      .then(project => {
+        for (var artworkId in project.val().artworks) {
+          var id = project.val().artworks[artworkId];
+          console.log(id);
+          getArtworks
+            .child(id)
+            .once("value")
+            .then(art => {
+              storage
+                .child(art.val().image)
+                .getDownloadURL()
+                .then(function(url) {
+                  var artworkTiles = {
+                    id: id,
+                    image: url,
+                    name: art.val().name
+                  };
+                  setState({
+                    tileData: [...state.tileData, artworkTiles]
+                  });
+                });
+            });
+        }
+        setState({
+          exhibit: project.val().name
+        });
+      })
       .catch(error => ({
         errorCode: error.code,
         errorMessage: error.message
@@ -59,8 +90,6 @@ class Project extends React.Component {
   }
 
   render() {
-    const exhibit = this.project == null ? "" : this.project.name;
-
     return (
       <React.Fragment>
         <br />
@@ -82,7 +111,7 @@ class Project extends React.Component {
                     alignItems: "center"
                   }}
                 >
-                  {exhibit}
+                  {this.state.exhibit}
                 </h1>
               </div>
               <div
@@ -119,14 +148,14 @@ class Project extends React.Component {
                 </Button>
               </div>
             </GridListTile>
-            {tileData.map(tile => (
-              <GridListTile key={tile.img}>
-                <img src={tile.img} alt={tile.title} />
+            {this.state.tileData.map(tile => (
+              <GridListTile key={tile.image}>
+                <img src={tile.image} alt={tile.name} />
                 <GridListTileBar
-                  title={tile.title}
+                  title={tile.name}
                   actionIcon={
                     <IconButton
-                      aria-label={`info about ${tile.title}`}
+                      aria-label={`info about ${tile.name}`}
                       className={classes.icon}
                     >
                       <Link
