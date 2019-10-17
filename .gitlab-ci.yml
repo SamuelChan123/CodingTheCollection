@@ -1,16 +1,22 @@
 image: node:6.11.3
 
+stages:
+  - build
+  - test
+  - deploy
+
 my_job:
+  stage: pre
   script:
     - echo "my_job"
 
 
-install:
+build:install
   script:
     - npm install
 
-run_tests:
+test:run_tests:
   script:
     - npm test
   dependencies:
-    - install
+    - build:install
