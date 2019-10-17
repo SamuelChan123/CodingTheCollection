@@ -11,14 +11,12 @@ import {
 } from "@material-ui/core";
 import ImageUploader from "react-images-upload";
 import Copyright from "./Copyright";
-import Navbar from "./Navbar";
-import { withAuthorization } from './Session'
+import { withAuthorization } from "./Session";
 
 class NewProject extends React.Component {
   constructor(props) {
     super(props);
     this.state = { pictures: [], pictureURLs: [] };
-    this.onDrop = this.onDrop.bind(this);
   }
 
   useStyles() {
@@ -48,12 +46,12 @@ class NewProject extends React.Component {
     }));
   }
 
-  onDrop(pictureFiles, pictureDataURLs) {
+  onDrop = (pictureFiles, pictureDataURLs) => {
     this.setState({
       pictures: pictureFiles,
       pictureURLs: pictureDataURLs
     });
-  }
+  };
 
   render() {
     console.log(this.state);
