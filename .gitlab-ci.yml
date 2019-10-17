@@ -6,7 +6,7 @@ stages:
   - deploy
 
 my_job:
-  stage: pre
+  stage: build
   script:
     - echo "my_job"
 
