@@ -7,8 +7,10 @@ my_job:
 
 install:
   script:
-    npm install
+    - npm install
 
 run_tests:
   script:
-    npm test
+    - npm test
+  dependencies:
+    - install
