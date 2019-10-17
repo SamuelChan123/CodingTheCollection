@@ -1,23 +1,22 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase } from './Firebase';
-
+import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
+import { compose } from "recompose";
+import { withFirebase } from "./Firebase";
 
 const SignInPage = () => (
   <div>
     <h1>Sign In</h1>
     <SignInForm />
     <p>
-      <Link to={'/register'}>Register</Link>
+      <Link to={"/register"}>Register</Link>
     </p>
   </div>
 );
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null,
+  email: "",
+  password: "",
+  error: null
 };
 
 class SignInFormBase extends Component {
@@ -38,12 +37,14 @@ class SignInFormBase extends Component {
       });
     event.preventDefault();
   };
+
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+
   render() {
     const { email, password, error } = this.state;
-    const isInvalid = password === '' || email === '';
+    const isInvalid = password === "" || email === "";
     return (
       <form onSubmit={this.onSubmit}>
         <input
@@ -70,7 +71,7 @@ class SignInFormBase extends Component {
 }
 const SignInForm = compose(
   withRouter,
-  withFirebase,
+  withFirebase
 )(SignInFormBase);
 
 export default SignInPage;
@@ -117,10 +118,6 @@ export { SignInForm };
 //     margin: theme.spacing(3, 0, 2)
 //   }
 // }));
-
-
-
-
 
 // export default function SignIn() {
 //   const classes = useStyles();
