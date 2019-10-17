@@ -11,12 +11,14 @@ my_job:
     - echo "my_job"
 
 
-build:install
+install:
+  stage: build
   script:
     - npm install
 
-test:run_tests:
+run_tests:
+  stage: test
   script:
     - npm test
   dependencies:
-    - build:install
+    - install
