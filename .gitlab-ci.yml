@@ -3,3 +3,8 @@ image: node:6.11.3
 my_job:
   script:
     - echo "my_job"
+
+
+install:
+  script:
+    npm install
