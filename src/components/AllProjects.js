@@ -39,25 +39,36 @@ class AllProjects extends React.Component {
     this.storage = this.props.firebase.storage(); // get storage bucket for images
   }
 
+  getState() {
+    return this.state;
+  }
+
   componentDidMount() {
     var setState = this.setState.bind(this);
-    var state = this.state;
+    var getState = this.getState.bind(this);
     var storage = this.storage;
     this.projects.on(
       "value",
-      function(snapshot) {
-        snapshot.forEach(function(project) {
+      snapshot => {
+        snapshot.forEach(project => {
           storage
             .child(project.val().image)
             .getDownloadURL()
             .then(function(url) {
               var projectId = project.key;
               var projectName = project.val().name;
+
               setState({
                 tileData: [
-                  ...state.tileData,
+                  ...getState().tileData,
                   { name: projectName, projectId: projectId, image: url }
-                ]
+                ].sort(function(a, b) {
+                  var keyA = a.name;
+                  var keyB = b.name;
+                  if (keyA < keyB) return -1;
+                  if (keyA > keyB) return 1;
+                  return 0;
+                })
               });
             });
         });

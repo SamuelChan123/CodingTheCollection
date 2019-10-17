@@ -47,8 +47,13 @@ class Project extends React.Component {
     this.projectId = this.props.location.state.projectId;
   }
 
+  getState() {
+    return this.state;
+  }
+
   componentDidMount() {
     var setState = this.setState.bind(this);
+    var getState = this.getState.bind(this);
     var state = this.state;
     var storage = this.storage;
     var getArtworks = this.artworks;
@@ -74,7 +79,15 @@ class Project extends React.Component {
                     name: art.val().name
                   };
                   setState({
-                    tileData: [...state.tileData, artworkTiles]
+                    tileData: [...getState().tileData, artworkTiles].sort(
+                      function(a, b) {
+                        var keyA = a.name;
+                        var keyB = b.name;
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                      }
+                    )
                   });
                 });
             });
