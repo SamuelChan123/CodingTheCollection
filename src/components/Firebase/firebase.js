@@ -54,6 +54,11 @@ class Firebase {
     this.db.ref(url).set(newData);
   };
 
+  setProjectWithId = (id, data) => {
+    const url = `projects/${id}`;
+    this.db.ref(url).set(data);
+  };
+
   users = () => this.db.ref("users");
   artworks = () => this.db.ref("artworks");
   storage = () => this.store.ref();

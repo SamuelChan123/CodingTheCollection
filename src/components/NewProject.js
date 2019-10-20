@@ -63,7 +63,6 @@ class NewProject extends React.Component {
         image: `projects/${this.state.projectImage.name}`,
         artworks: []
       };
-      var id = "testprojectid";
       var fb = this.props.firebase;
       var history = this.props.history;
       this.storage

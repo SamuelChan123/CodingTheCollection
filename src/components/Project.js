@@ -144,7 +144,12 @@ class Project extends React.Component {
                   className={classes.button}
                 >
                   <Link
-                    to="/project/presentation"
+                    to={{
+                      pathname: "/project/presentation",
+                      state: {
+                        projectId: this.projectId
+                      }
+                    }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     Present Project
@@ -156,7 +161,12 @@ class Project extends React.Component {
                   className={classes.button}
                 >
                   <Link
-                    to="/project/edit"
+                    to={{
+                      pathname: "/project/edit",
+                      state: {
+                        projectId: this.projectId
+                      }
+                    }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     Edit Project

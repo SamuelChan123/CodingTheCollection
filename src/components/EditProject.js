@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -13,13 +12,16 @@ import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
 import Navbar from "./Navbar";
-import { withAuthorization } from "./Session"
+import { withAuthorization } from "./Session";
 
 class EditProject extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { pictures: [], pictureURLs: [] };
-    this.onDrop = this.onDrop.bind(this);
+    this.state = { projectName: "", projectImage: null, projectImageURL: null };
+    this.projects = this.props.firebase.projects(); // get projects ref
+    this.storage = this.props.firebase.storage(); // get storage bucket for images
+    this.artworks = this.props.firebase.artworks();
+    this.projectId = this.props.location.state.projectId;
   }
 
   useStyles() {
@@ -49,12 +51,66 @@ class EditProject extends React.Component {
     }));
   }
 
-  onDrop(pictureFiles, pictureDataURLs) {
+  onUpdate = e => {
+    if (this.state.projectName && this.state.projectImage) {
+      var data = {
+        name: this.state.projectName,
+        image: `projects/${this.state.projectImage.name}`,
+        artworks: []
+      };
+      var fb = this.props.firebase;
+      var id = this.projectId;
+      var history = this.props.history;
+      this.storage
+        .child(`projects/${this.state.projectImage.name}`)
+        .put(this.state.projectImage)
+        .then(function(snapshot) {
+          fb.setProjectWithId(id, data);
+          history.push("/allprojects");
+        });
+      e.preventDefault();
+    }
+  };
+
+  onDelete = e => {
+    var history = this.props.history;
+    var storage = this.storage;
+    this.projects
+      .child(this.projectId)
+      .once("value")
+      .then(project => {
+        var imageUrl = project.val().image;
+        this.projects
+          .child(this.projectId)
+          .remove()
+          .then(function(snapshot) {
+            var storageRef = storage.child(imageUrl);
+            storageRef
+              .delete()
+              .then(function() {
+                history.push("/allprojects");
+              })
+              .catch(function(error) {
+                console.log("Image deletion failed!");
+              });
+          })
+          .catch(function(snapshot) {
+            console.log("Project Deletion failed!");
+          });
+      });
+    e.preventDefault();
+  };
+
+  handleName = event => {
+    this.setState({ projectName: event.target.value });
+  };
+
+  onDrop = (pictureFiles, pictureDataURLs) => {
     this.setState({
-      pictures: pictureFiles,
-      pictureURLs: pictureDataURLs
+      projectImage: pictureFiles[pictureFiles.length - 1],
+      projectImageURL: pictureDataURLs[pictureDataURLs.length - 1]
     });
-  }
+  };
 
   render() {
     console.log(this.state);
@@ -87,6 +143,7 @@ class EditProject extends React.Component {
                 label="Project Name"
                 name="name"
                 autoComplete="Project Name"
+                onChange={this.handleName}
                 autoFocus
               />
               <ImageUploader
@@ -97,57 +154,56 @@ class EditProject extends React.Component {
                 maxFileSize={5242880}
               />
               <div>
-                {this.state.pictures.length === 0 ? (
+                {this.state.projectImage === null ? (
                   <p></p>
                 ) : (
-                  this.state.pictureURLs.map(picture => (
-                    <img
-                      src={picture}
-                      alt="Cannot be displayed"
-                      key={picture}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%"
-                      }}
-                    />
-                  ))
+                  <img
+                    src={this.state.projectImageURL}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
                 )}
               </div>
               <br />
               <div style={{ paddingBottom: 10 }}>
-                <Link
+                {/* <Link
                   to="/allprojects"
                   style={{
                     textDecoration: "none",
                     color: "white"
                   }}
+                > */}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={e => this.onUpdate(e)}
+                  className={classes.submit}
                 >
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    Update Project
-                  </Button>
-                </Link>
+                  Update Project
+                </Button>
+                {/* </Link> */}
               </div>
               <div>
-                <Link
+                {/* <Link
                   to="/allprojects"
                   style={{ textDecoration: "none", color: "white" }}
+                > */}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={e => this.onDelete(e)}
+                  className={classes.submit}
                 >
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    Delete Project
-                  </Button>
-                </Link>
+                  Delete Project
+                </Button>
+                {/* </Link> */}
               </div>
             </form>
           </div>
