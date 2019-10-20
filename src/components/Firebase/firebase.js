@@ -31,6 +31,34 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
 
   projects = () => this.db.ref("projects");
+
+  project = projectId => {
+    this.db.ref(`projects/${projectId}`).once("value", snapshot => {
+      if (snapshot.exists()) {
+        return snapshot;
+      }
+      return null;
+    });
+  };
+  setProject = data => {
+    var myRef = this.db.ref("projects").push(data);
+    var key = myRef.key;
+    const url = `projects/${key}`;
+
+    var newData = {
+      id: key,
+      name: data.name,
+      image: data.image,
+      artworks: data.artworks
+    };
+    this.db.ref(url).set(newData);
+  };
+
+  setProjectWithId = (id, data) => {
+    const url = `projects/${id}`;
+    this.db.ref(url).set(data);
+  };
+
   users = () => this.db.ref("users");
   artworks = () => this.db.ref("artworks");
   storage = () => this.store.ref();

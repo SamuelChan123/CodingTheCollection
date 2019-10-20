@@ -17,26 +17,6 @@ import tileData from "../sample/ArtOfAmericas.js";
 import Navbar from "./NavbarUser";
 import { withAuthorization, withAuthentication } from "./Session";
 
-const classes = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
-    backgroundColor: theme.palette.background.paper
-  },
-  gridList: {
-    width: 1000,
-    height: 500
-  },
-  button: {
-    margin: theme.spacing(0.5)
-  },
-  icon: {
-    color: "rgba(255, 255, 255, 0.54)"
-  }
-}));
-
 class Project extends React.Component {
   constructor(props) {
     super(props);
@@ -47,8 +27,35 @@ class Project extends React.Component {
     this.projectId = this.props.location.state.projectId;
   }
 
+  getState() {
+    return this.state;
+  }
+
+  useStyles() {
+    return makeStyles(theme => ({
+      root: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+        overflow: "hidden",
+        backgroundColor: theme.palette.background.paper
+      },
+      gridList: {
+        width: 1000,
+        height: 500
+      },
+      button: {
+        margin: theme.spacing(0.5)
+      },
+      icon: {
+        color: "rgba(255, 255, 255, 0.54)"
+      }
+    }));
+  }
+
   componentDidMount() {
     var setState = this.setState.bind(this);
+    var getState = this.getState.bind(this);
     var state = this.state;
     var storage = this.storage;
     var getArtworks = this.artworks;
@@ -74,7 +81,15 @@ class Project extends React.Component {
                     name: art.val().name
                   };
                   setState({
-                    tileData: [...state.tileData, artworkTiles]
+                    tileData: [...getState().tileData, artworkTiles].sort(
+                      function(a, b) {
+                        var keyA = a.name;
+                        var keyB = b.name;
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                      }
+                    )
                   });
                 });
             });
@@ -90,6 +105,7 @@ class Project extends React.Component {
   }
 
   render() {
+    const classes = this.useStyles();
     return (
       <React.Fragment>
         <br />
@@ -128,7 +144,12 @@ class Project extends React.Component {
                   className={classes.button}
                 >
                   <Link
-                    to="/project/presentation"
+                    to={{
+                      pathname: "/project/presentation",
+                      state: {
+                        projectId: this.projectId
+                      }
+                    }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     Present Project
@@ -140,7 +161,12 @@ class Project extends React.Component {
                   className={classes.button}
                 >
                   <Link
-                    to="/project/edit"
+                    to={{
+                      pathname: "/project/edit",
+                      state: {
+                        projectId: this.projectId
+                      }
+                    }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     Edit Project

@@ -16,7 +16,10 @@ import { withAuthorization } from "./Session";
 class NewProject extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { pictures: [], pictureURLs: [] };
+    this.state = { projectName: "", projectImage: null, projectImageURL: null };
+    this.projects = this.props.firebase.projects(); // get projects ref
+    this.storage = this.props.firebase.storage(); // get storage bucket for images
+    this.artworks = this.props.firebase.artworks();
   }
 
   useStyles() {
@@ -48,9 +51,33 @@ class NewProject extends React.Component {
 
   onDrop = (pictureFiles, pictureDataURLs) => {
     this.setState({
-      pictures: pictureFiles,
-      pictureURLs: pictureDataURLs
+      projectImage: pictureFiles[pictureFiles.length - 1],
+      projectImageURL: pictureDataURLs[pictureDataURLs.length - 1]
     });
+  };
+
+  onCreate = e => {
+    if (this.state.projectName && this.state.projectImage) {
+      var data = {
+        name: this.state.projectName,
+        image: `projects/${this.state.projectImage.name}`,
+        artworks: []
+      };
+      var fb = this.props.firebase;
+      var history = this.props.history;
+      this.storage
+        .child(`projects/${this.state.projectImage.name}`)
+        .put(this.state.projectImage)
+        .then(function(snapshot) {
+          fb.setProject(data);
+          history.push("/allprojects");
+        });
+      e.preventDefault();
+    }
+  };
+
+  handleName = event => {
+    this.setState({ projectName: event.target.value });
   };
 
   render() {
@@ -84,6 +111,7 @@ class NewProject extends React.Component {
                 label="Project Name"
                 name="name"
                 autoComplete="Project Name"
+                onChange={this.handleName}
                 autoFocus
               />
               <ImageUploader
@@ -94,11 +122,11 @@ class NewProject extends React.Component {
                 maxFileSize={5242880}
               />
               <div>
-                {this.state.pictures.length === 0 ? (
+                {this.state.projectImage === null ? (
                   <p></p>
                 ) : (
                   <img
-                    src={this.state.pictureURLs[0]}
+                    src={this.state.projectImageURL}
                     alt="Cannot be displayed"
                     style={{
                       maxWidth: "100%",
@@ -108,20 +136,16 @@ class NewProject extends React.Component {
                 )}
               </div>
               <br />
-              <Link
-                to="/allprojects"
-                style={{ textDecoration: "none", color: "white" }}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={e => this.onCreate(e)}
+                className={classes.submit}
               >
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Create New Project
-                </Button>
-              </Link>
+                Create New Project
+              </Button>
             </form>
           </div>
           <Box mt={8}>
