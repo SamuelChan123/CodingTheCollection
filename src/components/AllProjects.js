@@ -14,23 +14,6 @@ import { compose } from "recompose";
 import { withAuthorization } from "./Session";
 import { withFirebase } from "./Firebase";
 
-const classes = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
-    backgroundColor: theme.palette.background.paper
-  },
-  gridList: {
-    width: 1000,
-    height: 450
-  },
-  icon: {
-    color: "rgba(255, 255, 255, 0.54)"
-  }
-}));
-
 class AllProjects extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +24,25 @@ class AllProjects extends React.Component {
 
   getState() {
     return this.state;
+  }
+
+  useStyles() {
+    return makeStyles(theme => ({
+      root: {
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around",
+        overflow: "hidden",
+        backgroundColor: theme.palette.background.paper
+      },
+      gridList: {
+        width: 1000,
+        height: 450
+      },
+      icon: {
+        color: "rgba(255, 255, 255, 0.54)"
+      }
+    }));
   }
 
   componentDidMount() {
@@ -80,6 +82,8 @@ class AllProjects extends React.Component {
   }
 
   render() {
+    const classes = this.useStyles();
+
     return (
       <React.Fragment>
         <br />
@@ -98,7 +102,7 @@ class AllProjects extends React.Component {
             </GridListTile>
             {}
             {this.state.tileData.map(tile => (
-              <GridListTile key={tile.image}>
+              <GridListTile key={tile.projectId}>
                 <img src={tile.image} alt={tile.name} />
                 <Link
                   to={{
