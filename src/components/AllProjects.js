@@ -102,7 +102,7 @@ class AllProjects extends React.Component {
             </GridListTile>
             {}
             {this.state.tileData.map(tile => (
-              <GridListTile key={tile.image}>
+              <GridListTile key={tile.projectId}>
                 <img src={tile.image} alt={tile.name} />
                 <Link
                   to={{
