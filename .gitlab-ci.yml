@@ -1,0 +1,23 @@
+image: node:6.11.3
+
+stages:
+  - build
+  - test
+  - deploy
+  
+cache:
+  paths:
+    - node_modules/
+
+my_job:
+  stage: build
+  script:
+    - echo "my_job"
+
+run_tests:
+  stage: test
+  script:
+    - npm install
+    - npm install
+    - npm test
+
