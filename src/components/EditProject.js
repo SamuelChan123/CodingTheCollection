@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -17,7 +18,12 @@ import { withAuthorization } from "./Session";
 class EditProject extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { projectName: "", projectImage: null, projectImageURL: null };
+    this.state = {
+      projectName: "",
+      projectImage: null,
+      projectImageURL: null,
+      oldProject: null
+    };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
@@ -51,7 +57,18 @@ class EditProject extends React.Component {
     }));
   }
 
+  componentDidMount() {
+    var setState = this.setState.bind(this);
+    this.projects
+      .child(this.projectId)
+      .once("value")
+      .then(project => {
+        setState({ oldProject: project.val() });
+      });
+  }
+
   onUpdate = e => {
+    console.log(this.state);
     if (this.state.projectName && this.state.projectImage) {
       var data = {
         name: this.state.projectName,
@@ -69,6 +86,10 @@ class EditProject extends React.Component {
           history.push("/allprojects");
         });
       e.preventDefault();
+    } else if (this.state.projectName) {
+    } else if (this.state.projectImage) {
+    } else {
+      console.log("bruh u didnt change anything lmao");
     }
   };
 
@@ -169,15 +190,7 @@ class EditProject extends React.Component {
               </div>
               <br />
               <div style={{ paddingBottom: 10 }}>
-                {/* <Link
-                  to="/allprojects"
-                  style={{
-                    textDecoration: "none",
-                    color: "white"
-                  }}
-                > */}
                 <Button
-                  type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
@@ -186,15 +199,9 @@ class EditProject extends React.Component {
                 >
                   Update Project
                 </Button>
-                {/* </Link> */}
               </div>
-              <div>
-                {/* <Link
-                  to="/allprojects"
-                  style={{ textDecoration: "none", color: "white" }}
-                > */}
+              <div style={{ paddingBottom: 10 }}>
                 <Button
-                  type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
@@ -203,7 +210,6 @@ class EditProject extends React.Component {
                 >
                   Delete Project
                 </Button>
-                {/* </Link> */}
               </div>
             </form>
           </div>
