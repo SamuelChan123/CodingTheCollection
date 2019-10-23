@@ -73,6 +73,8 @@ class NewProject extends React.Component {
           history.push("/allprojects");
         });
       e.preventDefault();
+    } else {
+      console.log("Both name and image must be filled in");
     }
   };
 

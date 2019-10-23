@@ -22,7 +22,8 @@ class EditProject extends React.Component {
       projectName: "",
       projectImage: null,
       projectImageURL: null,
-      oldProject: null
+      oldProject: null,
+      error: false
     };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
@@ -63,21 +64,24 @@ class EditProject extends React.Component {
       .child(this.projectId)
       .once("value")
       .then(project => {
-        setState({ oldProject: project.val() });
+        setState({ oldProject: project.val().image });
       });
   }
 
   onUpdate = e => {
-    console.log(this.state);
+    e.preventDefault();
+    var fb = this.props.firebase;
+    var id = this.projectId;
+    var history = this.props.history;
+    this.setState({
+      error: !(this.state.projectName && this.state.projectImage)
+    });
     if (this.state.projectName && this.state.projectImage) {
       var data = {
         name: this.state.projectName,
         image: `projects/${this.state.projectImage.name}`,
         artworks: []
       };
-      var fb = this.props.firebase;
-      var id = this.projectId;
-      var history = this.props.history;
       this.storage
         .child(`projects/${this.state.projectImage.name}`)
         .put(this.state.projectImage)
@@ -85,11 +89,25 @@ class EditProject extends React.Component {
           fb.setProjectWithId(id, data);
           history.push("/allprojects");
         });
-      e.preventDefault();
     } else if (this.state.projectName) {
+      const updated = {
+        name: this.state.projectName
+      };
+      fb.updateProjectWithId(this.projectId, updated);
+      history.push("/allprojects");
     } else if (this.state.projectImage) {
+      var newImg = this.state.projectImage.name;
+      var currentId = this.projectId;
+      this.storage
+        .child(`projects/${this.state.projectImage.name}`)
+        .put(this.state.projectImage)
+        .then(function(snapshot) {
+          const img = { image: `projects/${newImg}` };
+          fb.updateProjectWithId(currentId, img);
+          history.push("/allprojects");
+        });
     } else {
-      console.log("bruh u didnt change anything lmao");
+      console.log("Either the image or the project name must be updated!");
     }
   };
 
@@ -136,6 +154,7 @@ class EditProject extends React.Component {
   render() {
     console.log(this.state);
     const classes = this.useStyles();
+    const error = this.state.error;
 
     return (
       <React.Fragment>
@@ -186,6 +205,13 @@ class EditProject extends React.Component {
                       maxHeight: "100%"
                     }}
                   />
+                )}
+              </div>
+              <div>
+                {error && (
+                  <p style={{ color: "red" }}>
+                    Either the image or the project name must be updated!
+                  </p>
                 )}
               </div>
               <br />
