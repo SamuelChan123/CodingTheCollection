@@ -106,7 +106,7 @@ class AllProjects extends React.Component {
                 <img src={tile.image} alt={tile.name} />
                 <Link
                   to={{
-                    pathname: "/project",
+                    pathname: `project/${tile.projectId}`,
                     state: {
                       projectId: tile.projectId
                     }

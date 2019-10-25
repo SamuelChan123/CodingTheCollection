@@ -24,7 +24,7 @@ class Project extends React.Component {
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
-    this.projectId = this.props.location.state.projectId;
+    this.projectId = this.props.match.params.projectId;
   }
 
   getState() {
@@ -202,7 +202,7 @@ class Project extends React.Component {
             <GridListTile>
               {/*<img src={add} />*/}
               <Link
-                to="/project/some_id_here/artwork/new"
+                to={`/project/${this.projectId}/artwork/new`}
                 style={{
                   textDecoration: "none",
                   color: "rgba(255, 255, 255, 0.54)"
