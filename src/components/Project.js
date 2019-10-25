@@ -202,7 +202,7 @@ class Project extends React.Component {
             <GridListTile>
               {/*<img src={add} />*/}
               <Link
-                to={`/project/${this.projectId}/artwork/new`}
+                to={`/project/${this.projectId}/newartwork`}
                 style={{
                   textDecoration: "none",
                   color: "rgba(255, 255, 255, 0.54)"
