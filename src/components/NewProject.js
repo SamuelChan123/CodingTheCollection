@@ -143,7 +143,7 @@ class NewProject extends React.Component {
                 fullWidth
                 variant="contained"
                 color="primary"
-                onClick={e => this.onCreate(e)}
+                onClick={this.onCreate}
                 className={classes.submit}
               >
                 Create New Project

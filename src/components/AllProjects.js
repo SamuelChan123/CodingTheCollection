@@ -106,10 +106,7 @@ class AllProjects extends React.Component {
                 <img src={tile.image} alt={tile.name} />
                 <Link
                   to={{
-                    pathname: "/project",
-                    state: {
-                      projectId: tile.projectId
-                    }
+                    pathname: `project/${tile.projectId}`,
                   }}
                   style={{
                     textDecoration: "none",
@@ -134,7 +131,7 @@ class AllProjects extends React.Component {
               <GridListTile>
                 {/*<img src={add} />*/}
                 <Link
-                  to="/project/new"
+                  to="/newproject"
                   style={{
                     textDecoration: "none",
                     color: "rgba(255, 255, 255, 0.54)"

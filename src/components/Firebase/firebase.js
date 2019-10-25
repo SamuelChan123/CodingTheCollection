@@ -53,7 +53,14 @@ class Firebase {
     };
     this.db.ref(url).set(newData);
   };
-
+  setArtwork = data => {
+    var myRef = this.db.ref("artworks").push(data);
+    var key = myRef.key;
+    const url = `artworks/${key}`;
+    data.id = key;
+    this.db.ref(url).set(data);
+    return key;
+  };
   setProjectWithId = (id, data) => {
     const url = `projects/${id}`;
     this.db.ref(url).set(data);
@@ -63,6 +70,10 @@ class Firebase {
     const url = `projects/${id}`;
     this.db.ref(url).update(data);
   };
+
+  addArtworkToProject = (projectId, artworkId) => {
+    this.db.ref(`projects/${projectId}/artworks`).push().set({artId: artworkId});
+  }
 
   users = () => this.db.ref("users");
   artworks = () => this.db.ref("artworks");

@@ -32,12 +32,12 @@ class AppRouter extends Component {
             <Route path="/signin" component={Signin} />
             <Route path="/register" component={Register} />
             <Route path="/allprojects" component={AllProjects} />
-            <Route path="/project" exact component={Project} />
-            <Route path="/project/new" exact component={NewProject} />
+            <Route path="/project/:projectId" exact component={Project} />
+            <Route path="/newproject" exact component={NewProject} />
             <Route path="/project/presentation" component={Presentation} />
             <Route path="/model" component={Model} />
             <Route
-              path="/project/:projectId/artwork/new"
+              path="/project/:projectId/newartwork"
               exact
               component={NewArtwork}
             />
