@@ -49,36 +49,34 @@ class AllProjects extends React.Component {
     var setState = this.setState.bind(this);
     var getState = this.getState.bind(this);
     var storage = this.storage;
+    var promises = []; // list of project promises
     this.projects.on(
       "value",
       snapshot => {
         snapshot.forEach(project => {
-          storage
-            .child(project.val().image)
-            .getDownloadURL()
-            .then(function(url) {
-              var projectId = project.key;
-              var projectName = project.val().name;
-
-              setState({
-                tileData: [
-                  ...getState().tileData,
-                  { name: projectName, projectId: projectId, image: url }
-                ].sort(function(a, b) {
-                  var keyA = a.name;
-                  var keyB = b.name;
-                  if (keyA < keyB) return -1;
-                  if (keyA > keyB) return 1;
-                  return 0;
+          promises.push(new Promise((resolve, reject) => { // create a new promise for the each project
+            storage
+              .child(project.val().image)
+              .getDownloadURL()
+              .then(function(url) {
+                resolve({ // return the data of the project from the promise
+                  projectId: project.key,
+                  name: project.val().name,
+                  image: url
                 })
               });
-            });
+          }));
         });
       },
       function(errorObject) {
         return errorObject.code;
       }
     );
+    Promise.all(promises).then((tileData) => { // runs once all the project promises are resolved
+      setState({
+        tileData: tileData.sort((a, b) => ( a.name.toUpperCase() > b.name.toUpperCase() ) ? 1 : -1)
+      });
+    })
   }
 
   render() {
