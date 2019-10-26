@@ -64,8 +64,8 @@ class Project extends React.Component {
       .child(this.projectId)
       .once("value")
       .then(project => {
-        for (var artworkId in project.val().artworks) {
-          var id = project.val().artworks[artworkId];
+        for (var artwork in project.val().artworks) {
+          var id = project.val().artworks[artwork].artId;
           console.log(id);
           getArtworks
             .child(id)
@@ -145,7 +145,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: "/project/presentation",
+                      pathname: "/presentproject",
                       state: {
                         projectId: this.projectId
                       }
@@ -162,7 +162,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: "/project/edit",
+                      pathname: "/editproject",
                       state: {
                         projectId: this.projectId
                       }

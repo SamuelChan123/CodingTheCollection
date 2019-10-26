@@ -34,7 +34,7 @@ class AppRouter extends Component {
             <Route path="/allprojects" component={AllProjects} />
             <Route path="/project/:projectId" exact component={Project} />
             <Route path="/newproject" exact component={NewProject} />
-            <Route path="/project/presentation" component={Presentation} />
+            <Route path="/presentproject" component={Presentation} />
             <Route path="/model" component={Model} />
             <Route
               path="/project/:projectId/newartwork"
@@ -42,13 +42,11 @@ class AppRouter extends Component {
               component={NewArtwork}
             />
             <Route
-              path="/project/:projectId/artwork/:artworkId/edit"
+              path="/project/:projectId/editartwork/:artworkId"
               exact
               component={EditArtwork}
             />
-            <Route path="/project/edit" exact component={EditProject} />
-            {/* <Route path="/artwork" exact component={Artwork} />
-            <Route path="/artwork/new" exact component={NewArtwork} /> */}
+            <Route path="/editproject" exact component={EditProject} />
             <Redirect exact from="/" to="/welcome" />
           </Switch>
         </div>
