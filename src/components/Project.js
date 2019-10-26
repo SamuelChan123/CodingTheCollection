@@ -145,7 +145,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: "/project/presentation",
+                      pathname: "/presentproject",
                       state: {
                         projectId: this.projectId
                       }
@@ -162,7 +162,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: "/project/edit",
+                      pathname: "/editproject",
                       state: {
                         projectId: this.projectId
                       }
