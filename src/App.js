@@ -7,6 +7,8 @@ import {
   Redirect
 } from "react-router-dom";
 
+// hi
+
 import Register from "./components/Register";
 import Signin from "./components/Signin.js";
 import AllProjects from "./components/AllProjects.js";
