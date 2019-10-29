@@ -19,5 +19,5 @@ run_tests:
   script:
     - npm install
     - npm install
-    - npm test
+    
 
