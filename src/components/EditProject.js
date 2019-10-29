@@ -28,7 +28,7 @@ class EditProject extends React.Component {
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
-    this.projectId = this.props.location.state.projectId;
+    this.projectId = this.props.match.params.projectId;
   }
 
   useStyles() {
