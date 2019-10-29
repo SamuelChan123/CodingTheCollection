@@ -162,10 +162,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: "/editproject",
-                      state: {
-                        projectId: this.projectId
-                      }
+                      pathname: `/editproject/${this.projectId}`,
                     }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
@@ -185,7 +182,7 @@ class Project extends React.Component {
                       className={classes.icon}
                     >
                       <Link
-                        to="/project/some_id_here/artwork/some_id_here/edit"
+                        to={`/project/${this.projectId}/editartwork/${tile.id}`}
                         style={{
                           textDecoration: "none",
                           color: "rgba(255, 255, 255, 0.54)"

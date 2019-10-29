@@ -48,7 +48,7 @@ class AppRouter extends Component {
               exact
               component={EditArtwork}
             />
-            <Route path="/editproject" exact component={EditProject} />
+            <Route path="/editproject/:projectId" exact component={EditProject} />
             <Redirect exact from="/" to="/welcome" />
           </Switch>
         </div>
