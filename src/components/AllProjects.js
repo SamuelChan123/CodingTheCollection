@@ -54,29 +54,36 @@ class AllProjects extends React.Component {
       "value",
       snapshot => {
         snapshot.forEach(project => {
-          promises.push(new Promise((resolve, reject) => { // create a new promise for the each project
-            storage
-              .child(project.val().image)
-              .getDownloadURL()
-              .then(function(url) {
-                resolve({ // return the data of the project from the promise
-                  projectId: project.key,
-                  name: project.val().name,
-                  image: url
-                })
-              });
-          }));
+          promises.push(
+            new Promise((resolve, reject) => {
+              // create a new promise for the each project
+              storage
+                .child(project.val().image)
+                .getDownloadURL()
+                .then(function(url) {
+                  resolve({
+                    // return the data of the project from the promise
+                    projectId: project.key,
+                    name: project.val().name,
+                    image: url
+                  });
+                });
+            })
+          );
+        });
+        Promise.all(promises).then(tileData => {
+          // runs once all the project promises are resolved
+          setState({
+            tileData: tileData.sort((a, b) =>
+              a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1
+            )
+          });
         });
       },
       function(errorObject) {
         return errorObject.code;
       }
     );
-    Promise.all(promises).then((tileData) => { // runs once all the project promises are resolved
-      setState({
-        tileData: tileData.sort((a, b) => ( a.name.toUpperCase() > b.name.toUpperCase() ) ? 1 : -1)
-      });
-    })
   }
 
   render() {
@@ -104,7 +111,7 @@ class AllProjects extends React.Component {
                 <img src={tile.image} alt={tile.name} />
                 <Link
                   to={{
-                    pathname: `project/${tile.projectId}`,
+                    pathname: `project/${tile.projectId}`
                   }}
                   style={{
                     textDecoration: "none",
