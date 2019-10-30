@@ -4,24 +4,111 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import {
   Button,
-  CssBaseline,
-  TextField,
-  Box,
-  Typography,
-  makeStyles,
-  useTheme,
-  Container,
-  AppBar,
   IconButton,
 } from "@material-ui/core";
+import { withStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import dummyData from "../sample/DummyProject";
-import Navbar from "./NavbarUser";
 import Copyright from "./Copyright";
 import { withAuthorization, withAuthentication } from "./Session";
+
+const drawerWidth = 240;
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    overflow: "hidden",
+    height: "95vh",
+    backgroundColor: "white"
+  },
+  gridList: {
+    width: "100%"
+  },
+  artSelection: {
+    flex: 2,
+    padding: 3,
+    background: "white",
+    overflowY: "auto"
+  },
+  mainDisplay: {
+    flex: 8,
+    padding: 3,
+    background: "white",
+    float: "right",
+    height: "100%",
+    justifyContent: "center"
+  },
+  textField: {
+    flex: 3,
+    height: "100%",
+    paddingRight: "10%"
+  },
+  carouselTile: {
+    height: "85vh",
+    background: "white",
+    userSelect: "none"
+  },
+  carouselImage: {
+    maxHeight: "100%",
+    maxWidth: "100%",
+    objectFit: "contain",
+    background: "white"
+  },
+  appBar: {
+    backgroundColor: 'white',
+    height: '100%'
+  },
+  appBarShift: {
+    backgroundColor: '#9ACD32',
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }
+});
 
 class Presentation extends React.Component {
   constructor(props) {
@@ -33,108 +120,17 @@ class Presentation extends React.Component {
     this.projectId = this.props.match.params.projectId;
   }
 
-  drawerWidth = 240;
 
   getState() {
     return this.state;
   }
 
-  useStyles() {
-    return makeStyles(theme => ({
-      root: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        overflow: "hidden",
-        height: "100vh",
-        backgroundColor: theme.palette.background.paper
-      },
-      gridList: {
-        width: "100%"
-      },
-      artSelection: {
-        flex: 2,
-        padding: 3,
-        background: theme.palette.background.paper,
-        overflowY: "auto"
-      },
-      mainDisplay: {
-        flex: 8,
-        padding: 3,
-        background: theme.palette.background.paper,
-        float: "right",
-        height: "100%",
-        justifyContent: "center"
-      },
-      textField: {
-        flex: 3,
-        height: "100%",
-        paddingRight: "10%"
-      },
-      carouselTile: {
-        height: "85vh",
-        background: theme.palette.background.paper,
-        userSelect: "none"
-      },
-      carouselImage: {
-        maxHeight: "100%",
-        maxWidth: "100%",
-        objectFit: "contain",
-        background: theme.palette.background.paper
-      },
-      appBar: {
-        backgroundColor: '#9ACD32',
-      },
-      appBarShift: {
-        backgroundColor: '#9ACD32',
-        width: `calc(100% - ${this.drawerWidth}px)`,
-        marginLeft: this.drawerWidth,
-        transition: theme.transitions.create(['margin', 'width'], {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      },
-      menuButton: {
-        marginRight: theme.spacing(2),
-      },
-      hide: {
-        display: 'none',
-      },
-      drawer: {
-        width: this.drawerWidth,
-        flexShrink: 0,
-      },
-      drawerPaper: {
-        width: this.drawerWidth,
-      },
-      drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(0, 1),
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
-      },
-      content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        transition: theme.transitions.create('margin', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginLeft: -this.drawerWidth,
-      },
-      contentShift: {
-        transition: theme.transitions.create('margin', {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        marginLeft: 0,
-      }
-    }));
-  }
+
 
   render() {
-    const classes = this.useStyles();
+    const { classes } = this.props;
+
+    console.log(classes);
 
     const handleDrawerOpen = () => {
       this.setState({ open: true });
@@ -147,11 +143,13 @@ class Presentation extends React.Component {
     return (
       <React.Fragment>
         <div className={classes.root}>
+          
+          {/* Expand Artwork Selection Button */}
+          
           <div
             position="fixed"
-            className={classes.appBar}
+            className={clsx(classes.appBar, { [classes.hide]: this.state.open })}
           >
-                        {/* className={clsx(classes.appBar, {[classes.appBarShift]: this.state.open})} */}
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -163,7 +161,8 @@ class Presentation extends React.Component {
             </IconButton>
           </div>
 
-
+          {/* Artwork Selection Drawer */}
+          
           <div className={classes.artSelection}>
             <GridList cellHeight={160} className={classes.gridList} cols={2}>
               {dummyData.map(tile => (
@@ -173,6 +172,9 @@ class Presentation extends React.Component {
               ))}
             </GridList>
           </div>
+
+
+
           <div className={classes.mainDisplay}>
             <Carousel showStatus={false} showIndicators={false} emulateTouch>
               {dummyData.map(tile => (
@@ -223,7 +225,7 @@ class Presentation extends React.Component {
               aliquet metus, nec dictum sem est vel ex. Integer eu consectetur
               odio. Proin facilisis congue ex id eleifend.
             </p>
-            <Button variant="contained" color="primary">
+            {/*             <Button variant="contained" color="primary">
               <Link
                 to="/model"
                 style={{
@@ -233,7 +235,7 @@ class Presentation extends React.Component {
               >
                 3D Model
               </Link>
-            </Button>
+            </Button> */}
           </div>
         </div>
       </React.Fragment>
@@ -241,4 +243,4 @@ class Presentation extends React.Component {
   }
 }
 
-export default withAuthorization(Presentation);
+export default withStyles(styles)(withAuthorization(Presentation));
