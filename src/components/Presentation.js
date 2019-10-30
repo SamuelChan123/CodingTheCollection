@@ -5,8 +5,12 @@ import { Carousel } from "react-responsive-carousel";
 import {
   Button,
   IconButton,
+  Divider
 } from "@material-ui/core";
-import { withStyles, useTheme } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { withStyles, withTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import GridList from "@material-ui/core/GridList";
@@ -16,6 +20,7 @@ import Copyright from "./Copyright";
 import { withAuthorization, withAuthentication } from "./Session";
 
 const drawerWidth = 240;
+const iconWidth = 45;
 
 const styles = theme => ({
   root: {
@@ -49,7 +54,7 @@ const styles = theme => ({
     paddingRight: "10%"
   },
   carouselTile: {
-    height: "85vh",
+    height: "75vh",
     background: "white",
     userSelect: "none"
   },
@@ -61,16 +66,8 @@ const styles = theme => ({
   },
   appBar: {
     backgroundColor: 'white',
-    height: '100%'
-  },
-  appBarShift: {
-    backgroundColor: '#9ACD32',
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    height: '100%',
+    width: iconWidth
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -91,6 +88,7 @@ const styles = theme => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+    backgroundColor: "#9ACD32"
   },
   content: {
     flexGrow: 1,
@@ -100,6 +98,9 @@ const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: -drawerWidth,
+    justifyContent: "flex-start",
+    display: 'flex',
+    flexDirection: 'row'
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
@@ -107,6 +108,9 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
+    justifyContent: "flex-start",
+    display: 'flex',
+    flexDirection: 'row'
   }
 });
 
@@ -129,6 +133,7 @@ class Presentation extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const { theme } = this.props;
 
     console.log(classes);
 
@@ -143,9 +148,9 @@ class Presentation extends React.Component {
     return (
       <React.Fragment>
         <div className={classes.root}>
-          
+
           {/* Expand Artwork Selection Button */}
-          
+
           <div
             position="fixed"
             className={clsx(classes.appBar, { [classes.hide]: this.state.open })}
@@ -162,8 +167,22 @@ class Presentation extends React.Component {
           </div>
 
           {/* Artwork Selection Drawer */}
-          
-          <div className={classes.artSelection}>
+
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={this.state.open}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
+            <Divider />
             <GridList cellHeight={160} className={classes.gridList} cols={2}>
               {dummyData.map(tile => (
                 <GridListTile key={tile.img} cols={tile.cols || 1}>
@@ -171,61 +190,64 @@ class Presentation extends React.Component {
                 </GridListTile>
               ))}
             </GridList>
-          </div>
+          </Drawer>
 
 
+          <main
+            className={clsx(classes.content, { [classes.contentShift]: this.state.open, })}
+          >
+            <div className={classes.mainDisplay} >
+              <Carousel showStatus={false} showIndicators={false} emulateTouch>
+                {dummyData.map(tile => (
+                  <div className={classes.carouselTile}>
+                    <img src={tile.img} className={classes.carouselImage} />
+                  </div>
+                ))}
+              </Carousel>
+            </div>
 
-          <div className={classes.mainDisplay}>
-            <Carousel showStatus={false} showIndicators={false} emulateTouch>
-              {dummyData.map(tile => (
-                <div className={classes.carouselTile}>
-                  <img src={tile.img} className={classes.carouselImage} />
-                </div>
-              ))}
-            </Carousel>
-          </div>
-          <div className={classes.textField}>
-            <h1>Chancay</h1>
-            <h1>Double Vessel</h1>
-            <Button variant="contained" color="primary">
-              <Link
-                to="/model"
-                style={{
-                  textDecoration: "none",
-                  color: "white"
-                }}
-              >
-                3D Model
-              </Link>
-            </Button>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin felis
-              felis, volutpat vitae sodales sit amet, posuere sed dolor. Curabitur
-              sagittis auctor ultricies. Vestibulum eget condimentum est, id
-              dapibus justo. Aliquam pellentesque hendrerit felis et viverra.
-              Curabitur non neque id nunc maximus euismod ac et urna. Aliquam
-              ullamcorper egestas nisi, vitae pharetra enim lacinia ut. Fusce ac
-              dui in nunc sollicitudin porttitor ut vitae ex. Integer ligula nisi,
-              ultrices a aliquet a, accumsan nec leo. Morbi velit felis, tempor
-              nec risus dignissim, pellentesque convallis ligula. Vivamus enim
-              enim, rutrum quis cursus cursus, convallis porta sapien.
-            </p>
-            <p>
-              Sed a urna dapibus, consectetur eros quis, sagittis tortor. Etiam
-              malesuada commodo est. Mauris efficitur tincidunt ipsum ut ultrices.
-              Vestibulum rhoncus, tortor quis sollicitudin imperdiet, lorem ligula
-              congue lectus, mollis volutpat tellus arcu at orci. Phasellus odio
-              elit, finibus sed lobortis id, viverra tincidunt ex. Vivamus aliquam
-              turpis magna, interdum tempor mi aliquam in. Etiam mattis dapibus
-              tempus. Phasellus rutrum enim nisi, et ultricies purus vulputate sit
-              amet. Sed ac posuere leo, sed consectetur ex. Quisque sed lorem
-              ultrices, bibendum urna vitae, ultricies elit. Vivamus et cursus
-              leo. Phasellus non magna et erat eleifend venenatis. Sed at mattis
-              turpis. Donec porta, purus eget placerat tempor, augue tortor
-              aliquet metus, nec dictum sem est vel ex. Integer eu consectetur
-              odio. Proin facilisis congue ex id eleifend.
-            </p>
-            {/*             <Button variant="contained" color="primary">
+            <div className={classes.textField}>
+              <h1>Chancay</h1>
+              <h1>Double Vessel</h1>
+              <Button variant="contained" color="primary">
+                <Link
+                  to="/model"
+                  style={{
+                    textDecoration: "none",
+                    color: "white"
+                  }}
+                >
+                  3D Model
+                </Link>
+              </Button>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin felis
+                felis, volutpat vitae sodales sit amet, posuere sed dolor. Curabitur
+                sagittis auctor ultricies. Vestibulum eget condimentum est, id
+                dapibus justo. Aliquam pellentesque hendrerit felis et viverra.
+                Curabitur non neque id nunc maximus euismod ac et urna. Aliquam
+                ullamcorper egestas nisi, vitae pharetra enim lacinia ut. Fusce ac
+                dui in nunc sollicitudin porttitor ut vitae ex. Integer ligula nisi,
+                ultrices a aliquet a, accumsan nec leo. Morbi velit felis, tempor
+                nec risus dignissim, pellentesque convallis ligula. Vivamus enim
+                enim, rutrum quis cursus cursus, convallis porta sapien.
+              </p>
+              <p>
+                Sed a urna dapibus, consectetur eros quis, sagittis tortor. Etiam
+                malesuada commodo est. Mauris efficitur tincidunt ipsum ut ultrices.
+                Vestibulum rhoncus, tortor quis sollicitudin imperdiet, lorem ligula
+                congue lectus, mollis volutpat tellus arcu at orci. Phasellus odio
+                elit, finibus sed lobortis id, viverra tincidunt ex. Vivamus aliquam
+                turpis magna, interdum tempor mi aliquam in. Etiam mattis dapibus
+                tempus. Phasellus rutrum enim nisi, et ultricies purus vulputate sit
+                amet. Sed ac posuere leo, sed consectetur ex. Quisque sed lorem
+                ultrices, bibendum urna vitae, ultricies elit. Vivamus et cursus
+                leo. Phasellus non magna et erat eleifend venenatis. Sed at mattis
+                turpis. Donec porta, purus eget placerat tempor, augue tortor
+                aliquet metus, nec dictum sem est vel ex. Integer eu consectetur
+                odio. Proin facilisis congue ex id eleifend.
+              </p>
+              {/*             <Button variant="contained" color="primary">
               <Link
                 to="/model"
                 style={{
@@ -236,9 +258,11 @@ class Presentation extends React.Component {
                 3D Model
               </Link>
             </Button> */}
-          </div>
-        </div>
-      </React.Fragment>
+            </div>
+
+          </main>
+        </div >
+      </React.Fragment >
     );
   }
 }
