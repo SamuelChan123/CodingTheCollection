@@ -145,7 +145,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: "/presentproject",
+                      pathname: `/project/${this.projectId}/present`,
                       state: {
                         projectId: this.projectId
                       }
