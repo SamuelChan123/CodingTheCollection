@@ -49,6 +49,14 @@ class NewProject extends React.Component {
     }));
   }
 
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c == "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+
   onDrop = (pictureFiles, pictureDataURLs) => {
     this.setState({
       projectImage: pictureFiles[pictureFiles.length - 1],
@@ -58,15 +66,16 @@ class NewProject extends React.Component {
 
   onCreate = e => {
     if (this.state.projectName && this.state.projectImage) {
+      let uuid = this.uuidv4();
       var data = {
         name: this.state.projectName,
-        image: `projects/${this.state.projectImage.name}`,
+        image: `projects/${uuid}`,
         artworks: []
       };
       var fb = this.props.firebase;
       var history = this.props.history;
       this.storage
-        .child(`projects/${this.state.projectImage.name}`)
+        .child(`projects/${uuid}`)
         .put(this.state.projectImage)
         .then(function(snapshot) {
           fb.setProject(data);
