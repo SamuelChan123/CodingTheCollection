@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.5.0",
     "@material-ui/icons": "^4.4.3",
+    "clsx": "^1.0.4",
     "firebase": "^7.2.0",
     "material-kit-react": "^1.8.0",
     "react": "^16.10.2",

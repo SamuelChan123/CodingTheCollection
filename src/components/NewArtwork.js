@@ -13,12 +13,12 @@ import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
 import Navbar from "./Navbar";
-import { withAuthorization } from './Session'
+import { withAuthorization } from "./Session";
 
 class NewArtwork extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { pictures: [], pictureURLs: [], description: ''};
+    this.state = { pictures: [], pictureURLs: [], description: "" };
     this.onDrop = this.onDrop.bind(this);
     this.storage = this.props.firebase.storage();
     this.projectId = this.props.match.params.projectId;
@@ -52,6 +52,14 @@ class NewArtwork extends React.Component {
     }));
   }
 
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c == "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+
   onDrop(pictureFiles, pictureDataURLs) {
     this.setState({
       pictures: pictureFiles,
@@ -62,13 +70,15 @@ class NewArtwork extends React.Component {
   onCreate = e => {
     if (this.state.pictures.length > 0 && this.state.name) {
       var mainImage = this.state.pictures[0];
-      var imageUrl = `artwork/${mainImage.name}`;
+      let uuid = this.uuidv4();
+
+      var imageUrl = `artwork/${uuid}`;
       var data = {
         name: this.state.name,
         contextualmedia: [],
         description: this.state.description,
         image: imageUrl
-      }
+      };
       var fb = this.props.firebase;
       var history = this.props.history;
       var projectId = this.projectId;
@@ -80,15 +90,17 @@ class NewArtwork extends React.Component {
           history.push(`/project/${projectId}`);
         });
     } else {
-      console.log('AAAAAAAAAAAAAAAAAAAAAA')
+      console.log("AAAAAAAAAAAAAAAAAAAAAA");
     }
     e.preventDefault();
-  }
+  };
 
   handleForm = e => {
-    const {target:{name, value}} = e;
-    this.setState({[name]: value})
-  }
+    const {
+      target: { name, value }
+    } = e;
+    this.setState({ [name]: value });
+  };
 
   render() {
     const classes = this.useStyles();
