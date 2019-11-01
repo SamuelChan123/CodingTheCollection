@@ -30,7 +30,12 @@ class Firebase {
 
   doSignOut = () => this.auth.signOut();
 
+  getCurrentUser = () => this.auth.currentUser.uid;
+
   projects = () => this.db.ref("projects");
+
+  userSpecificProjects = () => this.db.ref("projects").orderByChild("owner").equalTo(this.auth.currentUser.uid);
+
 
   project = projectId => {
     this.db.ref(`projects/${projectId}`).once("value", snapshot => {
@@ -40,6 +45,7 @@ class Firebase {
       return null;
     });
   };
+
   setProject = data => {
     var myRef = this.db.ref("projects").push(data);
     var key = myRef.key;
@@ -49,10 +55,18 @@ class Firebase {
       id: key,
       name: data.name,
       image: data.image,
-      artworks: data.artworks
+      artworks: data.artworks,
+      owner: this.auth.currentUser.uid
     };
-    this.db.ref(url).set(newData);
+    this.db.ref(url).set(newData)
+    .then(() => {
+      this.db.ref(`users/${this.auth.currentUser.uid}/projects`)
+      .push()
+      .set({project: key});
+    });
   };
+
+
   setArtwork = data => {
     var myRef = this.db.ref("artworks").push(data);
     var key = myRef.key;
@@ -75,6 +89,7 @@ class Firebase {
     this.db.ref(`projects/${projectId}/artworks`).push().set({artId: artworkId});
   }
 
+  user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");
   artworks = () => this.db.ref("artworks");
   storage = () => this.store.ref();
