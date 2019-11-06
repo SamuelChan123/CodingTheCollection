@@ -33,6 +33,8 @@ class EditArtwork extends React.Component {
     };
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks(); // get artworks ref
+    this.projects = this.props.firebase.projects(); // get projects ref
+    this.projectId = this.props.match.params.projectId; // get project id;
     this.artworkId = this.props.match.params.artworkId;
   }
 
@@ -133,30 +135,54 @@ class EditArtwork extends React.Component {
 
   onDelete = e => {
     var history = this.props.history;
+    var fb = this.props.firebase;
     var storage = this.storage;
-    this.artworks
-      .child(this.artworkId)
+    let projectId = this.projectId;
+    let artworkId = this.artworkId;
+
+    this.projects
+      .child(this.projectId)
       .once("value")
-      .then(artwork => {
-        var imageUrl = artwork.val().image;
-        this.artworks
-          .child(this.artworkId)
-          .remove()
-          .then(function(snapshot) {
-            var storageRef = storage.child(imageUrl);
-            storageRef
-              .delete()
-              .then(function() {
-                history.push("/allprojects");
-              })
-              .catch(function(error) {
-                console.log("Image deletion failed!");
-              });
-          })
-          .catch(function(snapshot) {
-            console.log("Artwork Deletion failed!");
-          });
+      .then(project => {
+        let newProjectData = project.val();
+        console.log(newProjectData);
+        console.log(artworkId);
+        newProjectData.artworks[artworkId] = null;
+        console.log(newProjectData);
+        fb.setProjectWithId(projectId, newProjectData);
       });
+
+    // this.artworks
+    //   .child(this.artworkId)
+    //   .once("value")
+    //   .then(artwork => {
+    //     var imageUrl = artwork.val().image;
+    //     this.artworks
+    //       .child(artworkId)
+    //       .remove()
+    //       .then(function(snapshot) {
+    //         var storageRef = storage.child(imageUrl);
+    //         storageRef
+    //           .delete()
+    //           .then(function() {
+    //             this.projects
+    //               .child(this.projectId)
+    //               .once("value")
+    //               .then(project => {
+    //                 let newProjectData = project.val();
+    //                 newProjectData.artworks[artworkId] = null;
+    //                 fb.updateProjectWithId(projectId, newProjectData);
+    //               });
+    //             history.push("/allprojects");
+    //           })
+    //           .catch(function(error) {
+    //             console.log("Image deletion failed!");
+    //           });
+    //       })
+    //       .catch(function(snapshot) {
+    //         console.log("Artwork Deletion failed!");
+    //       });
+    //   });
     e.preventDefault();
   };
 
