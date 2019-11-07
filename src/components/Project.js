@@ -12,9 +12,7 @@ import {
 } from "@material-ui/core";
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 import Copyright from "./Copyright";
-
-import tileData from "../sample/ArtOfAmericas.js";
-import Navbar from "./NavbarUser";
+import BackButton from "./BackButton";
 import { withAuthorization, withAuthentication } from "./Session";
 
 class Project extends React.Component {
@@ -111,6 +109,12 @@ class Project extends React.Component {
         <br />
         <div className={classes.root}>
           <GridList cellHeight={180} cols={4} className={classes.gridList}>
+            <GridListTile key="backButton" cols={1} style={{ height: "auto" }}>
+              <BackButton
+                history={this.props.history}
+                backPage="/allprojects"
+              />
+            </GridListTile>
             <GridListTile key="Subheader" cols={4} style={{ height: "auto" }}>
               <div
                 style={{
@@ -162,7 +166,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: `/editproject/${this.projectId}`,
+                      pathname: `/editproject/${this.projectId}`
                     }}
                     style={{ textDecoration: "none", color: "white" }}
                   >

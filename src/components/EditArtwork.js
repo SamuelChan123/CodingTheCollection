@@ -12,15 +12,10 @@ import {
 import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
-import Navbar from "./Navbar";
 import { withAuthorization } from "./Session";
+import BackButton from "./BackButton";
 
 class EditArtwork extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { pictures: [], pictureURLs: [] };
-  //   this.onDrop = this.onDrop.bind(this);
-
   constructor(props) {
     super(props);
     this.state = {
@@ -138,51 +133,45 @@ class EditArtwork extends React.Component {
     var fb = this.props.firebase;
     var storage = this.storage;
     let projectId = this.projectId;
+    let projects = this.projects;
     let artworkId = this.artworkId;
 
-    this.projects
-      .child(this.projectId)
+    this.artworks
+      .child(this.artworkId)
       .once("value")
-      .then(project => {
-        let newProjectData = project.val();
-        console.log(newProjectData);
-        console.log(artworkId);
-        newProjectData.artworks[artworkId] = null;
-        console.log(newProjectData);
-        fb.setProjectWithId(projectId, newProjectData);
+      .then(artwork => {
+        var imageUrl = artwork.val().image;
+        this.artworks
+          .child(artworkId)
+          .remove()
+          .then(function(snapshot) {
+            var storageRef = storage.child(imageUrl);
+            storageRef
+              .delete()
+              .then(function() {
+                projects
+                  .child(projectId)
+                  .once("value")
+                  .then(project => {
+                    let newProjectData = project.val();
+                    for (var art in newProjectData.artworks) {
+                      if (newProjectData.artworks[art].artId == artworkId) {
+                        newProjectData.artworks[art].artId = null;
+                      }
+                    }
+                    console.log(newProjectData);
+                    fb.setProjectWithId(projectId, newProjectData);
+                    history.push("/allprojects");
+                  });
+              })
+              .catch(function(error) {
+                console.log("Image deletion failed!");
+              });
+          })
+          .catch(function(snapshot) {
+            console.log("Artwork Deletion failed!");
+          });
       });
-
-    // this.artworks
-    //   .child(this.artworkId)
-    //   .once("value")
-    //   .then(artwork => {
-    //     var imageUrl = artwork.val().image;
-    //     this.artworks
-    //       .child(artworkId)
-    //       .remove()
-    //       .then(function(snapshot) {
-    //         var storageRef = storage.child(imageUrl);
-    //         storageRef
-    //           .delete()
-    //           .then(function() {
-    //             this.projects
-    //               .child(this.projectId)
-    //               .once("value")
-    //               .then(project => {
-    //                 let newProjectData = project.val();
-    //                 newProjectData.artworks[artworkId] = null;
-    //                 fb.updateProjectWithId(projectId, newProjectData);
-    //               });
-    //             history.push("/allprojects");
-    //           })
-    //           .catch(function(error) {
-    //             console.log("Image deletion failed!");
-    //           });
-    //       })
-    //       .catch(function(snapshot) {
-    //         console.log("Artwork Deletion failed!");
-    //       });
-    //   });
     e.preventDefault();
   };
 
@@ -296,6 +285,7 @@ class EditArtwork extends React.Component {
                   Delete Artwork
                 </Button>
               </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
           <br />

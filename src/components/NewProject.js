@@ -12,6 +12,7 @@ import {
 import ImageUploader from "react-images-upload";
 import Copyright from "./Copyright";
 import { withAuthorization } from "./Session";
+import BackButton from "./BackButton";
 
 class NewProject extends React.Component {
   constructor(props) {
@@ -147,16 +148,19 @@ class NewProject extends React.Component {
                 )}
               </div>
               <br />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={this.onCreate}
-                className={classes.submit}
-              >
-                Create New Project
-              </Button>
+              <div style={{ paddingBottom: 10 }}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={this.onCreate}
+                  className={classes.submit}
+                >
+                  Create New Project
+                </Button>
+              </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
           <Box mt={8}>

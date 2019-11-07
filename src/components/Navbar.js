@@ -4,9 +4,12 @@ import {
   makeStyles,
   AppBar,
   Toolbar,
+  Box,
   Typography,
   Button
 } from "@material-ui/core";
+import Image from "react-bootstrap/Image";
+import NasherLogo from "../images/nashermuseum.svg";
 import SignOutButton from "./SignOut";
 import { AuthUserContext } from "./Session";
 
@@ -16,6 +19,10 @@ const useStyles = makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2)
+  },
+  logo: {
+    flexGrow: 1,
+    align: "center"
   },
   title: {
     flexGrow: 1
@@ -74,9 +81,18 @@ function NavbarAuth() {
               style={{ textDecoration: "none", color: "white" }}
             >
               CodingTheCollection
-            </Link>{" "}
+            </Link>
           </Typography>
-          {/* <Button color="inherit">Login</Button> */}
+
+          <Link
+            to="/allprojects"
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            <div style={{ backgroundImage: `url(${NasherLogo})` }}>
+              <Image src={NasherLogo} className={classes.logo} alt="" />
+            </div>
+          </Link>
+
           <Link to="/" style={{ textDecoration: "none", color: "white" }}>
             <Button color="inherit">Home</Button>
           </Link>

@@ -12,7 +12,7 @@ import {
 import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
-import Navbar from "./Navbar";
+import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
 class NewArtwork extends React.Component {
@@ -168,16 +168,19 @@ class NewArtwork extends React.Component {
                 )}
               </div>
               <br />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={e => this.onCreate(e)}
-              >
-                Upload new artwork
-              </Button>
+              <div style={{ paddingBottom: 10 }}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  onClick={e => this.onCreate(e)}
+                >
+                  Upload new artwork
+                </Button>
+              </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
           <Box mt={8}>

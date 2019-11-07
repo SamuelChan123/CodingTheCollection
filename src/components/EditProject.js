@@ -12,7 +12,7 @@ import {
 import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
-import Navbar from "./Navbar";
+import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
 class EditProject extends React.Component {
@@ -247,6 +247,7 @@ class EditProject extends React.Component {
                   Delete Project
                 </Button>
               </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
           <br />
