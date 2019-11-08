@@ -34,8 +34,11 @@ class Firebase {
 
   projects = () => this.db.ref("projects");
 
-  userSpecificProjects = () => this.db.ref("projects").orderByChild("owner").equalTo(this.auth.currentUser.uid);
-
+  userSpecificProjects = () =>
+    this.db
+      .ref("projects")
+      .orderByChild("owner")
+      .equalTo(this.auth.currentUser.uid);
 
   project = projectId => {
     this.db.ref(`projects/${projectId}`).once("value", snapshot => {
@@ -58,14 +61,16 @@ class Firebase {
       artworks: data.artworks,
       owner: this.auth.currentUser.uid
     };
-    this.db.ref(url).set(newData)
-    .then(() => {
-      this.db.ref(`users/${this.auth.currentUser.uid}/projects`)
-      .push()
-      .set({project: key});
-    });
+    this.db
+      .ref(url)
+      .set(newData)
+      .then(() => {
+        this.db
+          .ref(`users/${this.auth.currentUser.uid}/projects`)
+          .push()
+          .set({ project: key });
+      });
   };
-
 
   setArtwork = data => {
     var myRef = this.db.ref("artworks").push(data);
@@ -80,14 +85,27 @@ class Firebase {
     this.db.ref(url).set(data);
   };
 
+  setArtworkWithId = (id, data) => {
+    const url = `artworks/${id}`;
+    this.db.ref(url).set(data);
+  };
+
   updateProjectWithId = (id, data) => {
     const url = `projects/${id}`;
     this.db.ref(url).update(data);
   };
 
+  updateArtworkWithId = (id, data) => {
+    const url = `artworks/${id}`;
+    this.db.ref(url).update(data);
+  };
+
   addArtworkToProject = (projectId, artworkId) => {
-    this.db.ref(`projects/${projectId}/artworks`).push().set({artId: artworkId});
-  }
+    this.db
+      .ref(`projects/${projectId}/artworks`)
+      .push()
+      .set({ artId: artworkId });
+  };
 
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");

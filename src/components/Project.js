@@ -12,9 +12,7 @@ import {
 } from "@material-ui/core";
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 import Copyright from "./Copyright";
-
-import tileData from "../sample/ArtOfAmericas.js";
-import Navbar from "./NavbarUser";
+import BackButton from "./BackButton";
 import { withAuthorization, withAuthentication } from "./Session";
 
 class Project extends React.Component {
@@ -56,7 +54,6 @@ class Project extends React.Component {
   componentDidMount() {
     var setState = this.setState.bind(this);
     var getState = this.getState.bind(this);
-    var state = this.state;
     var storage = this.storage;
     var getArtworks = this.artworks;
 
@@ -66,7 +63,6 @@ class Project extends React.Component {
       .then(project => {
         for (var artwork in project.val().artworks) {
           var id = project.val().artworks[artwork].artId;
-          console.log(id);
           getArtworks
             .child(id)
             .once("value")
@@ -104,6 +100,10 @@ class Project extends React.Component {
       }));
   }
 
+  handleTileClick = artId => {
+    this.props.history.push(`/project/${this.projectId}/editartwork/${artId}`);
+  };
+
   render() {
     const classes = this.useStyles();
     return (
@@ -111,6 +111,12 @@ class Project extends React.Component {
         <br />
         <div className={classes.root}>
           <GridList cellHeight={180} cols={4} className={classes.gridList}>
+            <GridListTile key="backButton" cols={1} style={{ height: "auto" }}>
+              <BackButton
+                history={this.props.history}
+                backPage="/allprojects"
+              />
+            </GridListTile>
             <GridListTile key="Subheader" cols={4} style={{ height: "auto" }}>
               <div
                 style={{
@@ -162,7 +168,7 @@ class Project extends React.Component {
                 >
                   <Link
                     to={{
-                      pathname: `/editproject/${this.projectId}`,
+                      pathname: `/editproject/${this.projectId}`
                     }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
@@ -173,7 +179,11 @@ class Project extends React.Component {
             </GridListTile>
             {this.state.tileData.map(tile => (
               <GridListTile key={tile.image}>
-                <img src={tile.image} alt={tile.name} />
+                <img
+                  src={tile.image}
+                  alt={tile.name}
+                  onClick={() => this.handleTileClick(tile.id)}
+                />
                 <GridListTileBar
                   title={tile.name}
                   actionIcon={
@@ -197,7 +207,6 @@ class Project extends React.Component {
             ))}
 
             <GridListTile>
-              {/*<img src={add} />*/}
               <Link
                 to={`/project/${this.projectId}/newartwork`}
                 style={{

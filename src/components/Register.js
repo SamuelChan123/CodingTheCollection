@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { withFirebase } from './Firebase';
-import { Link, withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
+import React, { Component } from "react";
+import { withFirebase } from "./Firebase";
+import { withRouter } from "react-router-dom";
+import { compose } from "recompose";
 import {
   Avatar,
   Button,
@@ -10,32 +10,31 @@ import {
   Box,
   Typography,
   makeStyles,
-  Container,
-} from '@material-ui/core';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/styles';
-import { LockOutlined as LockOutlinedIcon } from '@material-ui/icons';
-import Copyright from './Copyright';
-import Navbar from './Navbar';
+  Container
+} from "@material-ui/core";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/styles";
+import { LockOutlined as LockOutlinedIcon } from "@material-ui/icons";
+import Copyright from "./Copyright";
 
 const useStyles = makeStyles(theme => ({
-  '@global': {
+  "@global": {
     body: {
       backgroundColor: theme.palette.common.white
     }
   },
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1)
   },
   submit: {
@@ -49,20 +48,20 @@ export default function RegisterPage() {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Register
-          </Typography>
-          <Register />
-        </div>
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Register
+        </Typography>
+        <Register />
+      </div>
       <Box mt={8}>
         <Copyright />
       </Box>
     </Container>
-  )
+  );
 }
 
 const INITIAL_STATE = {
@@ -102,7 +101,7 @@ class RegisterBase extends Component {
         this.setState({ error });
       });
     event.preventDefault();
-  }
+  };
 
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
@@ -184,7 +183,7 @@ class RegisterBase extends Component {
           type="password"
           placeholder="Confirm Password"
         />
-        <Button 
+        <Button
           fullWidth
           variant="contained"
           color="primary"
@@ -203,23 +202,23 @@ class RegisterBase extends Component {
 const theme = createMuiTheme();
 
 const styles = {
-  '@global': {
+  "@global": {
     body: {
       backgroundColor: theme.palette.common.white
     }
   },
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1)
   },
   submit: {
@@ -229,5 +228,5 @@ const styles = {
 
 const Register = compose(
   withRouter,
-  withFirebase,
+  withFirebase
 )(withStyles(styles)(RegisterBase));

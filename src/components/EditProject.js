@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -12,7 +11,7 @@ import {
 import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
-import Navbar from "./Navbar";
+import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
 class EditProject extends React.Component {
@@ -23,7 +22,7 @@ class EditProject extends React.Component {
       projectImage: null,
       projectImageURL: null,
       oldProject: null,
-      error: false
+      noError: false
     };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
@@ -74,20 +73,25 @@ class EditProject extends React.Component {
     var id = this.projectId;
     var history = this.props.history;
     this.setState({
-      error: !(this.state.projectName && this.state.projectImage)
+      noError: this.state.projectName || this.state.projectImage
     });
     if (this.state.projectName && this.state.projectImage) {
       var data = {
-        name: this.state.projectName,
-        image: `projects/${this.state.projectImage.name}`,
-        artworks: []
+        name: this.state.projectName
       };
-      this.storage
-        .child(`projects/${this.state.projectImage.name}`)
-        .put(this.state.projectImage)
-        .then(function(snapshot) {
-          fb.setProjectWithId(id, data);
-          history.push("/allprojects");
+      let updatedProjectImage = this.state.projectImage;
+      this.projects
+        .child(this.projectId)
+        .once("value")
+        .then(project => {
+          var imageUrl = project.val().image;
+          this.storage
+            .child(`${imageUrl}`)
+            .put(updatedProjectImage)
+            .then(function(snapshot) {
+              fb.updateProjectWithId(id, data);
+              history.push("/allprojects");
+            });
         });
     } else if (this.state.projectName) {
       const updated = {
@@ -96,15 +100,18 @@ class EditProject extends React.Component {
       fb.updateProjectWithId(this.projectId, updated);
       history.push("/allprojects");
     } else if (this.state.projectImage) {
-      var newImg = this.state.projectImage.name;
-      var currentId = this.projectId;
-      this.storage
-        .child(`projects/${this.state.projectImage.name}`)
-        .put(this.state.projectImage)
-        .then(function(snapshot) {
-          const img = { image: `projects/${newImg}` };
-          fb.updateProjectWithId(currentId, img);
-          history.push("/allprojects");
+      let updatedProjectImage = this.state.projectImage;
+      this.projects
+        .child(this.projectId)
+        .once("value")
+        .then(project => {
+          var imageUrl = project.val().image;
+          this.storage
+            .child(`${imageUrl}`)
+            .put(updatedProjectImage)
+            .then(function(snapshot) {
+              history.push("/allprojects");
+            });
         });
     } else {
       console.log("Either the image or the project name must be updated!");
@@ -152,9 +159,8 @@ class EditProject extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const classes = this.useStyles();
-    const error = this.state.error;
+    const noError = this.state.noError;
 
     return (
       <React.Fragment>
@@ -208,9 +214,10 @@ class EditProject extends React.Component {
                 )}
               </div>
               <div>
-                {error && (
+                {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the image or the project name must be updated!
+                    Either the project image or the project name must be
+                    updated!
                   </p>
                 )}
               </div>
@@ -237,8 +244,10 @@ class EditProject extends React.Component {
                   Delete Project
                 </Button>
               </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
+          <br />
           <Box mt={8}>
             <Copyright />
           </Box>
