@@ -220,7 +220,8 @@ class EditProject extends React.Component {
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the image or the project name must be updated!
+                    Either the project image or the project name must be
+                    updated!
                   </p>
                 )}
               </div>

@@ -17,7 +17,12 @@ import BackButton from "./BackButton";
 class NewProject extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { projectName: "", projectImage: null, projectImageURL: null };
+    this.state = {
+      projectName: "",
+      projectImage: null,
+      projectImageURL: null,
+      noError: true
+    };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
@@ -66,6 +71,9 @@ class NewProject extends React.Component {
   };
 
   onCreate = e => {
+    this.setState({
+      noError: this.state.projectName && this.state.projectImage
+    });
     if (this.state.projectName && this.state.projectImage) {
       let uuid = this.uuidv4();
       var data = {
@@ -95,6 +103,7 @@ class NewProject extends React.Component {
   render() {
     console.log(this.state);
     const classes = this.useStyles();
+    let noError = this.state.noError;
 
     return (
       <React.Fragment>
@@ -147,10 +156,16 @@ class NewProject extends React.Component {
                   />
                 )}
               </div>
-              <br />
+              <div>
+                {!noError && (
+                  <p style={{ color: "red" }}>
+                    Either the project image or the project title must be
+                    updated!
+                  </p>
+                )}
+              </div>
               <div style={{ paddingBottom: 10 }}>
                 <Button
-                  type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"

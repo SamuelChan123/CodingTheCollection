@@ -259,7 +259,8 @@ class EditArtwork extends React.Component {
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the image or the project name must be updated!
+                    Either the artwork image or the artwork name must be
+                    updated!
                   </p>
                 )}
               </div>
