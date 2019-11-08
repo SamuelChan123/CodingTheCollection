@@ -24,7 +24,6 @@ class AllProjects extends React.Component {
 
   componentDidMount() {
     let setState = this.setState.bind(this);
-    let getState = this.getState.bind(this);
     let { storage } = this;
     let promises = []; // list of project promises
     this.projects.on(

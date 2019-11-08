@@ -54,7 +54,6 @@ class Project extends React.Component {
   componentDidMount() {
     var setState = this.setState.bind(this);
     var getState = this.getState.bind(this);
-    var state = this.state;
     var storage = this.storage;
     var getArtworks = this.artworks;
 
@@ -208,7 +207,6 @@ class Project extends React.Component {
             ))}
 
             <GridListTile>
-              {/*<img src={add} />*/}
               <Link
                 to={`/project/${this.projectId}/newartwork`}
                 style={{

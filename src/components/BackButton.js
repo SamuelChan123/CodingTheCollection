@@ -2,10 +2,6 @@ import React from "react";
 import { Button } from "@material-ui/core";
 
 class BackButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   goBack = () => {
     if (this.props.backPage == null) {
       this.props.history.goBack();

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -152,7 +151,7 @@ class EditArtwork extends React.Component {
                   .then(project => {
                     let newProjectData = project.val();
                     for (var art in newProjectData.artworks) {
-                      if (newProjectData.artworks[art].artId == artworkId) {
+                      if (newProjectData.artworks[art].artId === artworkId) {
                         newProjectData.artworks[art].artId = null;
                       }
                     }
