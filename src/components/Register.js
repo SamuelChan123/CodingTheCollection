@@ -66,7 +66,8 @@ export default function RegisterPage() {
 }
 
 const INITIAL_STATE = {
-  username: '',
+  firstname: '',
+  lastname: '',
   email: '',
   passwordOne: '',
   passwordTwo: '',
@@ -80,18 +81,20 @@ class RegisterBase extends Component {
   }
 
   onSubmit = event => {
-    const { username, email, passwordOne } = this.state;
+    const { firstname, lastname, email, passwordOne } = this.state;
+
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
         return this.props.firebase
           .user(authUser.user.uid)
           .set({
-            username,
+            firstname,
+            lastname,
             email,
           });
       })
-      .then(authUser => {
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push("/allprojects");
       })
@@ -106,7 +109,8 @@ class RegisterBase extends Component {
   };
   render() { 
     const {
-      username,
+      firstname,
+      lastname,
       email,
       passwordOne,
       passwordTwo,
@@ -119,7 +123,8 @@ class RegisterBase extends Component {
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
       email === '' ||
-      username === '';
+      firstname === '' ||
+      lastname === '';
 
     return (
       <form className={classes.form} onSubmit={this.onSubmit}>
@@ -129,11 +134,22 @@ class RegisterBase extends Component {
           required
           fullWidth
           autoFocus
-          name="username"
-          value={username}
+          name="firstname"
+          value={firstname}
           onChange={this.onChange}
           type="text"
-          placeholder="Full Name"
+          placeholder="First Name"
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="lastname"
+          value={lastname}
+          onChange={this.onChange}
+          type="text"
+          placeholder="Last Name"
         />
         <TextField
           variant="outlined"
