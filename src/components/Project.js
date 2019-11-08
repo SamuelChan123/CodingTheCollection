@@ -102,6 +102,10 @@ class Project extends React.Component {
       }));
   }
 
+  handleTileClick = artId => {
+    this.props.history.push(`/project/${this.projectId}/editartwork/${artId}`);
+  };
+
   render() {
     const classes = this.useStyles();
     return (
@@ -177,7 +181,11 @@ class Project extends React.Component {
             </GridListTile>
             {this.state.tileData.map(tile => (
               <GridListTile key={tile.image}>
-                <img src={tile.image} alt={tile.name} />
+                <img
+                  src={tile.image}
+                  alt={tile.name}
+                  onClick={() => this.handleTileClick(tile.id)}
+                />
                 <GridListTileBar
                   title={tile.name}
                   actionIcon={

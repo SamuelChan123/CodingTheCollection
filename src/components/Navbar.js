@@ -93,7 +93,10 @@ function NavbarAuth() {
             </div>
           </Link>
 
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+          <Link
+            to="/allprojects"
+            style={{ textDecoration: "none", color: "white" }}
+          >
             <Button color="inherit">Home</Button>
           </Link>
           <Link
