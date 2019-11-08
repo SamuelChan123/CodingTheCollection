@@ -27,7 +27,6 @@ class NewArtwork extends React.Component {
     this.onDrop = this.onDrop.bind(this);
     this.storage = this.props.firebase.storage();
     this.projectId = this.props.match.params.projectId;
-    console.log(this.projectId);
   }
 
   useStyles() {

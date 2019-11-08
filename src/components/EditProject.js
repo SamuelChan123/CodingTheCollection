@@ -90,8 +90,6 @@ class EditProject extends React.Component {
             .child(`${imageUrl}`)
             .put(updatedProjectImage)
             .then(function(snapshot) {
-              console.log(`projects/${imageUrl}`);
-              console.log(updatedProjectImage);
               fb.updateProjectWithId(id, data);
               history.push("/allprojects");
             });
@@ -162,7 +160,6 @@ class EditProject extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const classes = this.useStyles();
     const noError = this.state.noError;
 

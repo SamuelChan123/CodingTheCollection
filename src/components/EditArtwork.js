@@ -87,9 +87,6 @@ class EditArtwork extends React.Component {
         name: this.state.artworkName
       };
       let updatedArtworkImage = this.state.artworkImage;
-      console.log(updatedArtworkImage);
-      console.log(id);
-      console.log(data);
       this.artworks
         .child(this.artworkId)
         .once("value")
@@ -159,7 +156,6 @@ class EditArtwork extends React.Component {
                         newProjectData.artworks[art].artId = null;
                       }
                     }
-                    console.log(newProjectData);
                     fb.setProjectWithId(projectId, newProjectData);
                     history.push("/allprojects");
                   });
@@ -191,7 +187,6 @@ class EditArtwork extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const classes = this.useStyles();
     const noError = this.state.noError;
 

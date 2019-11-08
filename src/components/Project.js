@@ -64,7 +64,6 @@ class Project extends React.Component {
       .then(project => {
         for (var artwork in project.val().artworks) {
           var id = project.val().artworks[artwork].artId;
-          console.log(id);
           getArtworks
             .child(id)
             .once("value")

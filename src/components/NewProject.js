@@ -101,7 +101,6 @@ class NewProject extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const classes = this.useStyles();
     let noError = this.state.noError;
 

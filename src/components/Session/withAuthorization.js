@@ -3,14 +3,12 @@ import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 
-
 const withAuthorization = Component => {
   class WithAuthorization extends React.Component {
-
     componentDidMount() {
       this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
         if (authUser == null) {
-          this.props.history.push('/welcome');
+          this.props.history.push("/welcome");
         }
       });
     }
@@ -20,14 +18,13 @@ const withAuthorization = Component => {
     }
 
     render() {
-    //   console.log(authUser == null)
       return <Component {...this.props} />;
     }
   }
 
   return compose(
     withRouter,
-    withFirebase,
+    withFirebase
   )(WithAuthorization);
 };
 export default withAuthorization;
