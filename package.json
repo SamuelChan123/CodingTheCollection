@@ -5,10 +5,12 @@
   "dependencies": {
     "@material-ui/core": "^4.5.2",
     "@material-ui/icons": "^4.5.1",
+    "bootstrap": "^4.3.1",
     "clsx": "^1.0.4",
     "firebase": "^7.2.3",
     "material-kit-react": "^1.8.0",
     "react": "^16.11.0",
+    "react-bootstrap": "^1.0.0-beta.14",
     "react-dom": "^16.11.0",
     "react-images-upload": "^1.2.7",
     "react-responsive-carousel": "^3.1.51",

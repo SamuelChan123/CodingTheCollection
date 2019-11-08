@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -12,7 +11,7 @@ import {
 import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
-import Navbar from "./Navbar";
+import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
 class EditProject extends React.Component {
@@ -90,8 +89,6 @@ class EditProject extends React.Component {
             .child(`${imageUrl}`)
             .put(updatedProjectImage)
             .then(function(snapshot) {
-              console.log(`projects/${imageUrl}`);
-              console.log(updatedProjectImage);
               fb.updateProjectWithId(id, data);
               history.push("/allprojects");
             });
@@ -162,7 +159,6 @@ class EditProject extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const classes = this.useStyles();
     const noError = this.state.noError;
 
@@ -220,7 +216,8 @@ class EditProject extends React.Component {
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the image or the project name must be updated!
+                    Either the project image or the project name must be
+                    updated!
                   </p>
                 )}
               </div>
@@ -247,6 +244,7 @@ class EditProject extends React.Component {
                   Delete Project
                 </Button>
               </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
           <br />

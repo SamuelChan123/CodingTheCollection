@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -12,11 +11,17 @@ import {
 import ImageUploader from "react-images-upload";
 import Copyright from "./Copyright";
 import { withAuthorization } from "./Session";
+import BackButton from "./BackButton";
 
 class NewProject extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { projectName: "", projectImage: null, projectImageURL: null };
+    this.state = {
+      projectName: "",
+      projectImage: null,
+      projectImageURL: null,
+      noError: true
+    };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
@@ -52,7 +57,7 @@ class NewProject extends React.Component {
   uuidv4 = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
       var r = (Math.random() * 16) | 0,
-        v = c == "x" ? r : (r & 0x3) | 0x8;
+        v = c === "x" ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
   };
@@ -65,6 +70,9 @@ class NewProject extends React.Component {
   };
 
   onCreate = e => {
+    this.setState({
+      noError: this.state.projectName && this.state.projectImage
+    });
     if (this.state.projectName && this.state.projectImage) {
       let uuid = this.uuidv4();
       var data = {
@@ -92,8 +100,8 @@ class NewProject extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const classes = this.useStyles();
+    let noError = this.state.noError;
 
     return (
       <React.Fragment>
@@ -146,17 +154,26 @@ class NewProject extends React.Component {
                   />
                 )}
               </div>
-              <br />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={this.onCreate}
-                className={classes.submit}
-              >
-                Create New Project
-              </Button>
+              <div>
+                {!noError && (
+                  <p style={{ color: "red" }}>
+                    Either the project image or the project title must be
+                    updated!
+                  </p>
+                )}
+              </div>
+              <div style={{ paddingBottom: 10 }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={this.onCreate}
+                  className={classes.submit}
+                >
+                  Create New Project
+                </Button>
+              </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
           <Box mt={8}>

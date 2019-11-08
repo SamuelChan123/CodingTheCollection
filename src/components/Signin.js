@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import { withFirebase } from "./Firebase";
 import Copyright from "./Copyright";
@@ -8,14 +8,13 @@ import {
   Button,
   CssBaseline,
   TextField,
-  Grid,
   Box,
   Typography,
   makeStyles,
   Container
 } from "@material-ui/core";
-import { createMuiTheme } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/styles';
+import { createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/styles";
 import { LockOutlined as LockOutlinedIcon } from "@material-ui/icons";
 
 export default function SignInPage() {
@@ -23,23 +22,22 @@ export default function SignInPage() {
 
   return (
     <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <SignInForm />
-        </div>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
-      </Container>
-  )
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <SignInForm />
+      </div>
+      <Box mt={8}>
+        <Copyright />
+      </Box>
+    </Container>
+  );
 }
-
 
 const INITIAL_STATE = {
   email: "",
@@ -52,7 +50,7 @@ class SignInFormBase extends Component {
     super(props);
     this.state = { ...INITIAL_STATE };
   }
-  
+
   onSubmit = event => {
     const { email, password } = this.state;
     this.props.firebase
@@ -77,9 +75,7 @@ class SignInFormBase extends Component {
     const { email, password, error } = this.state;
     const isInvalid = password === "" || email === "";
     return (
-      <form 
-        className={classes.form}
-        onSubmit={this.onSubmit}>
+      <form className={classes.form} onSubmit={this.onSubmit}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -103,13 +99,14 @@ class SignInFormBase extends Component {
           type="password"
           placeholder="Password"
         />
-        <Button disabled={isInvalid} 
+        <Button
+          disabled={isInvalid}
           type="submit"
           className={classes.submit}
           fullWidth
           variant="contained"
           color="primary"
-          >
+        >
           Sign In
         </Button>
         {error && <p>{error.message}</p>}

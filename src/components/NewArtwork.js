@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -12,17 +11,21 @@ import {
 import ImageUploader from "react-images-upload";
 
 import Copyright from "./Copyright";
-import Navbar from "./Navbar";
+import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
 class NewArtwork extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { pictures: [], pictureURLs: [], description: "" };
+    this.state = {
+      pictures: [],
+      pictureURLs: [],
+      description: "",
+      noError: true
+    };
     this.onDrop = this.onDrop.bind(this);
     this.storage = this.props.firebase.storage();
     this.projectId = this.props.match.params.projectId;
-    console.log(this.projectId);
   }
 
   useStyles() {
@@ -55,7 +58,7 @@ class NewArtwork extends React.Component {
   uuidv4 = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
       var r = (Math.random() * 16) | 0,
-        v = c == "x" ? r : (r & 0x3) | 0x8;
+        v = c === "x" ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
   };
@@ -68,11 +71,14 @@ class NewArtwork extends React.Component {
   }
 
   onCreate = e => {
+    this.setState({
+      noError: this.state.pictures.length > 0 && this.state.name
+    });
     if (this.state.pictures.length > 0 && this.state.name) {
       var mainImage = this.state.pictures[0];
       let uuid = this.uuidv4();
 
-      var imageUrl = `artwork/${uuid}`;
+      var imageUrl = `artworks/${uuid}`;
       var data = {
         name: this.state.name,
         contextualmedia: [],
@@ -90,7 +96,9 @@ class NewArtwork extends React.Component {
           history.push(`/project/${projectId}`);
         });
     } else {
-      console.log("AAAAAAAAAAAAAAAAAAAAAA");
+      console.log(
+        "Both the Artwork Title and the Artwork Image must be uploaded!"
+      );
     }
     e.preventDefault();
   };
@@ -104,6 +112,7 @@ class NewArtwork extends React.Component {
 
   render() {
     const classes = this.useStyles();
+    let noError = this.state.noError;
 
     return (
       <React.Fragment>
@@ -167,17 +176,26 @@ class NewArtwork extends React.Component {
                   ))
                 )}
               </div>
-              <br />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={e => this.onCreate(e)}
-              >
-                Upload new artwork
-              </Button>
+              <div>
+                {!noError && (
+                  <p style={{ color: "red" }}>
+                    Either the artwork image or the artwork title must be filled
+                    in!
+                  </p>
+                )}
+              </div>
+              <div style={{ paddingBottom: 10 }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  onClick={e => this.onCreate(e)}
+                >
+                  Upload new artwork
+                </Button>
+              </div>
+              <BackButton history={this.props.history} />
             </form>
           </div>
           <Box mt={8}>

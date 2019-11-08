@@ -24,7 +24,6 @@ class AllProjects extends React.Component {
 
   componentDidMount() {
     let setState = this.setState.bind(this);
-    let getState = this.getState.bind(this);
     let { storage } = this;
     let promises = []; // list of project promises
     this.projects.on(
@@ -86,6 +85,10 @@ class AllProjects extends React.Component {
     }));
   }
 
+  handleTileClick = projectId => {
+    this.props.history.push(`project/${projectId}`);
+  };
+
   render() {
     const classes = this.useStyles();
 
@@ -108,8 +111,13 @@ class AllProjects extends React.Component {
             {}
             {this.state.tileData.map(tile => (
               <GridListTile key={tile.projectId}>
-                <img src={tile.image} alt={tile.name} />
+                <img
+                  src={tile.image}
+                  alt={tile.name}
+                  onClick={() => this.handleTileClick(tile.projectId)}
+                />
                 <Link
+                  key={tile.projectId}
                   to={{
                     pathname: `project/${tile.projectId}`
                   }}
