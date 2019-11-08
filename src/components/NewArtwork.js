@@ -78,7 +78,7 @@ class NewArtwork extends React.Component {
       var mainImage = this.state.pictures[0];
       let uuid = this.uuidv4();
 
-      var imageUrl = `artwork/${uuid}`;
+      var imageUrl = `artworks/${uuid}`;
       var data = {
         name: this.state.name,
         contextualmedia: [],
