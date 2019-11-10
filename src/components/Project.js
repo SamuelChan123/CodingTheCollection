@@ -175,6 +175,20 @@ class Project extends React.Component {
                     Edit Project
                   </Link>
                 </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                >
+                  <Link
+                    to={{
+                      pathname: `/shareproject/${this.projectId}`
+                    }}
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    Share Project
+                  </Link>
+                </Button>
               </div>
             </GridListTile>
             {this.state.tileData.map(tile => (
