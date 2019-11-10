@@ -13,12 +13,15 @@ import {
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 import Copyright from "./Copyright";
 import BackButton from "./BackButton";
-import { withAuthorization, withAuthentication } from "./Session";
+import { AuthUserContext, withAuthorization, withAuthentication } from "./Session";
 
 class Project extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tileData: [], exhibit: "" };
+    this.state = { 
+      tileData: [], 
+      exhibit: "", 
+      owner: "" };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
@@ -91,13 +94,15 @@ class Project extends React.Component {
             });
         }
         setState({
-          exhibit: project.val().name
+          exhibit: project.val().name,
+          owner: project.val().owner
         });
       })
       .catch(error => ({
         errorCode: error.code,
         errorMessage: error.message
       }));
+      console.log(this.state.owner)
   }
 
   handleTileClick = artId => {
@@ -106,6 +111,7 @@ class Project extends React.Component {
 
   render() {
     const classes = this.useStyles();
+    const { owner } = this.state;
     return (
       <React.Fragment>
         <br />
