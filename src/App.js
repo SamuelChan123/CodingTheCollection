@@ -18,6 +18,7 @@ import NewProject from "./components/NewProject.js";
 import NewArtwork from "./components/NewArtwork.js";
 import EditArtwork from "./components/EditArtwork.js";
 import EditProject from "./components/EditProject.js";
+import ShareProject from "./components/ShareProject.js";
 import Home from "./components/Home.js";
 import Presentation from "./components/Presentation.js";
 import Model from "./components/Model";
@@ -50,6 +51,7 @@ class AppRouter extends Component {
               component={EditArtwork}
             />
             <Route path="/editproject/:projectId" exact component={EditProject} />
+            <Route path="/shareproject/:projectId" exact component={ShareProject} />
             <Redirect exact from="/" to="/welcome" />
           </Switch>
         </div>
