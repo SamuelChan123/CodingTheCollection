@@ -76,7 +76,7 @@ function NavbarAuth() {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link
-              to="/allprojects"
+              to="/welcome"
               style={{ textDecoration: "none", color: "white" }}
             >
               CodingTheCollection
