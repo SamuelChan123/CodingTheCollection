@@ -30,7 +30,7 @@ export default function Home() {
       >
         <Button variant="contained" color="primary">
           <Link
-            to="/signin"
+            to="/allprojects"
             style={{
               textDecoration: "none",
               color: "white"
