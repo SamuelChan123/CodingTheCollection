@@ -13,12 +13,20 @@ import {
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 import Copyright from "./Copyright";
 import BackButton from "./BackButton";
-import { withAuthorization, withAuthentication } from "./Session";
+import {
+  AuthUserContext,
+  withAuthorization,
+  withAuthentication
+} from "./Session";
 
 class Project extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tileData: [], exhibit: "" };
+    this.state = {
+      tileData: [],
+      exhibit: "",
+      owner: ""
+    };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
@@ -72,10 +80,11 @@ class Project extends React.Component {
                 .getDownloadURL()
                 .then(function(url) {
                   var artworkTiles = {
-                    id: id,
+                    id: art.val().id,
                     image: url,
                     name: art.val().name
                   };
+                  console.log(artworkTiles);
                   setState({
                     tileData: [...getState().tileData, artworkTiles].sort(
                       function(a, b) {
@@ -87,17 +96,20 @@ class Project extends React.Component {
                       }
                     )
                   });
+                  console.log(getState().tileData);
                 });
             });
         }
         setState({
-          exhibit: project.val().name
+          exhibit: project.val().name,
+          owner: project.val().owner
         });
       })
       .catch(error => ({
         errorCode: error.code,
         errorMessage: error.message
       }));
+    console.log(this.state.owner);
   }
 
   handleTileClick = artId => {
@@ -106,6 +118,7 @@ class Project extends React.Component {
 
   render() {
     const classes = this.useStyles();
+    const { owner } = this.state;
     return (
       <React.Fragment>
         <br />
@@ -173,6 +186,20 @@ class Project extends React.Component {
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     Edit Project
+                  </Link>
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                >
+                  <Link
+                    to={{
+                      pathname: `/shareproject/${this.projectId}`
+                    }}
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    Share Project
                   </Link>
                 </Button>
               </div>

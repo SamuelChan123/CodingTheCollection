@@ -107,6 +107,17 @@ class Firebase {
       .set({ artId: artworkId });
   };
 
+  addCollaboratorToProject = (projectId, email) => {
+    this.db
+    .ref(`projects/${projectId}/collaborators`)
+    .push()
+    .set({ userEmail: email });
+  };
+  
+  getCollaborators = (projectId) => this.db.ref(`projects/${projectId}/collaborators`);
+
+  collaborator = (projectId, uid) => this.db.ref(`projects/${projectId}/collaborators/${uid}`);
+
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");
   artworks = () => this.db.ref("artworks");

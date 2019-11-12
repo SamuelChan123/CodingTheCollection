@@ -65,11 +65,12 @@ export default function RegisterPage() {
 }
 
 const INITIAL_STATE = {
-  username: "",
-  email: "",
-  passwordOne: "",
-  passwordTwo: "",
-  error: null
+  firstname: '',
+  lastname: '',
+  email: '',
+  passwordOne: '',
+  passwordTwo: '',
+  error: null,
 };
 
 class RegisterBase extends Component {
@@ -79,16 +80,20 @@ class RegisterBase extends Component {
   }
 
   onSubmit = event => {
-    const { username, email, passwordOne } = this.state;
+    const { firstname, lastname, email, passwordOne } = this.state;
+
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        return this.props.firebase.user(authUser.user.uid).set({
-          username,
-          email
-        });
+        return this.props.firebase
+          .user(authUser.user.uid)
+          .set({
+            firstname,
+            lastname,
+            email,
+          });
       })
-      .then(authUser => {
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push("/allprojects");
       })
@@ -101,16 +106,24 @@ class RegisterBase extends Component {
   onChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
-  render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state;
+  render() { 
+    const {
+      firstname,
+      lastname,
+      email,
+      passwordOne,
+      passwordTwo,
+      error,
+    } = this.state;
 
     const { classes } = this.props;
 
     const isInvalid =
       passwordOne !== passwordTwo ||
-      passwordOne === "" ||
-      email === "" ||
-      username === "";
+      passwordOne === '' ||
+      email === '' ||
+      firstname === '' ||
+      lastname === '';
 
     return (
       <form className={classes.form} onSubmit={this.onSubmit}>
@@ -120,11 +133,22 @@ class RegisterBase extends Component {
           required
           fullWidth
           autoFocus
-          name="username"
-          value={username}
+          name="firstname"
+          value={firstname}
           onChange={this.onChange}
           type="text"
-          placeholder="Full Name"
+          placeholder="First Name"
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="lastname"
+          value={lastname}
+          onChange={this.onChange}
+          type="text"
+          placeholder="Last Name"
         />
         <TextField
           variant="outlined"
