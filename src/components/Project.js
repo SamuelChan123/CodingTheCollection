@@ -13,15 +13,20 @@ import {
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 import Copyright from "./Copyright";
 import BackButton from "./BackButton";
-import { AuthUserContext, withAuthorization, withAuthentication } from "./Session";
+import {
+  AuthUserContext,
+  withAuthorization,
+  withAuthentication
+} from "./Session";
 
 class Project extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      tileData: [], 
-      exhibit: "", 
-      owner: "" };
+    this.state = {
+      tileData: [],
+      exhibit: "",
+      owner: ""
+    };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
@@ -75,10 +80,11 @@ class Project extends React.Component {
                 .getDownloadURL()
                 .then(function(url) {
                   var artworkTiles = {
-                    id: id,
+                    id: art.val().id,
                     image: url,
                     name: art.val().name
                   };
+                  console.log(artworkTiles);
                   setState({
                     tileData: [...getState().tileData, artworkTiles].sort(
                       function(a, b) {
@@ -90,6 +96,7 @@ class Project extends React.Component {
                       }
                     )
                   });
+                  console.log(getState().tileData);
                 });
             });
         }
@@ -102,7 +109,7 @@ class Project extends React.Component {
         errorCode: error.code,
         errorMessage: error.message
       }));
-      console.log(this.state.owner)
+    console.log(this.state.owner);
   }
 
   handleTileClick = artId => {

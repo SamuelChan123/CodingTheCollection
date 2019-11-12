@@ -77,6 +77,7 @@ class EditArtwork extends React.Component {
 
     var fb = this.props.firebase;
     var id = this.artworkId;
+    var projectId = this.projectId;
     var history = this.props.history;
     this.setState({
       noError: this.state.artworkName || this.state.artworkImage
@@ -96,7 +97,7 @@ class EditArtwork extends React.Component {
             .put(updatedArtworkImage)
             .then(function(snapshot) {
               fb.updateArtworkWithId(id, data);
-              history.push("/allprojects");
+              history.push(`/project/${projectId}`);
             });
         });
     } else if (this.state.artworkName) {
@@ -104,7 +105,7 @@ class EditArtwork extends React.Component {
         name: this.state.artworkName
       };
       fb.updateArtworkWithId(this.artworkId, updated);
-      history.push("/allprojects");
+      history.push(`/project/${projectId}`);
     } else if (this.state.artworkImage) {
       let updatedArtworkImage = this.state.artworkImage;
       this.artworks
@@ -116,7 +117,7 @@ class EditArtwork extends React.Component {
             .child(`${imageUrl}`)
             .put(updatedArtworkImage)
             .then(function(snapshot) {
-              history.push("/allprojects");
+              history.push(`/project/${projectId}`);
             });
         });
     } else {
@@ -156,7 +157,7 @@ class EditArtwork extends React.Component {
                       }
                     }
                     fb.setProjectWithId(projectId, newProjectData);
-                    history.push("/allprojects");
+                    history.push(`/project/${projectId}`);
                   });
               })
               .catch(function(error) {
