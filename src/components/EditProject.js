@@ -21,8 +21,9 @@ class EditProject extends React.Component {
       projectName: "",
       projectImage: null,
       projectImageURL: null,
-      oldProject: null,
-      noError: false
+      oldProjectName: "",
+      oldProjectImage: null,
+      noError: true
     };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
@@ -59,11 +60,22 @@ class EditProject extends React.Component {
 
   componentDidMount() {
     var setState = this.setState.bind(this);
+    var projectId = this.projectId;
+    var storage = this.storage;
+
     this.projects
-      .child(this.projectId)
+      .child(projectId)
       .once("value")
       .then(project => {
-        setState({ oldProject: project.val().image });
+        storage
+          .child(project.val().image)
+          .getDownloadURL()
+          .then(url => {
+            setState({
+              oldProjectName: project.val().name,
+              oldProjectImage: url
+            });
+          });
       });
   }
 
@@ -161,50 +173,44 @@ class EditProject extends React.Component {
   render() {
     const classes = this.useStyles();
     const noError = this.state.noError;
+    const oldName = this.state.oldProjectName;
 
     return (
       <React.Fragment>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <br />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Edit Project
-            </Typography>
-          </div>
-          <div className={classes.paper}>
-            <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="name"
-                label="Project Name"
-                name="name"
-                autoComplete="Project Name"
-                onChange={this.handleName}
-                autoFocus
-              />
-              <ImageUploader
-                withIcon={true}
-                buttonText="Choose Images"
-                onChange={this.onDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-                maxFileSize={5242880}
-              />
-              <div>
-                {this.state.projectImage === null ? (
-                  <p></p>
-                ) : (
+        {oldName && (
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <br />
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Typography component="h1" variant="h5">
+                Edit Project
+              </Typography>
+            </div>
+            <div className={classes.paper}>
+              <form className={classes.form} noValidate>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Project Name"
+                  defaultValue={oldName}
+                  name="name"
+                  autoComplete="Project Name"
+                  onChange={this.handleName}
+                  autoFocus
+                />
+                {this.state.oldProjectImage != null && (
                   <img
-                    src={this.state.projectImageURL}
+                    src={this.state.oldProjectImage}
                     alt="Cannot be displayed"
                     style={{
                       maxWidth: "100%",
@@ -212,46 +218,65 @@ class EditProject extends React.Component {
                     }}
                   />
                 )}
-              </div>
-              <div>
-                {!noError && (
-                  <p style={{ color: "red" }}>
-                    Either the project image or the project name must be
-                    updated!
-                  </p>
-                )}
-              </div>
-              <br />
-              <div style={{ paddingBottom: 10 }}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={e => this.onUpdate(e)}
-                  className={classes.submit}
-                >
-                  Update Project
-                </Button>
-              </div>
-              <div style={{ paddingBottom: 10 }}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={e => this.onDelete(e)}
-                  className={classes.submit}
-                >
-                  Delete Project
-                </Button>
-              </div>
-              <BackButton history={this.props.history} />
-            </form>
-          </div>
-          <br />
-          <Box mt={8}>
-            <Copyright />
-          </Box>
-        </Container>
+                <ImageUploader
+                  withIcon={true}
+                  buttonText="Choose Images"
+                  onChange={this.onDrop}
+                  imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                  maxFileSize={5242880}
+                />
+                <div>
+                  {this.state.projectImage != null && (
+                    <img
+                      src={this.state.projectImageURL}
+                      alt="Cannot be displayed"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%"
+                      }}
+                    />
+                  )}
+                </div>
+                <div>
+                  {!noError && (
+                    <p style={{ color: "red" }}>
+                      Either the project image or the project name must be
+                      updated!
+                    </p>
+                  )}
+                </div>
+                <br />
+                <div style={{ paddingBottom: 10 }}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={e => this.onUpdate(e)}
+                    className={classes.submit}
+                  >
+                    Update Project
+                  </Button>
+                </div>
+                <div style={{ paddingBottom: 10 }}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={e => this.onDelete(e)}
+                    className={classes.submit}
+                  >
+                    Delete Project
+                  </Button>
+                </div>
+                <BackButton history={this.props.history} />
+              </form>
+            </div>
+            <br />
+            <Box mt={8}>
+              <Copyright />
+            </Box>
+          </Container>
+        )}
       </React.Fragment>
     );
   }
