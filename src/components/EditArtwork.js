@@ -18,10 +18,6 @@ class EditArtwork extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      artworkName: "",
-      artworkImage: null,
-      artworkImageURL: null,
-      artworkDescription: null,
       oldArtwork: null,
       noError: true
     };
@@ -40,7 +36,11 @@ class EditArtwork extends React.Component {
       .then(artwork => {
         setState({
           oldArtwork: artwork.val().image,
-          artworkDescription: artwork.val().description
+          name: artwork.val().name,
+          description: artwork.val().description || "",
+          year: artwork.val().year || "",
+          artist: artwork.val().artist || "",
+          materials: artwork.val().materials || "",
         });
       });
   }
@@ -79,13 +79,14 @@ class EditArtwork extends React.Component {
     var id = this.artworkId;
     var projectId = this.projectId;
     var history = this.props.history;
-    this.setState({
-      noError: this.state.artworkName || this.state.artworkImage
-    });
-    if (this.state.artworkName && this.state.artworkImage) {
-      var data = {
-        name: this.state.artworkName
-      };
+    var data = {
+      name: this.state.name,
+      description: this.state.description,
+      artist: this.state.artist,
+      year: this.state.year,
+      materials: this.state.materials
+    };
+    if (this.state.name && this.state.artworkImage) {
       let updatedArtworkImage = this.state.artworkImage;
       this.artworks
         .child(this.artworkId)
@@ -100,11 +101,8 @@ class EditArtwork extends React.Component {
               history.push(`/project/${projectId}`);
             });
         });
-    } else if (this.state.artworkName) {
-      const updated = {
-        name: this.state.artworkName
-      };
-      fb.updateArtworkWithId(this.artworkId, updated);
+    } else if (this.state.name) {
+      fb.updateArtworkWithId(this.artworkId, data);
       history.push(`/project/${projectId}`);
     } else if (this.state.artworkImage) {
       let updatedArtworkImage = this.state.artworkImage;
@@ -121,6 +119,7 @@ class EditArtwork extends React.Component {
             });
         });
     } else {
+      this.setState({ noError: false })
       console.log("Either the image or the artwork name must be updated!");
     }
   };
@@ -179,6 +178,10 @@ class EditArtwork extends React.Component {
     this.setState({ artworkDescription: event.target.value });
   };
 
+  handleForm = event => {
+    this.setState({[ event.target.name ]: event.target.value })
+  }
+
   onDrop = (pictureFiles, pictureDataURLs) => {
     this.setState({
       artworkImage: pictureFiles[pictureFiles.length - 1],
@@ -216,28 +219,64 @@ class EditArtwork extends React.Component {
                 id="name"
                 label="Name"
                 name="name"
-                onChange={this.handleName}
+                onChange={this.handleForm}
                 autoFocus
+                value={this.state.name}
+                defaultValue=" "
               />
               <TextField
                 variant="outlined"
                 margin="normal"
-                required
                 fullWidth
                 id="desc"
                 label="Description"
-                onChange={this.handleName}
-                name="desc"
+                onChange={this.handleForm}
+                name="description"
+                value={this.state.description}
+                defaultValue=" "
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="artist"
+                label="Artist"
+                onChange={this.handleForm}
+                name="artist"
+                value={this.state.artist}
+                defaultValue=" "
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="year"
+                label="Year"
+                onChange={this.handleForm}
+                name="year"
+                value={this.state.year}
+                defaultValue=" "
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="materials"
+                label="Materials"
+                onChange={this.handleForm}
+                name="materials"
+                value={this.state.materials}
+                defaultValue=" "
               />
               <ImageUploader
                 withIcon={true}
                 buttonText="Choose Images"
                 onChange={this.onDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
                 maxFileSize={5242880}
               />
               <div>
-                {this.state.artworkImage === null ? (
+                {!this.state.artworkImage ? (
                   <p></p>
                 ) : (
                   <img
