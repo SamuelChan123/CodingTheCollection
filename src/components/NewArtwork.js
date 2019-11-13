@@ -18,12 +18,15 @@ class NewArtwork extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pictures: [],
-      pictureURLs: [],
-      description: "",
-      noError: true
+      artworkImage: null,
+      artworkUrl: null,
+      contextImages: [],
+      contextUrls: [],
+      noError: true,
+      uploadText: "Submit"
     };
-    this.onDrop = this.onDrop.bind(this);
+    this.onArtworkImageDrop = this.onArtworkImageDrop.bind(this);
+    this.onContextImagesDrop = this.onContextImagesDrop.bind(this);
     this.storage = this.props.firebase.storage();
     this.projectId = this.props.match.params.projectId;
   }
@@ -63,37 +66,80 @@ class NewArtwork extends React.Component {
     });
   };
 
-  onDrop(pictureFiles, pictureDataURLs) {
+  onArtworkImageDrop(images, urls) {
     this.setState({
-      pictures: pictureFiles,
-      pictureURLs: pictureDataURLs
+      artworkImage: images[images.length-1],
+      artworkUrl: urls[urls.length-1]
+    })
+  }
+
+  onContextImagesDrop(images, urls) {
+    this.setState({
+      contextImages: images.map((img) => ({
+        name: '',
+        desc: '',
+        image: img,
+      })),
+      contextUrls: urls
     });
   }
 
   onCreate = e => {
+    const noError = this.state.artworkImage && this.state.name
     this.setState({
-      noError: this.state.pictures.length > 0 && this.state.name
+      noError: noError
     });
-    if (this.state.pictures.length > 0 && this.state.name) {
-      var mainImage = this.state.pictures[0];
-      let uuid = this.uuidv4();
-
-      var imageUrl = `artworks/${uuid}`;
+    if (noError) {
+      this.setState({
+        uploadText: `Uploading ${this.state.contextImages.length+1} images...`
+      })
+      var mainImage = this.state.artworkImage;
+      var imageUrl = `artworks/${this.uuidv4()}`;
       var data = {
         name: this.state.name,
         contextualmedia: [],
-        description: this.state.description,
+        description: this.state.description || '',
+        artist: this.state.artist || '',
+        year: this.state.year || '',
+        materials: this.state.materials || '',
         image: imageUrl
       };
       var fb = this.props.firebase;
       var history = this.props.history;
       var projectId = this.projectId;
-      this.storage
+      var storage = this.storage;
+      var contextImages = this.state.contextImages;
+      var uuidv4 = this.uuidv4;
+
+      console.log('storing stuff...')
+      storage
         .child(imageUrl)
         .put(mainImage)
         .then(function(snapshot) {
-          fb.addArtworkToProject(projectId, fb.setArtwork(data));
-          history.push(`/project/${projectId}`);
+          let artworkId = fb.setArtwork(data)
+          fb.addArtworkToProject(projectId, artworkId);
+          let promises = []
+          contextImages.forEach((data, i) => {
+            let imageUrl = `contextualmedia/${uuidv4()}`;
+            promises.push(new Promise((resolve, reject) => {
+              storage.child(imageUrl).put(data.image).then(() => {
+                fb.addContextualMediaToArtwork(
+                  artworkId,
+                  fb.setContextualMedia({
+                    name: data.name,
+                    description: data.desc,
+                    image: imageUrl
+                  })
+                )
+                resolve()
+              })            
+            }))
+
+          console.log('waiting for all promises to finish...')
+          })
+          Promise.all(promises).then(() => {
+            history.push(`/project/${projectId}`);
+          });
         });
     } else {
       console.log(
@@ -109,6 +155,20 @@ class NewArtwork extends React.Component {
     } = e;
     this.setState({ [name]: value });
   };
+
+  handleContextForm = e => {
+    const {
+      target: { name, value }
+    } = e;
+    const nameArr = name.split(' ')
+    const index = parseInt(nameArr[0])
+    const nameVal = nameArr.slice(1).toString()
+
+    let contextImages = [...this.state.contextImages]
+    let contextImage = {...contextImages[index]} // the contextual media image we want to update
+    contextImage[nameArr] = nameVal
+    this.setState({contextImages})
+  }
 
   render() {
     const classes = this.useStyles();
@@ -152,35 +212,94 @@ class NewArtwork extends React.Component {
                 name="desc"
                 onChange={this.handleForm}
               />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="artist"
+                label="Artist"
+                name="artist"
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="year"
+                label="Year"
+                name="year"
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="materials"
+                label="Materials/Dimensions"
+                name="materials"
+                onChange={this.handleForm}
+              />
               <ImageUploader
-                withIcon={true}
+                label="Artwork Image"
+                buttonText="Choose Image"
+                onChange={this.onArtworkImageDrop}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                maxFileSize={5242880}
+                singleImage={true}
+              />
+              <div>
+                {!this.state.artworkImage ? (
+                  <p></p>
+                ) : (
+                  <img
+                    src={this.state.artworkUrl}
+                    alt="artwork image"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
+                )}
+              </div>
+              <ImageUploader
+                label="Contextual Media Images"
                 buttonText="Choose Images"
-                onChange={this.onDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                onChange={this.onContextImagesDrop}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
                 maxFileSize={5242880}
               />
               <div>
-                {this.state.pictures.length === 0 ? (
+                {this.state.contextImages.length === 0 ? (
                   <p></p>
                 ) : (
-                  this.state.pictureURLs.map(picture => (
-                    <img
-                      src={picture}
-                      alt="Cannot be displayed"
-                      key={picture}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%"
-                      }}
-                    />
+                  this.state.contextUrls.map((url, i) => (
+                    <div key={i}>
+                      <img
+                        src={url}
+                        alt={`contextual media ${i}`}
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "100%"
+                        }}
+                      />
+                      <TextField
+                        variant="outlined"
+                        margin="dense"
+                        required
+                        fullWidth
+                        label="Description"
+                        name={`${i} desc`}
+                        onChange={this.handleContextForm}
+                      />
+                    <Box p={2}></Box>
+                    </div>
                   ))
                 )}
               </div>
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the artwork image or the artwork title must be filled
-                    in!
+                    Either the artwork image or the artwork title must be filled in!
                   </p>
                 )}
               </div>
@@ -192,7 +311,7 @@ class NewArtwork extends React.Component {
                   className={classes.submit}
                   onClick={e => this.onCreate(e)}
                 >
-                  Upload new artwork
+                  {this.state.uploadText}
                 </Button>
               </div>
               <BackButton history={this.props.history} />
