@@ -75,9 +75,15 @@ class Firebase {
   setArtwork = data => {
     var myRef = this.db.ref("artworks").push(data);
     var key = myRef.key;
-    const url = `artworks/${key}`;
     data.id = key;
-    this.db.ref(url).set(data);
+    this.db.ref(`artworks/${key}`).set(data);
+    return key;
+  };
+  setContextualMedia = data => {
+    var myRef = this.db.ref("contextualmedia").push(data);
+    var key = myRef.key;
+    data.id = key;
+    this.db.ref(`contextualmedia/${key}`).set(data);
     return key;
   };
   setProjectWithId = (id, data) => {
@@ -105,6 +111,12 @@ class Firebase {
       .ref(`projects/${projectId}/artworks`)
       .push()
       .set({ artId: artworkId });
+  };
+  addContextualMediaToArtwork = (artworkId, contextualMediaId) => {
+    this.db
+      .ref(`artworks/${artworkId}/contextualmedia`)
+      .push()
+      .set({ contextualMediaId: contextualMediaId });
   };
 
   addCollaboratorToProject = (projectId, email) => {
