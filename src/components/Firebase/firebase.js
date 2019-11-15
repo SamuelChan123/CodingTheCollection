@@ -134,6 +134,7 @@ class Firebase {
   users = () => this.db.ref("users");
   artworks = () => this.db.ref("artworks");
   storage = () => this.store.ref();
+  contextualMedia = () => this.db.ref("contextualmedia");
 }
 
 export default Firebase;
