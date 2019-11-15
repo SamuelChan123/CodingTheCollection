@@ -360,6 +360,12 @@ class Presentation extends React.Component {
                     {this.state.currentArtwork.name}, {this.state.currentArtwork.year}
                     <br/>
                     {this.state.currentArtwork.materials}
+                    <br/>
+                    {this.state.currentArtwork.dimensions}
+                    <br/>
+                    {this.state.currentArtwork.creditLine}
+                    <br/>
+                    {this.state.currentArtwork.objectNumber}
                   </h2>
                   <p>
                     {this.state.description}
