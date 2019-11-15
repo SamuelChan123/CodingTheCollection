@@ -76,7 +76,6 @@ class NewArtwork extends React.Component {
   onContextImagesDrop(images, urls) {
     this.setState({
       contextImages: images.map((img) => ({
-        name: '',
         desc: '',
         image: img,
       })),
@@ -111,25 +110,22 @@ class NewArtwork extends React.Component {
       var contextImages = this.state.contextImages;
       var uuidv4 = this.uuidv4;
 
-      console.log('storing stuff...')
+      // store in firebase
       storage
         .child(imageUrl)
-        .put(mainImage)
+        .put(mainImage) // upload artwork main image
         .then(function(snapshot) {
           let artworkId = fb.setArtwork(data)
-          fb.addArtworkToProject(projectId, artworkId);
+          fb.addArtworkToProject(projectId, artworkId); // link artwork -> project
           let promises = []
-          contextImages.forEach((data, i) => {
+          contextImages.forEach((data, i) => { // for every contextual image...
             let imageUrl = `contextualmedia/${uuidv4()}`;
             promises.push(new Promise((resolve, reject) => {
-              storage.child(imageUrl).put(data.image).then(() => {
-                fb.addContextualMediaToArtwork(
+              storage.child(imageUrl).put(data.image).then(() => { // upload curr image to firebase
+                data.image = imageUrl // replace the actual image with its URL
+                fb.addContextualMediaToArtwork( // link contextual media -> artwork
                   artworkId,
-                  fb.setContextualMedia({
-                    name: data.name,
-                    description: data.desc,
-                    image: imageUrl
-                  })
+                  fb.setContextualMedia(data)
                 )
                 resolve()
               })            
@@ -164,9 +160,10 @@ class NewArtwork extends React.Component {
     const index = parseInt(nameArr[0])
     const nameVal = nameArr.slice(1).toString()
 
+    console.log(index)
+    console.log(nameVal)
     let contextImages = [...this.state.contextImages]
-    let contextImage = {...contextImages[index]} // the contextual media image we want to update
-    contextImage[nameArr] = nameVal
+    contextImages[index][nameVal] = value // the contextual media image we want to update
     this.setState({contextImages})
   }
 
