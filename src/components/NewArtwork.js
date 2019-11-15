@@ -94,6 +94,7 @@ class NewArtwork extends React.Component {
       })
       var mainImage = this.state.artworkImage;
       var imageUrl = `artworks/${this.uuidv4()}`;
+  
       var data = {
         name: this.state.name,
         contextualmedia: [],
@@ -101,6 +102,9 @@ class NewArtwork extends React.Component {
         artist: this.state.artist || '',
         year: this.state.year || '',
         materials: this.state.materials || '',
+        dimensions: this.state.dimensions || '',
+        objectNumber: this.state.objectNumber || '',
+        creditLine: this.state.creditLine || '',
         image: imageUrl
       };
       var fb = this.props.firebase;
@@ -204,15 +208,6 @@ class NewArtwork extends React.Component {
                 variant="outlined"
                 margin="normal"
                 fullWidth
-                id="desc"
-                label="Description"
-                name="desc"
-                onChange={this.handleForm}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
                 id="artist"
                 label="Artist"
                 name="artist"
@@ -232,8 +227,45 @@ class NewArtwork extends React.Component {
                 margin="normal"
                 fullWidth
                 id="materials"
-                label="Materials/Dimensions"
+                label="Materials"
                 name="materials"
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="dimensions"
+                label="Dimensions"
+                name="dimensions"
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="objectNumber"
+                label="Object Number"
+                name="objectNumber"
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="creditLine"
+                label="Credit Line"
+                name="creditLine"
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                multiline
+                id="description"
+                label="Description"
+                name="description"
                 onChange={this.handleForm}
               />
               <ImageUploader

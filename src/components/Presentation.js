@@ -122,10 +122,23 @@ const styles = theme => ({
 class Presentation extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tileData: [], exhibit: "", open: true, artId: (this.props.match.params.artId ? this.props.match.params.artId : null), artName: ""};
+    this.state = { tileData: [], 
+                   exhibit: "",
+                   open: true, 
+                   artId: (this.props.match.params.artId ? this.props.match.params.artId : null), 
+                   artName: "",
+                   currentArtwork: null,
+                   currentSlide: 0,
+                   artInfo: new Map(),
+                   artTileData: new Map(),
+                   leftTileData: [],
+                   description: "",
+                  };
+
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks();
+    this.contextualMedia = this.props.firebase.contextualMedia();
     this.projectId = this.props.match.params.projectId;
   }
 
@@ -140,14 +153,19 @@ class Presentation extends React.Component {
     var state = this.state;
     var storage = this.storage;
     var getArtworks = this.artworks;
+    var getContextualMedia = this.contextualMedia;
+
+    let artMap = new Map();
+    let artInfoMap = new Map();
 
     this.projects
       .child(this.projectId)
       .once("value")
       .then(project => {
         for (var artwork in project.val().artworks) {
+          let contextualArt = [];
           var id = project.val().artworks[artwork].artId;
-          console.log(id);
+          // console.log(id);
           getArtworks
             .child(id)
             .once("value")
@@ -161,19 +179,57 @@ class Presentation extends React.Component {
                     image: url,
                     name: art.val().name
                   };
+                  contextualArt.push({
+                    image: url,
+                    description: art.val().description
+                  });
                   if(!getState().artId) {
                     setState({artId: artworkTiles.id});
                   }
                   if(getState().artId == artworkTiles.id) {
                     setState({artName: artworkTiles.name});
                   }
+                  // console.log(art.val())
+                  if (getState().currentArtwork == null) {
+                    setState({currentArtwork: art.val()})
+                  }
+
+                  artMap.set(art.val().id, art.val());
+                  
 
                   setState({
-                    tileData: [...getState().tileData, artworkTiles]
+                    // tileData: artInfoMap.get(art.val().id),
+                    leftTileData: [...getState().leftTileData, artworkTiles]
                   });
+
+                  // console.log(art.val());
+                  for (var contextualMedia in art.val().contextualmedia) {
+                    let contextualMediaId = art.val().contextualmedia[contextualMedia].contextualMediaId;
+                    console.log(contextualMediaId);
+                    getContextualMedia
+                      .child(contextualMediaId)
+                      .once("value")
+                      .then(art1 => {
+                        storage
+                        .child(art1.val().image)
+                        .getDownloadURL()
+                        .then(function (url) {
+                          contextualArt.push({
+                            image: url,
+                            description: art1.val().description,
+                          });
+                        })
+                      })
+                  }
+                  artInfoMap.set(art.val().id, contextualArt);
+
                 });
             });
         }
+        setState({artInfo: artMap});
+        setState({artTileData: artInfoMap});
+        setState({tileData: artInfoMap.get(getState().currentArtwork.id)})
+
         setState({
           exhibit: project.val().name
         });
@@ -182,6 +238,7 @@ class Presentation extends React.Component {
         errorCode: error.code,
         errorMessage: error.message
       }));
+
   }
 
   
@@ -191,6 +248,11 @@ class Presentation extends React.Component {
     const { classes } = this.props;
     const { theme } = this.props;
 
+    // console.log(this.state);
+    // console.log(this.state.artInfo);
+    // console.log(this.state.artTileData);
+    // console.log(this.state.tileData);
+
     const handleDrawerOpen = () => {
       this.setState({ open: true });
     };
@@ -199,11 +261,27 @@ class Presentation extends React.Component {
       this.setState({ open: false });
     };
 
+
     const selectArt = (tile) => {
       /* this.setState({artId: newArtId}); */
       console.log('Art selected: ', tile.id);
       this.setState({artId: tile.id, artName: tile.name});
+      this.setState({
+        currentArtwork: this.state.artInfo.get(tile.id),
+        tileData: this.state.artTileData.get(tile.id),
+      });
+      this.setState({description: this.state.currentArtwork.description});
+      // this.forceUpdate();
+      // console.log(this.state.description);
+      // console.log(this.state.currentArtwork.description);
+  
     }
+
+    const onClickThumb = item => {
+        // console.log(item);
+        // let newDescription = this.state.artTileData.get(this.state.currentArtwork.id)[item].description;
+        // this.setState({description: newDescription});
+    };
 
     return (
       <React.Fragment>
@@ -246,8 +324,7 @@ class Presentation extends React.Component {
             <Divider />
             
             <GridList cellHeight={160} className={classes.gridList} cols={1}>
-              {console.log(this.state.tileData)}
-              {this.state.tileData.map(tile => (
+              {this.state.leftTileData.map(tile => (
                 <GridListTile key={tile.id} cols={tile.cols || 1 }
                   onClick = {function(e) {
                     selectArt(tile);
@@ -260,14 +337,13 @@ class Presentation extends React.Component {
             </GridList>
           </Drawer>
 
-
           <main
             className={clsx(classes.content, { [classes.contentShift]: this.state.open, })}
           >
             <div className={classes.mainDisplay} >
-              <Carousel showStatus={false} showIndicators={false} emulateTouch>
+              <Carousel showStatus={false} showIndicators={false} emulateTouch onClickThumb={onClickThumb} >
                 {this.state.tileData.map(tile => (
-                  <div className={classes.carouselTile}>
+                  <div className={classes.carouselTile} key={tile.image}>
                     <img src={tile.image} className={classes.carouselImage} />
                   </div>
                 ))}
@@ -275,57 +351,28 @@ class Presentation extends React.Component {
             </div>
 
             <div className={classes.textField}>
-              <h1>Chancay</h1>
-              <h1>{this.state.artName}</h1>
-              <Button variant="contained" color="primary">
-                <Link
-                  to="/model"
-                  style={{
-                    textDecoration: "none",
-                    color: "white"
-                  }}
-                >
-                  3D Model
-                </Link>
-              </Button>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin felis
-                felis, volutpat vitae sodales sit amet, posuere sed dolor. Curabitur
-                sagittis auctor ultricies. Vestibulum eget condimentum est, id
-                dapibus justo. Aliquam pellentesque hendrerit felis et viverra.
-                Curabitur non neque id nunc maximus euismod ac et urna. Aliquam
-                ullamcorper egestas nisi, vitae pharetra enim lacinia ut. Fusce ac
-                dui in nunc sollicitudin porttitor ut vitae ex. Integer ligula nisi,
-                ultrices a aliquet a, accumsan nec leo. Morbi velit felis, tempor
-                nec risus dignissim, pellentesque convallis ligula. Vivamus enim
-                enim, rutrum quis cursus cursus, convallis porta sapien.
-              </p>
-              <p>
-                Sed a urna dapibus, consectetur eros quis, sagittis tortor. Etiam
-                malesuada commodo est. Mauris efficitur tincidunt ipsum ut ultrices.
-                Vestibulum rhoncus, tortor quis sollicitudin imperdiet, lorem ligula
-                congue lectus, mollis volutpat tellus arcu at orci. Phasellus odio
-                elit, finibus sed lobortis id, viverra tincidunt ex. Vivamus aliquam
-                turpis magna, interdum tempor mi aliquam in. Etiam mattis dapibus
-                tempus. Phasellus rutrum enim nisi, et ultricies purus vulputate sit
-                amet. Sed ac posuere leo, sed consectetur ex. Quisque sed lorem
-                ultrices, bibendum urna vitae, ultricies elit. Vivamus et cursus
-                leo. Phasellus non magna et erat eleifend venenatis. Sed at mattis
-                turpis. Donec porta, purus eget placerat tempor, augue tortor
-                aliquet metus, nec dictum sem est vel ex. Integer eu consectetur
-                odio. Proin facilisis congue ex id eleifend.
-              </p>
-              {/*             <Button variant="contained" color="primary">
-              <Link
-                to="/model"
-                style={{
-                  textDecoration: "none",
-                  color: "white"
-                }}
-              >
-                3D Model
-              </Link>
-            </Button> */}
+
+              {this.state.currentArtwork && 
+                <div>
+                  <h2>
+                    {this.state.currentArtwork.artist}
+                    <br/>
+                    {this.state.currentArtwork.name}, {this.state.currentArtwork.year}
+                    <br/>
+                    {this.state.currentArtwork.materials}
+                    <br/>
+                    {this.state.currentArtwork.dimensions}
+                    <br/>
+                    {this.state.currentArtwork.creditLine}
+                    <br/>
+                    {this.state.currentArtwork.objectNumber}
+                  </h2>
+                  <p>
+                    {this.state.description}
+                  </p>
+                </div>
+              }
+
             </div>
 
           </main>
