@@ -23,7 +23,8 @@ class NewArtwork extends React.Component {
       contextImages: [],
       contextUrls: [],
       noError: true,
-      uploadText: "Submit"
+      uploadText: "Submit",
+      uploading: false
     };
     this.onArtworkImageDrop = this.onArtworkImageDrop.bind(this);
     this.onContextImagesDrop = this.onContextImagesDrop.bind(this);
@@ -84,12 +85,13 @@ class NewArtwork extends React.Component {
   }
 
   onCreate = e => {
-    const noError = this.state.artworkImage && this.state.name
-    this.setState({
-      noError: noError
-    });
-    if (noError) {
+    if (!this.state.artworkImage || !this.state.name || this.state.uploading) {
       this.setState({
+        noError: false,
+      })
+    } else {
+      this.setState({
+        uploading: true,
         uploadText: `Uploading ${this.state.contextImages.length+1} images...`
       })
       var mainImage = this.state.artworkImage;
@@ -141,11 +143,7 @@ class NewArtwork extends React.Component {
             history.push(`/project/${projectId}`);
           });
         });
-    } else {
-      console.log(
-        "Both the Artwork Title and the Artwork Image must be uploaded!"
-      );
-    }
+    } 
     e.preventDefault();
   };
 
@@ -339,6 +337,7 @@ class NewArtwork extends React.Component {
                   color="primary"
                   className={classes.submit}
                   onClick={e => this.onCreate(e)}
+                  disabled={this.state.uploading}
                 >
                   {this.state.uploadText}
                 </Button>
