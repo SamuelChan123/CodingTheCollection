@@ -8,16 +8,36 @@ import {
   GridListTile,
   GridList,
   Button,
-  makeStyles
 } from "@material-ui/core";
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 import Copyright from "./Copyright";
 import BackButton from "./BackButton";
-import {
-  AuthUserContext,
-  withAuthorization,
-  withAuthentication
-} from "./Session";
+import { withAuthorization } from "./Session";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/styles";
+
+
+const theme = createMuiTheme();
+
+const styles = {
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden",
+    backgroundColor: theme.palette.background.paper
+  },
+  gridList: {
+    width: 1000,
+    height: "100%"
+  },
+  button: {
+    margin: theme.spacing(0.5)
+  },
+  icon: {
+    color: "rgba(255, 255, 255, 0.54)"
+  }
+};
 
 class Project extends React.Component {
   constructor(props) {
@@ -35,28 +55,6 @@ class Project extends React.Component {
 
   getState() {
     return this.state;
-  }
-
-  useStyles() {
-    return makeStyles(theme => ({
-      root: {
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
-        overflow: "hidden",
-        backgroundColor: theme.palette.background.paper
-      },
-      gridList: {
-        width: 1000,
-        height: 500
-      },
-      button: {
-        margin: theme.spacing(0.5)
-      },
-      icon: {
-        color: "rgba(255, 255, 255, 0.54)"
-      }
-    }));
   }
 
   componentDidMount() {
@@ -117,8 +115,8 @@ class Project extends React.Component {
   };
 
   render() {
-    const classes = this.useStyles();
-    const { owner } = this.state;
+    const { classes } = this.props;
+    
     return (
       <React.Fragment>
         <br />
@@ -261,4 +259,4 @@ class Project extends React.Component {
   }
 }
 
-export default withAuthorization(Project);
+export default withAuthorization(withStyles(styles)(Project));
