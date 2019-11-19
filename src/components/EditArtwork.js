@@ -349,7 +349,9 @@ class EditArtwork extends React.Component {
 
   deleteContextual = i => {
     let contexts = this.state.contextImages;
+    contexts.splice(i, 1);
     let contextUrls = this.state.contextUrls;
+    contextUrls.splice(i, 1);
     this.setState({ contextImages: contexts, contextUrls: contextUrls });
   };
 
