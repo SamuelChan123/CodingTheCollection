@@ -132,7 +132,6 @@ class Presentation extends React.Component {
                    artInfo: new Map(),
                    artTileData: new Map(),
                    leftTileData: [],
-                   description: "",
                   };
 
     this.projects = this.props.firebase.projects(); // get projects ref
@@ -157,91 +156,127 @@ class Presentation extends React.Component {
 
     let artMap = new Map();
     let artInfoMap = new Map();
+    let promises = []
 
     this.projects
       .child(this.projectId)
       .once("value")
       .then(project => {
         for (var artwork in project.val().artworks) {
-          let contextualArt = [];
-          var id = project.val().artworks[artwork].artId;
-          // console.log(id);
-          getArtworks
-            .child(id)
-            .once("value")
-            .then(art => {
-              storage
-                .child(art.val().image)
-                .getDownloadURL()
-                .then(function (url) {
-                  var artworkTiles = {
-                    id: art.val().id,
-                    image: url,
-                    name: art.val().name
-                  };
-                  contextualArt.push({
-                    image: url,
-                    description: art.val().description
-                  });
-                  if(!getState().artId) {
-                    setState({artId: artworkTiles.id});
-                  }
-                  if(getState().artId == artworkTiles.id) {
-                    setState({artName: artworkTiles.name});
-                  }
-                  // console.log(art.val())
-                  if (getState().currentArtwork == null) {
-                    setState({currentArtwork: art.val()})
-                  }
+					promises.push(new Promise((resolve, reject) => {
+						let contextualArt = [];
+						var id = project.val().artworks[artwork].artId;
+						// console.log(id);
+						getArtworks
+							.child(id)
+							.once("value")
+							.then(art => {
+								storage
+								.child(art.val().image)
+								.getDownloadURL()
+								.then(function (url) {
+									var artworkTiles = {
+										id: art.val().id,
+										image: url,
+										name: art.val().name
+									};
+									contextualArt.push({
+										image: url,
+										description: art.val().description
+									});
+									if(!getState().artId) {
+										setState({artId: artworkTiles.id});
+									}
+									if(getState().artId == artworkTiles.id) {
+										setState({artName: artworkTiles.name});
+									}
+									// console.log(art.val())
+									if (getState().currentArtwork == null) {
+										setState({currentArtwork: art.val()})
+									}
 
-                  artMap.set(art.val().id, art.val());
-                  
+									artMap.set(art.val().id, art.val());
+									
 
-                  setState({
-                    // tileData: artInfoMap.get(art.val().id),
-                    leftTileData: [...getState().leftTileData, artworkTiles]
-                  });
+									setState({
+										// tileData: artInfoMap.get(art.val().id),
+										leftTileData: [...getState().leftTileData, artworkTiles]
+									});
 
-                  // console.log(art.val());
-                  for (var contextualMedia in art.val().contextualmedia) {
-                    let contextualMediaId = art.val().contextualmedia[contextualMedia].contextualMediaId;
-                    console.log(contextualMediaId);
-                    getContextualMedia
-                      .child(contextualMediaId)
-                      .once("value")
-                      .then(art1 => {
-                        storage
-                        .child(art1.val().image)
-                        .getDownloadURL()
-                        .then(function (url) {
-                          contextualArt.push({
-                            image: url,
-                            description: art1.val().description,
-                          });
-                        })
-                      })
-                  }
-                  artInfoMap.set(art.val().id, contextualArt);
+									// console.log(art.val());
+									for (var contextualMedia in art.val().contextualmedia) {
+										let contextualMediaId = art.val().contextualmedia[contextualMedia].contextualMediaId;
+										console.log(contextualMediaId);
+										getContextualMedia
+											.child(contextualMediaId)
+											.once("value")
+											.then(art1 => {
+												storage
+												.child(art1.val().image)
+												.getDownloadURL()
+												.then(function (url) {
+													contextualArt.push({
+														image: url,
+														description: art1.val().description,
+													});
+												})
+											})
+									}
+									console.log("resolving...")
+									artInfoMap.set(art.val().id, contextualArt);
+									resolve()
 
-                });
-            });
+								});
+							});
+						}))
         }
-        setState({artInfo: artMap});
-        setState({artTileData: artInfoMap});
-        setState({tileData: artInfoMap.get(getState().currentArtwork.id)})
-
-        setState({
-          exhibit: project.val().name
-        });
-      })
-      .catch(error => ({
-        errorCode: error.code,
-        errorMessage: error.message
-      }));
+				Promise.all(promises).then(() => { 
+					this.setState({
+						artInfo: artMap,
+						artTileData: artInfoMap,
+						tileData: artInfoMap.get(getState().currentArtwork.id),
+						exhibit: project.val().name
+					}, () => {
+            /*
+            console.log(this.state)
+            this.forceUpdate()
+            setTimeout(() => {
+              console.log('forcing...')
+              console.log(this.state.tileData)
+              this.forceUpdate()
+            }, 1000)
+            */
+            this.selectArt(this.state.artId)
+          })
+				})
+    }).catch(error => ({
+			errorCode: error.code,
+			errorMessage: error.message
+    }));
+      
 
   }
 
   
+  selectArt(tileId) {
+    /* this.setState({artId: newArtId}); */
+    console.log('Art selected: ', tileId);
+    console.log(this.state.artTileData.get(tileId))
+    // https://stackoverflow.com/questions/55276560/react-array-in-state-updating-late
+    this.setState(oldState => {
+      let currentArtwork = oldState.artInfo.get(tileId)
+      return {
+        artId: tileId, 
+        artName: currentArtwork.name,
+        currentArtwork: currentArtwork,
+        tileData: oldState.artTileData.get(tileId),
+      }
+    }, ()=> {
+      console.log(this.state.tileData)
+      this.forceUpdate()
+    });
+
+  }
 
 
   render() {
@@ -262,20 +297,6 @@ class Presentation extends React.Component {
     };
 
 
-    const selectArt = (tile) => {
-      /* this.setState({artId: newArtId}); */
-      console.log('Art selected: ', tile.id);
-      this.setState({artId: tile.id, artName: tile.name});
-      this.setState({
-        currentArtwork: this.state.artInfo.get(tile.id),
-        tileData: this.state.artTileData.get(tile.id),
-      });
-      this.setState({description: this.state.currentArtwork.description});
-      // this.forceUpdate();
-      // console.log(this.state.description);
-      // console.log(this.state.currentArtwork.description);
-  
-    }
 
     const onClickThumb = item => {
         // console.log(item);
@@ -326,8 +347,8 @@ class Presentation extends React.Component {
             <GridList cellHeight={160} className={classes.gridList} cols={1}>
               {this.state.leftTileData.map(tile => (
                 <GridListTile key={tile.id} cols={tile.cols || 1 }
-                  onClick = {function(e) {
-                    selectArt(tile);
+                  onClick = {(e) => {
+                    this.selectArt(tile.id);
                   }} 
                 className = {clsx(this.state.artId == tile.id && classes.selected)}>
                   <img src={tile.image} alt={tile.name} 
@@ -341,7 +362,9 @@ class Presentation extends React.Component {
             className={clsx(classes.content, { [classes.contentShift]: this.state.open, })}
           >
             <div className={classes.mainDisplay} >
-              <Carousel showStatus={false} showIndicators={false} emulateTouch onClickThumb={onClickThumb} >
+
+
+              <Carousel test={this.state.tileData} showStatus={false} showIndicators={false} emulateTouch onClickThumb={onClickThumb} >
                 {this.state.tileData.map(tile => (
                   <div className={classes.carouselTile} key={tile.image}>
                     <img src={tile.image} className={classes.carouselImage} />
@@ -368,7 +391,7 @@ class Presentation extends React.Component {
                     {this.state.currentArtwork.objectNumber}
                   </h2>
                   <p>
-                    {this.state.description}
+                    {this.state.currentArtwork.description}
                   </p>
                 </div>
               }
@@ -377,7 +400,7 @@ class Presentation extends React.Component {
 
           </main>
         </div >
-      </React.Fragment >
+    e </React.Fragment >
     );
   }
 }
