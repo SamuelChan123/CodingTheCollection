@@ -4,8 +4,7 @@ import {
   IconButton,
   GridListTileBar,
   GridListTile,
-  GridList,
-  makeStyles
+  GridList
 } from "@material-ui/core";
 import { Info as InfoIcon, Add as AddIcon } from "@material-ui/icons/";
 import { compose } from "recompose";
@@ -13,6 +12,28 @@ import Copyright from "./Copyright";
 // import tileData from "../sample/AllProjectsSample";
 import { AuthUserContext, withAuthorization } from "./Session";
 import { withFirebase } from "./Firebase";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/styles";
+
+const theme = createMuiTheme();
+
+const styles = {
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "visible",
+    backgroundColor: theme.palette.background.paper
+  },
+  gridList: {
+    width: 1000,
+    height: "100%"
+  },
+  height: "100%",
+  icon: {
+    color: "rgba(255, 255, 255, 0.54)"
+  }
+};
 
 class AllProjects extends React.Component {
   constructor(props) {
@@ -33,8 +54,6 @@ class AllProjects extends React.Component {
       authUser => {
         if (authUser) {
           this.setState({ authUser: authUser, });
-          // console.log(this.props.firebase.projects().orderByChild("owner").equalTo(authUser.uid))
-          console.log(authUser.email)
           this.projects = this.props.firebase.projects().orderByChild("owner").equalTo(authUser.uid)
           let emailKey = (authUser.email).replace(".", ",")
           this.sharedProjects = this.props.firebase.projects().orderByChild("collaborators/" + emailKey).equalTo(true)
@@ -127,31 +146,13 @@ class AllProjects extends React.Component {
     return this.state;
   }
 
-  useStyles() {
-    return makeStyles(theme => ({
-      root: {
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
-        overflow: "hidden",
-        backgroundColor: theme.palette.background.paper
-      },
-      gridList: {
-        width: 1000,
-        height: 450
-      },
-      icon: {
-        color: "rgba(255, 255, 255, 0.54)"
-      }
-    }));
-  }
-
   handleTileClick = projectId => {
     this.props.history.push(`project/${projectId}`);
   };
 
   render() {
-    const classes = this.useStyles();
+    const { classes } = this.props;
+  
     const { loading } = this.state;
 
     return (
@@ -295,12 +296,12 @@ class AllProjects extends React.Component {
   }
 }
 
-export default withAuthorization(AllProjects);
+export default withAuthorization(withStyles(styles)(AllProjects));
 
 const AllProjectsPage = compose(
   withRouter,
   withFirebase,
   withAuthorization
-)(AllProjects);
+)(withStyles(styles)(AllProjects));
 
 export { AllProjectsPage };
