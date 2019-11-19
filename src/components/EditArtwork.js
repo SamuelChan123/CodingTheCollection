@@ -6,7 +6,6 @@ import {
   Box,
   Typography,
   makeStyles,
-  GridListTile,
   Container
 } from "@material-ui/core";
 import ImageUploader from "react-images-upload";
@@ -74,15 +73,13 @@ class EditArtwork extends React.Component {
 
             artwork.child("contextualmedia").forEach(mediaRef => {
               let contextId = mediaRef.val().contextualMediaId;
-              console.log(contextId);
               this.contextualMedia
                 .child(contextId)
                 .once("value")
                 .then(media => {
                   let description = media.val().desc;
                   let contextualMediaImage = media.val().image;
-                  console.log(contextualMediaImage);
-                  console.log(description);
+
                   storage
                     .child(contextualMediaImage)
                     .getDownloadURL()
@@ -287,7 +284,7 @@ class EditArtwork extends React.Component {
     });
   };
 
-  deleteContextual = i => {
+  deleteOldContextual = i => {
     let contexts = this.state.oldContextuals;
     let removingId = contexts[i].id;
     contexts.splice(i, 1);
@@ -314,22 +311,15 @@ class EditArtwork extends React.Component {
                 .once("value")
                 .then(artwork => {
                   let artworkData = artwork.val();
-                  console.log(
-                    "artworkdata before" + JSON.stringify(artworkData)
-                  );
+
                   let conMedias = artworkData.contextualmedia;
                   for (var cm in conMedias) {
-                    console.log(cm);
                     if (conMedias[cm].contextualMediaId === removingId) {
-                      console.log("hello");
                       conMedias[cm].contextualMediaId = null;
                     }
                   }
                   artworkData.contextualmedia = conMedias;
                   fb.setArtworkWithId(artworkId, artworkData);
-                  console.log(
-                    "artworkdata after" + JSON.stringify(artworkData)
-                  );
                 });
             });
           });
@@ -355,6 +345,12 @@ class EditArtwork extends React.Component {
         contextualData.desc = newDescription;
         fb.setContextualWithId(contextualId, contextualData);
       });
+  };
+
+  deleteContextual = i => {
+    let contexts = this.state.contextImages;
+    let contextUrls = this.state.contextUrls;
+    this.setState({ contextImages: contexts, contextUrls: contextUrls });
   };
 
   handleName = event => {
@@ -394,8 +390,6 @@ class EditArtwork extends React.Component {
     const index = parseInt(nameArr[0]);
     const nameVal = nameArr.slice(1).toString();
 
-    console.log(index);
-    console.log(nameVal);
     let contextImages = [...this.state.contextImages];
     contextImages[index][nameVal] = value; // the contextual media image we want to update
     this.setState({ contextImages });
@@ -409,8 +403,6 @@ class EditArtwork extends React.Component {
     const index = parseInt(nameArr[0]);
     const nameVal = nameArr.slice(1).toString();
 
-    console.log(index);
-    console.log(nameVal);
     let oldContextuals = [...this.state.oldContextuals];
     oldContextuals[index][nameVal] = value; // the old contextual media field we want to update
     this.setState({ oldContextuals });
@@ -582,9 +574,9 @@ class EditArtwork extends React.Component {
                           variant="contained"
                           color="primary"
                           fullWidth
-                          onClick={() => this.deleteContextual(i)}
+                          onClick={() => this.deleteOldContextual(i)}
                         >
-                          Delete Artwork
+                          Delete Contextual Artwork
                         </Button>
                       </div>
                       <Box p={2}></Box>
@@ -650,6 +642,16 @@ class EditArtwork extends React.Component {
                         name={`${i} desc`}
                         onChange={this.handleContextForm}
                       />
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.deleteContextual(i)}
+                        >
+                          Delete Contextual Artwork
+                        </Button>
+                      </div>
                       <Box p={2}></Box>
                     </div>
                   ))
