@@ -524,7 +524,19 @@ class EditArtwork extends React.Component {
         <Container maxWidth="sm">
           <div className={classes.paper}>
             <form>
-              {this.state.oldArtwork != null && (
+            <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Artwork Image
+            </Typography>
+          </div>
+
+              {this.state.oldArtwork != null && !this.state.artworkImage && (
                 <img
                   src={this.state.oldArtwork}
                   alt="Cannot be displayed"
@@ -534,6 +546,40 @@ class EditArtwork extends React.Component {
                   }}
                 />
               )}
+              <div>
+                {!this.state.artworkImage ? (
+                  <p></p>
+                ) : (
+                  <img
+                    src={this.state.artworkUrl}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
+                )}
+              </div>
+<ImageUploader
+                label="Update Artwork Image"
+                buttonText="Choose Image"
+                onChange={this.onArtworkImageDrop}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                maxFileSize={5242880}
+                singleImage={true}
+              />
+  
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Contextual Media
+            </Typography>
+          </div>
 
               <div>
                 {this.state.oldContextuals.length === 0 ? (
@@ -590,28 +636,6 @@ class EditArtwork extends React.Component {
         <Container maxWidth="sm">
           <div className={classes.paper}>
             <form>
-              <ImageUploader
-                label="Artwork Image"
-                buttonText="Choose Image"
-                onChange={this.onArtworkImageDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-                maxFileSize={5242880}
-                singleImage={true}
-              />
-              <div>
-                {!this.state.artworkImage ? (
-                  <p></p>
-                ) : (
-                  <img
-                    src={this.state.artworkUrl}
-                    alt="Cannot be displayed"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%"
-                    }}
-                  />
-                )}
-              </div>
               <ImageUploader
                 label="Contextual Media Images"
                 buttonText="Choose Images"
