@@ -23,6 +23,7 @@ import ShareProject from "./components/ShareProject.js";
 import Home from "./components/Home.js";
 import Presentation from "./components/Presentation.js";
 import Model from "./components/Model";
+import HowItWorks from "./components/HowItWorks";
 import { withAuthentication } from "./components/Session";
 
 const theme = createMuiTheme({
@@ -47,6 +48,7 @@ class AppRouter extends Component {
               <Route path="/allprojects" component={AllProjects} />
               <Route path="/project/:projectId" exact component={Project} />
               <Route path="/newproject" exact component={NewProject} />
+              <Route path="/howitworks" exact component={HowItWorks} />
               <Route
                 path="/project/:projectId/present"
                 exact
