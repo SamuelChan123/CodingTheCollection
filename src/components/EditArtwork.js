@@ -79,7 +79,7 @@ class EditArtwork extends React.Component {
                 .child(contextId)
                 .once("value")
                 .then(media => {
-                  let description = media.val().description;
+                  let description = media.val().desc;
                   let contextualMediaImage = media.val().image;
                   console.log(contextualMediaImage);
                   console.log(description);
@@ -293,7 +293,6 @@ class EditArtwork extends React.Component {
     contexts.splice(i, 1);
     this.setState({ oldContextuals: contexts });
 
-    var history = this.props.history;
     var fb = this.props.firebase;
     var storage = this.storage;
     let artworks = this.artworks;
@@ -337,13 +336,25 @@ class EditArtwork extends React.Component {
       });
   };
 
-  updateContextualDescription = (i, description) => {
+  updateContextualDescription = i => {
     let contexts = this.state.oldContextuals;
     let modifying = contexts[i];
-    modifying.description = description;
+    let newDescription = this.state.oldContextuals[i][`desc`];
+    modifying.description = newDescription;
     contexts[i] = modifying;
     this.setState({ oldContextuals: contexts });
-    console.log(this.state.oldContextuals);
+
+    let contextualId = contexts[i].id;
+    var fb = this.props.firebase;
+
+    this.contextualMedia
+      .child(contextualId)
+      .once("value")
+      .then(contextual => {
+        let contextualData = contextual.val();
+        contextualData.desc = newDescription;
+        fb.setContextualWithId(contextualId, contextualData);
+      });
   };
 
   handleName = event => {
@@ -390,10 +401,25 @@ class EditArtwork extends React.Component {
     this.setState({ contextImages });
   };
 
+  handleOldContextForm = e => {
+    const {
+      target: { name, value }
+    } = e;
+    const nameArr = name.split(" ");
+    const index = parseInt(nameArr[0]);
+    const nameVal = nameArr.slice(1).toString();
+
+    console.log(index);
+    console.log(nameVal);
+    let oldContextuals = [...this.state.oldContextuals];
+    oldContextuals[index][nameVal] = value; // the old contextual media field we want to update
+    this.setState({ oldContextuals });
+  };
+
   render() {
     const classes = this.useStyles();
     const noError = this.state.noError;
-    console.log(this.state.oldArtwork);
+    console.log(this.state);
     return (
       <React.Fragment>
         <CssBaseline />
@@ -535,18 +561,32 @@ class EditArtwork extends React.Component {
                         variant="outlined"
                         margin="dense"
                         required
+                        fullWidth
                         label="Description"
-                        value={obj.description}
+                        defaultValue={obj.description}
                         name={`${i} desc`}
-                        // onChange={this.handleContextForm}
+                        onChange={this.handleOldContextForm}
                       />
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => this.deleteContextual(i)}
-                      >
-                        Delete Artwork
-                      </Button>
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.updateContextualDescription(i)}
+                        >
+                          Update Description
+                        </Button>
+                      </div>
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.deleteContextual(i)}
+                        >
+                          Delete Artwork
+                        </Button>
+                      </div>
                       <Box p={2}></Box>
                     </div>
                   ))
