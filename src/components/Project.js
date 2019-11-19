@@ -7,7 +7,7 @@ import {
   GridListTileBar,
   GridListTile,
   GridList,
-  Button,
+  Button
 } from "@material-ui/core";
 import { Edit as EditIcon, Add as AddIcon } from "@material-ui/icons/";
 import Copyright from "./Copyright";
@@ -15,7 +15,6 @@ import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/styles";
-
 
 const theme = createMuiTheme();
 
@@ -116,7 +115,7 @@ class Project extends React.Component {
 
   render() {
     const { classes } = this.props;
-    
+
     return (
       <React.Fragment>
         <br />

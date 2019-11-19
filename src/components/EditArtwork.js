@@ -526,6 +526,19 @@ class EditArtwork extends React.Component {
         <Container maxWidth="sm">
           <div className={classes.paper}>
             <form>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingBottom: 30
+                }}
+              >
+                <Typography component="h1" variant="h5">
+                  Main Artwork
+                </Typography>
+              </div>
+
               {this.state.oldArtwork != null && (
                 <img
                   src={this.state.oldArtwork}
@@ -537,6 +550,19 @@ class EditArtwork extends React.Component {
                 />
               )}
 
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingBottom: 30,
+                  paddingTop: 30
+                }}
+              >
+                <Typography component="h3" variant="h5">
+                  Contextual Artworks
+                </Typography>
+              </div>
               <div>
                 {this.state.oldContextuals.length === 0 ? (
                   <p></p>
