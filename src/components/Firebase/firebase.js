@@ -96,6 +96,11 @@ class Firebase {
     this.db.ref(url).set(data);
   };
 
+  setContextualWithId = (id, data) => {
+    const url = `contextualmedia/${id}`;
+    this.db.ref(url).set(data);
+  };
+
   updateProjectWithId = (id, data) => {
     const url = `projects/${id}`;
     this.db.ref(url).update(data);
@@ -121,14 +126,16 @@ class Firebase {
 
   addCollaboratorToProject = (projectId, email) => {
     this.db
-    .ref(`projects/${projectId}/collaborators`)
-    .push()
-    .set({ userEmail: email });
+      .ref(`projects/${projectId}/collaborators`)
+      .push()
+      .set({ userEmail: email });
   };
-  
-  getCollaborators = (projectId) => this.db.ref(`projects/${projectId}/collaborators`);
 
-  collaborator = (projectId, uid) => this.db.ref(`projects/${projectId}/collaborators/${uid}`);
+  getCollaborators = projectId =>
+    this.db.ref(`projects/${projectId}/collaborators`);
+
+  collaborator = (projectId, uid) =>
+    this.db.ref(`projects/${projectId}/collaborators/${uid}`);
 
   user = uid => this.db.ref(`users/${uid}`);
   users = () => this.db.ref("users");

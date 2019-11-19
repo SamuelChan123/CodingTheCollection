@@ -69,16 +69,16 @@ class NewArtwork extends React.Component {
 
   onArtworkImageDrop(images, urls) {
     this.setState({
-      artworkImage: images[images.length-1],
-      artworkUrl: urls[urls.length-1]
-    })
+      artworkImage: images[images.length - 1],
+      artworkUrl: urls[urls.length - 1]
+    });
   }
 
   onContextImagesDrop(images, urls) {
     this.setState({
-      contextImages: images.map((img) => ({
-        desc: '',
-        image: img,
+      contextImages: images.map(img => ({
+        desc: "",
+        image: img
       })),
       contextUrls: urls
     });
@@ -96,17 +96,17 @@ class NewArtwork extends React.Component {
       })
       var mainImage = this.state.artworkImage;
       var imageUrl = `artworks/${this.uuidv4()}`;
-  
+
       var data = {
         name: this.state.name,
         contextualmedia: [],
-        description: this.state.description || '',
-        artist: this.state.artist || '',
-        year: this.state.year || '',
-        materials: this.state.materials || '',
-        dimensions: this.state.dimensions || '',
-        objectNumber: this.state.objectNumber || '',
-        creditLine: this.state.creditLine || '',
+        description: this.state.description || "",
+        artist: this.state.artist || "",
+        year: this.state.year || "",
+        materials: this.state.materials || "",
+        dimensions: this.state.dimensions || "",
+        objectNumber: this.state.objectNumber || "",
+        creditLine: this.state.creditLine || "",
         image: imageUrl
       };
       var fb = this.props.firebase;
@@ -121,24 +121,32 @@ class NewArtwork extends React.Component {
         .child(imageUrl)
         .put(mainImage) // upload artwork main image
         .then(function(snapshot) {
-          let artworkId = fb.setArtwork(data)
+          let artworkId = fb.setArtwork(data);
           fb.addArtworkToProject(projectId, artworkId); // link artwork -> project
-          let promises = []
-          contextImages.forEach((data, i) => { // for every contextual image...
+          let promises = [];
+          contextImages.forEach((data, i) => {
+            // for every contextual image...
             let imageUrl = `contextualmedia/${uuidv4()}`;
-            promises.push(new Promise((resolve, reject) => {
-              storage.child(imageUrl).put(data.image).then(() => { // upload curr image to firebase
-                data.image = imageUrl // replace the actual image with its URL
-                fb.addContextualMediaToArtwork( // link contextual media -> artwork
-                  artworkId,
-                  fb.setContextualMedia(data)
-                )
-                resolve()
-              })            
-            }))
+            promises.push(
+              new Promise((resolve, reject) => {
+                storage
+                  .child(imageUrl)
+                  .put(data.image)
+                  .then(() => {
+                    // upload curr image to firebase
+                    data.image = imageUrl; // replace the actual image with its URL
+                    fb.addContextualMediaToArtwork(
+                      // link contextual media -> artwork
+                      artworkId,
+                      fb.setContextualMedia(data)
+                    );
+                    resolve();
+                  });
+              })
+            );
 
-          console.log('waiting for all promises to finish...')
-          })
+            console.log("waiting for all promises to finish...");
+          });
           Promise.all(promises).then(() => {
             history.push(`/project/${projectId}`);
           });
@@ -158,16 +166,16 @@ class NewArtwork extends React.Component {
     const {
       target: { name, value }
     } = e;
-    const nameArr = name.split(' ')
-    const index = parseInt(nameArr[0])
-    const nameVal = nameArr.slice(1).toString()
+    const nameArr = name.split(" ");
+    const index = parseInt(nameArr[0]);
+    const nameVal = nameArr.slice(1).toString();
 
-    console.log(index)
-    console.log(nameVal)
-    let contextImages = [...this.state.contextImages]
-    contextImages[index][nameVal] = value // the contextual media image we want to update
-    this.setState({contextImages})
-  }
+    console.log(index);
+    console.log(nameVal);
+    let contextImages = [...this.state.contextImages];
+    contextImages[index][nameVal] = value; // the contextual media image we want to update
+    this.setState({ contextImages });
+  };
 
   render() {
     const classes = this.useStyles();
@@ -256,16 +264,7 @@ class NewArtwork extends React.Component {
                 name="creditLine"
                 onChange={this.handleForm}
               />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                multiline
-                id="description"
-                label="Description"
-                name="description"
-                onChange={this.handleForm}
-              />
+
               <ImageUploader
                 label="Artwork Image"
                 buttonText="Choose Image"
@@ -274,6 +273,7 @@ class NewArtwork extends React.Component {
                 maxFileSize={5242880}
                 singleImage={true}
               />
+
               <div>
                 {!this.state.artworkImage ? (
                   <p></p>
@@ -318,7 +318,7 @@ class NewArtwork extends React.Component {
                         name={`${i} desc`}
                         onChange={this.handleContextForm}
                       />
-                    <Box p={2}></Box>
+                      <Box p={2}></Box>
                     </div>
                   ))
                 )}
@@ -326,7 +326,8 @@ class NewArtwork extends React.Component {
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the artwork image or the artwork title must be filled in!
+                    Either the artwork image or the artwork title must be filled
+                    in!
                   </p>
                 )}
               </div>

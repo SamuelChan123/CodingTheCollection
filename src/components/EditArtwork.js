@@ -19,29 +19,82 @@ class EditArtwork extends React.Component {
     super(props);
     this.state = {
       oldArtwork: null,
-      noError: true
+      name: "",
+      description: "",
+      year: "",
+      artist: "",
+      materials: "",
+      dimensions: "",
+      objectNumber: "",
+      creditLine: "",
+      noError: true,
+      artworkImage: null,
+      artworkUrl: null,
+      oldContextuals: [],
+      contextImages: [],
+      contextUrls: [],
+      uploadText: "Update Artwork"
     };
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks(); // get artworks ref
+    this.contextualMedia = this.props.firebase.contextualMedia(); // get contexual media ref
     this.projects = this.props.firebase.projects(); // get projects ref
     this.projectId = this.props.match.params.projectId; // get project id;
     this.artworkId = this.props.match.params.artworkId;
   }
 
+  getState = () => {
+    return this.state;
+  };
+
   componentDidMount() {
     var setState = this.setState.bind(this);
+    var getState = this.getState.bind(this);
+    var storage = this.storage;
     this.artworks
       .child(this.artworkId)
       .once("value")
       .then(artwork => {
-        setState({
-          oldArtwork: artwork.val().image,
-          name: artwork.val().name,
-          description: artwork.val().description || "",
-          year: artwork.val().year || "",
-          artist: artwork.val().artist || "",
-          materials: artwork.val().materials || "",
-        });
+        storage
+          .child(artwork.val().image)
+          .getDownloadURL()
+          .then(url => {
+            setState({
+              oldArtwork: url,
+              name: artwork.val().name,
+              description: artwork.val().description || "",
+              year: artwork.val().year || "",
+              artist: artwork.val().artist || "",
+              materials: artwork.val().materials || "",
+              dimensions: artwork.val().dimensions || "",
+              objectNumber: artwork.val().objectNumber || "",
+              creditLine: artwork.val().creditLine || ""
+            });
+
+            artwork.child("contextualmedia").forEach(mediaRef => {
+              let contextId = mediaRef.val().contextualMediaId;
+              this.contextualMedia
+                .child(contextId)
+                .once("value")
+                .then(media => {
+                  let description = media.val().desc;
+                  let contextualMediaImage = media.val().image;
+
+                  storage
+                    .child(contextualMediaImage)
+                    .getDownloadURL()
+                    .then(contextualUrl => {
+                      var newContextuals = getState().oldContextuals.slice();
+                      newContextuals.push({
+                        image: contextualUrl,
+                        description: description,
+                        id: contextId
+                      });
+                      setState({ oldContextuals: newContextuals });
+                    });
+                });
+            });
+          });
       });
   }
 
@@ -84,9 +137,52 @@ class EditArtwork extends React.Component {
       description: this.state.description,
       artist: this.state.artist,
       year: this.state.year,
-      materials: this.state.materials
+      materials: this.state.materials,
+      dimensions: this.state.dimensions,
+      objectNumber: this.state.objectNumber,
+      creditLine: this.state.creditLine
     };
+    var storage = this.storage;
+    var contextImages = this.state.contextImages;
+    var uuidv4 = this.uuidv4;
+    var artworkId = this.artworkId;
+
+    if (contextImages.length > 0) {
+      this.setState({
+        uploadText: `Uploading ${this.state.contextImages.length} images...`
+      });
+      let promises = [];
+      contextImages.forEach((data, i) => {
+        // for every contextual image...
+        let imageUrl = `contextualmedia/${uuidv4()}`;
+        promises.push(
+          new Promise((resolve, reject) => {
+            storage
+              .child(imageUrl)
+              .put(data.image)
+              .then(() => {
+                // upload curr image to firebase
+                data.image = imageUrl; // replace the actual image with its URL
+                fb.addContextualMediaToArtwork(
+                  // link contextual media -> artwork
+                  artworkId,
+                  fb.setContextualMedia(data)
+                );
+                resolve();
+              });
+          })
+        );
+        console.log("waiting for all promises to finish...");
+      });
+      Promise.all(promises).then(() => {
+        history.push(`/project/${projectId}`);
+      });
+    }
+
     if (this.state.name && this.state.artworkImage) {
+      this.setState({
+        uploadText: `Uploading ${this.state.contextImages.length + 1} images...`
+      });
       let updatedArtworkImage = this.state.artworkImage;
       this.artworks
         .child(this.artworkId)
@@ -102,9 +198,17 @@ class EditArtwork extends React.Component {
             });
         });
     } else if (this.state.name) {
+      if (this.state.contextImages.length > 0) {
+        this.setState({
+          uploadText: `Uploading ${this.state.contextImages.length} images...`
+        });
+      }
       fb.updateArtworkWithId(this.artworkId, data);
       history.push(`/project/${projectId}`);
     } else if (this.state.artworkImage) {
+      this.setState({
+        uploadText: `Uploading ${this.state.contextImages.length + 1} images...`
+      });
       let updatedArtworkImage = this.state.artworkImage;
       this.artworks
         .child(this.artworkId)
@@ -119,8 +223,10 @@ class EditArtwork extends React.Component {
             });
         });
     } else {
-      this.setState({ noError: false })
-      console.log("Either the image or the artwork name must be updated!");
+      this.setState({ noError: false });
+      console.log(
+        "At least one of the artwork image, contexual images, or artwork name must be updated!"
+      );
     }
   };
 
@@ -170,6 +276,83 @@ class EditArtwork extends React.Component {
     e.preventDefault();
   };
 
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+
+  deleteOldContextual = i => {
+    let contexts = this.state.oldContextuals;
+    let removingId = contexts[i].id;
+    contexts.splice(i, 1);
+    this.setState({ oldContextuals: contexts });
+
+    var fb = this.props.firebase;
+    var storage = this.storage;
+    let artworks = this.artworks;
+    let artworkId = this.artworkId;
+
+    this.contextualMedia
+      .child(removingId)
+      .once("value")
+      .then(contextual => {
+        let imageUrl = contextual.val().image;
+        this.contextualMedia
+          .child(removingId)
+          .remove()
+          .then(value => {
+            let storageRef = storage.child(imageUrl);
+            storageRef.delete().then(() => {
+              artworks
+                .child(artworkId)
+                .once("value")
+                .then(artwork => {
+                  let artworkData = artwork.val();
+
+                  let conMedias = artworkData.contextualmedia;
+                  for (var cm in conMedias) {
+                    if (conMedias[cm].contextualMediaId === removingId) {
+                      conMedias[cm].contextualMediaId = null;
+                    }
+                  }
+                  artworkData.contextualmedia = conMedias;
+                  fb.setArtworkWithId(artworkId, artworkData);
+                });
+            });
+          });
+      });
+  };
+
+  updateContextualDescription = i => {
+    let contexts = this.state.oldContextuals;
+    let modifying = contexts[i];
+    let newDescription = this.state.oldContextuals[i][`desc`];
+    modifying.description = newDescription;
+    contexts[i] = modifying;
+    this.setState({ oldContextuals: contexts });
+
+    let contextualId = contexts[i].id;
+    var fb = this.props.firebase;
+
+    this.contextualMedia
+      .child(contextualId)
+      .once("value")
+      .then(contextual => {
+        let contextualData = contextual.val();
+        contextualData.desc = newDescription;
+        fb.setContextualWithId(contextualId, contextualData);
+      });
+  };
+
+  deleteContextual = i => {
+    let contexts = this.state.contextImages;
+    let contextUrls = this.state.contextUrls;
+    this.setState({ contextImages: contexts, contextUrls: contextUrls });
+  };
+
   handleName = event => {
     this.setState({ artworkName: event.target.value });
   };
@@ -179,25 +362,62 @@ class EditArtwork extends React.Component {
   };
 
   handleForm = event => {
-    this.setState({[ event.target.name ]: event.target.value })
-  }
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-  onDrop = (pictureFiles, pictureDataURLs) => {
+  onArtworkImageDrop = (images, urls) => {
     this.setState({
-      artworkImage: pictureFiles[pictureFiles.length - 1],
-      artworkImageURL: pictureDataURLs[pictureDataURLs.length - 1]
+      artworkImage: images[images.length - 1],
+      artworkUrl: urls[urls.length - 1]
     });
+  };
+
+  onContextImagesDrop = (images, urls) => {
+    this.setState({
+      contextImages: images.map(img => ({
+        desc: "",
+        image: img
+      })),
+      contextUrls: urls
+    });
+  };
+
+  handleContextForm = e => {
+    const {
+      target: { name, value }
+    } = e;
+    const nameArr = name.split(" ");
+    const index = parseInt(nameArr[0]);
+    const nameVal = nameArr.slice(1).toString();
+
+    let contextImages = [...this.state.contextImages];
+    contextImages[index][nameVal] = value; // the contextual media image we want to update
+    this.setState({ contextImages });
+  };
+
+  handleOldContextForm = e => {
+    const {
+      target: { name, value }
+    } = e;
+    const nameArr = name.split(" ");
+    const index = parseInt(nameArr[0]);
+    const nameVal = nameArr.slice(1).toString();
+
+    let oldContextuals = [...this.state.oldContextuals];
+    oldContextuals[index][nameVal] = value; // the old contextual media field we want to update
+    this.setState({ oldContextuals });
   };
 
   render() {
     const classes = this.useStyles();
     const noError = this.state.noError;
-
+    console.log(this.state);
     return (
       <React.Fragment>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <br />
+        <CssBaseline />
+        <br />
+
+        <Container maxWidth="xs">
           <div
             style={{
               display: "flex",
@@ -209,6 +429,7 @@ class EditArtwork extends React.Component {
               Edit Artwork
             </Typography>
           </div>
+          <br />
           <div className={classes.paper}>
             <form className={classes.form} noValidate>
               <TextField
@@ -222,7 +443,6 @@ class EditArtwork extends React.Component {
                 onChange={this.handleForm}
                 autoFocus
                 value={this.state.name}
-                defaultValue=" "
               />
               <TextField
                 variant="outlined"
@@ -230,10 +450,10 @@ class EditArtwork extends React.Component {
                 fullWidth
                 id="desc"
                 label="Description"
+                multiline
                 onChange={this.handleForm}
                 name="description"
                 value={this.state.description}
-                defaultValue=" "
               />
               <TextField
                 variant="outlined"
@@ -244,7 +464,6 @@ class EditArtwork extends React.Component {
                 onChange={this.handleForm}
                 name="artist"
                 value={this.state.artist}
-                defaultValue=" "
               />
               <TextField
                 variant="outlined"
@@ -255,7 +474,6 @@ class EditArtwork extends React.Component {
                 onChange={this.handleForm}
                 name="year"
                 value={this.state.year}
-                defaultValue=" "
               />
               <TextField
                 variant="outlined"
@@ -266,27 +484,177 @@ class EditArtwork extends React.Component {
                 onChange={this.handleForm}
                 name="materials"
                 value={this.state.materials}
-                defaultValue=" "
               />
+
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="dimensions"
+                label="Dimensions"
+                name="dimensions"
+                value={this.state.dimensions}
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="objectNumber"
+                label="Object Number"
+                name="objectNumber"
+                value={this.state.objectNumber}
+                onChange={this.handleForm}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                multiline
+                id="creditLine"
+                label="Credit Line"
+                name="creditLine"
+                value={this.state.creditLine}
+                onChange={this.handleForm}
+              />
+            </form>
+          </div>
+        </Container>
+        <br />
+        <Container maxWidth="sm">
+          <div className={classes.paper}>
+            <form>
+              {this.state.oldArtwork != null && (
+                <img
+                  src={this.state.oldArtwork}
+                  alt="Cannot be displayed"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%"
+                  }}
+                />
+              )}
+
+              <div>
+                {this.state.oldContextuals.length === 0 ? (
+                  <p></p>
+                ) : (
+                  this.state.oldContextuals.map((obj, i) => (
+                    <div key={i}>
+                      <img
+                        src={obj.image}
+                        alt={`contextual media ${i}`}
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "100%"
+                        }}
+                      />
+                      <TextField
+                        variant="outlined"
+                        margin="dense"
+                        required
+                        fullWidth
+                        label="Description"
+                        defaultValue={obj.description}
+                        name={`${i} desc`}
+                        onChange={this.handleOldContextForm}
+                      />
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.updateContextualDescription(i)}
+                        >
+                          Update Description
+                        </Button>
+                      </div>
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.deleteOldContextual(i)}
+                        >
+                          Delete Contextual Artwork
+                        </Button>
+                      </div>
+                      <Box p={2}></Box>
+                    </div>
+                  ))
+                )}
+              </div>
+            </form>
+          </div>
+        </Container>
+        <Container maxWidth="sm">
+          <div className={classes.paper}>
+            <form>
               <ImageUploader
-                withIcon={true}
-                buttonText="Choose Images"
-                onChange={this.onDrop}
+                label="Artwork Image"
+                buttonText="Choose Image"
+                onChange={this.onArtworkImageDrop}
                 imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
                 maxFileSize={5242880}
+                singleImage={true}
               />
               <div>
                 {!this.state.artworkImage ? (
                   <p></p>
                 ) : (
                   <img
-                    src={this.state.artworkImageURL}
+                    src={this.state.artworkUrl}
                     alt="Cannot be displayed"
                     style={{
                       maxWidth: "100%",
                       maxHeight: "100%"
                     }}
                   />
+                )}
+              </div>
+              <ImageUploader
+                label="Contextual Media Images"
+                buttonText="Choose Images"
+                onChange={this.onContextImagesDrop}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                maxFileSize={5242880}
+              />
+              <div>
+                {this.state.contextImages.length === 0 ? (
+                  <p></p>
+                ) : (
+                  this.state.contextUrls.map((url, i) => (
+                    <div key={i}>
+                      <img
+                        src={url}
+                        alt={`contextual media ${i}`}
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "100%"
+                        }}
+                      />
+                      <TextField
+                        variant="outlined"
+                        margin="dense"
+                        required
+                        fullWidth
+                        label="Description"
+                        name={`${i} desc`}
+                        onChange={this.handleContextForm}
+                      />
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.deleteContextual(i)}
+                        >
+                          Delete Contextual Artwork
+                        </Button>
+                      </div>
+                      <Box p={2}></Box>
+                    </div>
+                  ))
                 )}
               </div>
               <br />
@@ -306,7 +674,7 @@ class EditArtwork extends React.Component {
                   onClick={e => this.onUpdate(e)}
                   className={classes.submit}
                 >
-                  Update Artwork
+                  {this.state.uploadText}
                 </Button>
               </div>
               <div style={{ paddingBottom: 10 }}>

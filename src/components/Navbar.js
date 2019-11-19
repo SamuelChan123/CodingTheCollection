@@ -83,14 +83,15 @@ function NavbarAuth() {
             </Link>
           </Typography>
 
+          {/* <div style={{ backgroundImage: `url(${NasherLogo})` }}></div> */}
+          <a>
+            <Image src={NasherLogo} className={classes.logo} alt="" />
+          </a>
+
           <Link
             to="/allprojects"
             style={{ textDecoration: "none", color: "white" }}
-          >
-            <div style={{ backgroundImage: `url(${NasherLogo})` }}>
-              <Image src={NasherLogo} className={classes.logo} alt="" />
-            </div>
-          </Link>
+          ></Link>
 
           <Link
             to="/allprojects"
