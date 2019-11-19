@@ -132,7 +132,6 @@ class Presentation extends React.Component {
                    artInfo: new Map(),
                    artTileData: new Map(),
                    leftTileData: [],
-                   description: "",
                   };
 
     this.projects = this.props.firebase.projects(); // get projects ref
@@ -237,7 +236,18 @@ class Presentation extends React.Component {
 						artTileData: artInfoMap,
 						tileData: artInfoMap.get(getState().currentArtwork.id),
 						exhibit: project.val().name
-					})
+					}, () => {
+            /*
+            console.log(this.state)
+            this.forceUpdate()
+            setTimeout(() => {
+              console.log('forcing...')
+              console.log(this.state.tileData)
+              this.forceUpdate()
+            }, 1000)
+            */
+            this.selectArt(this.state.artId)
+          })
 				})
     }).catch(error => ({
 			errorCode: error.code,
@@ -248,6 +258,25 @@ class Presentation extends React.Component {
   }
 
   
+  selectArt(tileId) {
+    /* this.setState({artId: newArtId}); */
+    console.log('Art selected: ', tileId);
+    console.log(this.state.artTileData.get(tileId))
+    // https://stackoverflow.com/questions/55276560/react-array-in-state-updating-late
+    this.setState(oldState => {
+      let currentArtwork = oldState.artInfo.get(tileId)
+      return {
+        artId: tileId, 
+        artName: currentArtwork.name,
+        currentArtwork: currentArtwork,
+        tileData: oldState.artTileData.get(tileId),
+      }
+    }, ()=> {
+      console.log(this.state.tileData)
+      this.forceUpdate()
+    });
+
+  }
 
 
   render() {
@@ -268,26 +297,6 @@ class Presentation extends React.Component {
     };
 
 
-    const selectArt = (tile) => {
-      /* this.setState({artId: newArtId}); */
-      console.log('Art selected: ', tile.id);
-      console.log(this.state.artTileData.get(tile.id))
-      // https://stackoverflow.com/questions/55276560/react-array-in-state-updating-late
-      this.setState(oldState => {
-	      let currentArtwork = oldState.artInfo.get(tile.id)
-				return {
-					artId: tile.id, 
-					artName: currentArtwork.name,
-					currentArtwork: currentArtwork,
-					tileData: oldState.artTileData.get(tile.id),
-					description: currentArtwork.description
-				}
-      }, ()=> {
-        console.log(this.state.tileData)
-        this.forceUpdate()
-      });
-  
-    }
 
     const onClickThumb = item => {
         // console.log(item);
@@ -339,7 +348,7 @@ class Presentation extends React.Component {
               {this.state.leftTileData.map(tile => (
                 <GridListTile key={tile.id} cols={tile.cols || 1 }
                   onClick = {(e) => {
-                    selectArt(tile);
+                    this.selectArt(tile.id);
                   }} 
                 className = {clsx(this.state.artId == tile.id && classes.selected)}>
                   <img src={tile.image} alt={tile.name} 
@@ -382,7 +391,7 @@ class Presentation extends React.Component {
                     {this.state.currentArtwork.objectNumber}
                   </h2>
                   <p>
-                    {this.state.description}
+                    {this.state.currentArtwork.description}
                   </p>
                 </div>
               }
