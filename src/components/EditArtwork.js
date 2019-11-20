@@ -79,7 +79,7 @@ class EditArtwork extends React.Component {
               this.contextualMedia
                 .child(contextId)
                 .once("value")
-                .then(media => {                  
+                .then(media => {
                   let description = media.val().desc;
                   let contextualMediaImage = media.val().image;
 
@@ -150,8 +150,8 @@ class EditArtwork extends React.Component {
     var contextImages = this.state.contextImages;
     var uuidv4 = this.uuidv4;
     var artworkId = this.artworkId;
-    
-    var deleteOldContextual = this.deleteOldContextual
+
+    var deleteOldContextual = this.deleteOldContextual;
 
     new Promise(function(resolve, reject) {
       oldContextualsToDelete.forEach(deleteOldContextual);
@@ -301,11 +301,11 @@ class EditArtwork extends React.Component {
     let removingId = contexts[i].id;
     this.setState({
       oldContextualsToDelete: [...this.state.oldContextualsToDelete, removingId]
-    })
-    
+    });
+
     contexts.splice(i, 1);
     this.setState({ oldContextuals: contexts });
-  }
+  };
 
   deleteOldContextual = removingId => {
     // console.log(removingId);
@@ -363,13 +363,13 @@ class EditArtwork extends React.Component {
       var fb = this.props.firebase;
 
       this.contextualMedia
-      .child(contextualId)
-      .once("value")
-      .then(contextual => {
-        let contextualData = contextual.val();
-        contextualData.desc = newDescription;
-        fb.setContextualWithId(contextualId, contextualData);
-      });
+        .child(contextualId)
+        .once("value")
+        .then(contextual => {
+          let contextualData = contextual.val();
+          contextualData.desc = newDescription;
+          fb.setContextualWithId(contextualId, contextualData);
+        });
     }
   };
 
@@ -552,17 +552,17 @@ class EditArtwork extends React.Component {
         <Container maxWidth="sm">
           <div className={classes.paper}>
             <form>
-            <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Artwork Image
-            </Typography>
-          </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Typography component="h1" variant="h5">
+                  Artwork Image
+                </Typography>
+              </div>
 
               {this.state.oldArtwork != null && !this.state.artworkImage && (
                 <img
@@ -588,7 +588,7 @@ class EditArtwork extends React.Component {
                   />
                 )}
               </div>
-<ImageUploader
+              <ImageUploader
                 label="Update Artwork Image"
                 buttonText="Choose Image"
                 onChange={this.onArtworkImageDrop}
@@ -596,19 +596,32 @@ class EditArtwork extends React.Component {
                 maxFileSize={5242880}
                 singleImage={true}
               />
-  
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Contextual Media
-            </Typography>
-          </div>
 
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Typography component="h1" variant="h5">
+                  Contextual Media
+                </Typography>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingBottom: 30,
+                  paddingTop: 30
+                }}
+              >
+                <Typography component="h3" variant="h5">
+                  Contextual Artworks
+                </Typography>
+              </div>
               <div>
                 {this.state.oldContextuals.length === 0 ? (
                   <p></p>
