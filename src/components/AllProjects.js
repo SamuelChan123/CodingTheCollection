@@ -55,7 +55,7 @@ class AllProjects extends React.Component {
         if (authUser) {
           this.setState({ authUser: authUser, });
           this.projects = this.props.firebase.projects().orderByChild("owner").equalTo(authUser.uid)
-          let emailKey = (authUser.email).replace(".", ",")
+          let emailKey = (authUser.email).replace(/\./g, ",")
           this.sharedProjects = this.props.firebase.projects().orderByChild("collaborators/" + emailKey).equalTo(true)
 
           let setState = this.setState.bind(this);
