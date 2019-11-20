@@ -609,19 +609,6 @@ class EditArtwork extends React.Component {
                 </Typography>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingBottom: 30,
-                  paddingTop: 30
-                }}
-              >
-                <Typography component="h3" variant="h5">
-                  Contextual Artworks
-                </Typography>
-              </div>
               <div>
                 {this.state.oldContextuals.length === 0 ? (
                   <p></p>
