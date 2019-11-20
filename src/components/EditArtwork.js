@@ -556,7 +556,8 @@ class EditArtwork extends React.Component {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
+                  paddingBottom: 30
                 }}
               >
                 <Typography component="h1" variant="h5">
@@ -574,7 +575,7 @@ class EditArtwork extends React.Component {
                   }}
                 />
               )}
-              <div>
+              <div style={{ paddingBottom: 10 }}>
                 {!this.state.artworkImage ? (
                   <p></p>
                 ) : (
@@ -601,7 +602,8 @@ class EditArtwork extends React.Component {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
+                  paddingBottom: 30
                 }}
               >
                 <Typography component="h1" variant="h5">
@@ -623,16 +625,18 @@ class EditArtwork extends React.Component {
                           maxHeight: "100%"
                         }}
                       />
-                      <TextField
-                        variant="outlined"
-                        margin="dense"
-                        required
-                        fullWidth
-                        label="Description"
-                        defaultValue={obj.description}
-                        name={`${i} desc`}
-                        onChange={this.handleOldContextForm}
-                      />
+                      <div style={{ paddingBottom: 10 }}>
+                        <TextField
+                          variant="outlined"
+                          margin="dense"
+                          required
+                          fullWidth
+                          label="Description"
+                          defaultValue={obj.description}
+                          name={`${i} desc`}
+                          onChange={this.handleOldContextForm}
+                        />
+                      </div>
                       <div style={{ paddingBottom: 10 }}>
                         <Button
                           variant="contained"
