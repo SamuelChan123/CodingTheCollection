@@ -7,6 +7,8 @@
     "@material-ui/icons": "^4.5.1",
     "bootstrap": "^4.3.1",
     "clsx": "^1.0.4",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "firebase": "^7.2.3",
     "material-kit-react": "^1.8.0",
     "npm": "^6.13.0",
@@ -19,12 +21,13 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.1.2",
     "react-slick": "^0.25.2",
+    "react-test-renderer": "^16.12.0",
     "recompose": "^0.30.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom --browser",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
