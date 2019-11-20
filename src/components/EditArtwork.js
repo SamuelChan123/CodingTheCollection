@@ -556,7 +556,8 @@ class EditArtwork extends React.Component {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
+                  paddingBottom: 30
                 }}
               >
                 <Typography component="h1" variant="h5">
@@ -565,16 +566,26 @@ class EditArtwork extends React.Component {
               </div>
 
               {this.state.oldArtwork != null && !this.state.artworkImage && (
-                <img
-                  src={this.state.oldArtwork}
-                  alt="Cannot be displayed"
+                <div
                   style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%"
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingBottom: 30
                   }}
-                />
+                >
+                  <img
+                    src={this.state.oldArtwork}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
+                </div>
               )}
-              <div>
+
+              <div style={{ paddingBottom: 10 }}>
                 {!this.state.artworkImage ? (
                   <p></p>
                 ) : (
@@ -601,7 +612,8 @@ class EditArtwork extends React.Component {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
+                  paddingBottom: 30
                 }}
               >
                 <Typography component="h1" variant="h5">
@@ -609,7 +621,14 @@ class EditArtwork extends React.Component {
                 </Typography>
               </div>
 
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingBottom: 30
+                }}
+              >
                 {this.state.oldContextuals.length === 0 ? (
                   <p></p>
                 ) : (
@@ -623,16 +642,18 @@ class EditArtwork extends React.Component {
                           maxHeight: "100%"
                         }}
                       />
-                      <TextField
-                        variant="outlined"
-                        margin="dense"
-                        required
-                        fullWidth
-                        label="Description"
-                        defaultValue={obj.description}
-                        name={`${i} desc`}
-                        onChange={this.handleOldContextForm}
-                      />
+                      <div style={{ paddingBottom: 10 }}>
+                        <TextField
+                          variant="outlined"
+                          margin="dense"
+                          required
+                          fullWidth
+                          label="Description"
+                          defaultValue={obj.description}
+                          name={`${i} desc`}
+                          onChange={this.handleOldContextForm}
+                        />
+                      </div>
                       <div style={{ paddingBottom: 10 }}>
                         <Button
                           variant="contained"
