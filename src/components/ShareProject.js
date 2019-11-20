@@ -34,7 +34,7 @@ class ShareProject extends React.Component {
   };
 
   onAddCollaborator = event => {
-    this.props.firebase.getCollaborators(this.projectId).child((this.state.text).replace(".", ",")).set(true)
+    this.props.firebase.getCollaborators(this.projectId).child((this.state.text).replace(/\./g, ",")).set(true)
     
     // push({
     //   email: this.state.text,
@@ -175,7 +175,7 @@ const CollaboratorList = ({ collaborators, onRemoveCollaborator  }) => (
 );
 const CollaboratorItem = ({ collaborator, onRemoveCollaborator }) => (
   <li>
-    <strong>{(collaborator.uid).replace(",", ".")}</strong>
+    <strong>{(collaborator.uid).replace(/,/g, ".")}</strong>
     <button
     type="button"
     onClick={() => onRemoveCollaborator(collaborator.uid)}
