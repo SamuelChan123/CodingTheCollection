@@ -127,6 +127,7 @@ class Presentation extends React.Component {
                    open: true, 
                    artId: (this.props.match.params.artId ? this.props.match.params.artId : null), 
                    artName: "",
+                   description: "",
                    currentArtwork: null,
                    currentSlide: 0,
                    artInfo: new Map(),
@@ -215,9 +216,11 @@ class Presentation extends React.Component {
 												.child(art1.val().image)
 												.getDownloadURL()
 												.then(function (url) {
+                          console.log('art:')
+                          console.log(art1.val())
 													contextualArt.push({
 														image: url,
-														description: art1.val().description,
+														description: art1.val().desc,
 													});
 												})
 											})
@@ -270,6 +273,7 @@ class Presentation extends React.Component {
         artName: currentArtwork.name,
         currentArtwork: currentArtwork,
         tileData: oldState.artTileData.get(tileId),
+        description: currentArtwork.description
       }
     }, ()=> {
       console.log(this.state.tileData)
@@ -299,9 +303,7 @@ class Presentation extends React.Component {
 
 
     const onClickThumb = item => {
-        // console.log(item);
-        // let newDescription = this.state.artTileData.get(this.state.currentArtwork.id)[item].description;
-        // this.setState({description: newDescription});
+      this.setState({description: this.state.tileData[item].description});
     };
 
     return (
@@ -391,7 +393,7 @@ class Presentation extends React.Component {
                     {this.state.currentArtwork.objectNumber}
                   </h2>
                   <p>
-                    {this.state.currentArtwork.description}
+                    {this.state.description}
                   </p>
                 </div>
               }
