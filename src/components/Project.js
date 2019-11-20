@@ -82,7 +82,7 @@ class Project extends React.Component {
                     image: url,
                     name: art.val().name
                   };
-                  console.log(artworkTiles);
+                  // console.log(artworkTiles);
                   setState({
                     tileData: [...getState().tileData, artworkTiles].sort(
                       function(a, b) {
@@ -94,7 +94,7 @@ class Project extends React.Component {
                       }
                     )
                   });
-                  console.log(getState().tileData);
+                  // console.log(getState().tileData);
                 });
             });
         }

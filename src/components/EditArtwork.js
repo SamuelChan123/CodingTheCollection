@@ -33,7 +33,8 @@ class EditArtwork extends React.Component {
       oldContextuals: [],
       contextImages: [],
       contextUrls: [],
-      uploadText: "Update Artwork"
+      oldContextualsToDelete: [],
+      uploadText: "Save Changes"
     };
     this.storage = this.props.firebase.storage(); // get storage bucket for images
     this.artworks = this.props.firebase.artworks(); // get artworks ref
@@ -72,11 +73,13 @@ class EditArtwork extends React.Component {
             });
 
             artwork.child("contextualmedia").forEach(mediaRef => {
+              // console.log(artwork.val());
               let contextId = mediaRef.val().contextualMediaId;
+              // console.log(contextId);
               this.contextualMedia
                 .child(contextId)
                 .once("value")
-                .then(media => {
+                .then(media => {                  
                   let description = media.val().desc;
                   let contextualMediaImage = media.val().image;
 
@@ -142,10 +145,19 @@ class EditArtwork extends React.Component {
       objectNumber: this.state.objectNumber,
       creditLine: this.state.creditLine
     };
+    var oldContextualsToDelete = this.state.oldContextualsToDelete;
     var storage = this.storage;
     var contextImages = this.state.contextImages;
     var uuidv4 = this.uuidv4;
     var artworkId = this.artworkId;
+    
+    var deleteOldContextual = this.deleteOldContextual
+
+    new Promise(function(resolve, reject) {
+      oldContextualsToDelete.forEach(deleteOldContextual);
+    }).then(function(result) {
+      this.updateContextualDescription();
+    });
 
     if (contextImages.length > 0) {
       this.setState({
@@ -284,12 +296,20 @@ class EditArtwork extends React.Component {
     });
   };
 
-  deleteOldContextual = i => {
+  enqueueDeleteOldContextual = i => {
     let contexts = this.state.oldContextuals;
     let removingId = contexts[i].id;
+    this.setState({
+      oldContextualsToDelete: [...this.state.oldContextualsToDelete, removingId]
+    })
+    
     contexts.splice(i, 1);
     this.setState({ oldContextuals: contexts });
+  }
 
+  deleteOldContextual = removingId => {
+    // console.log(removingId);
+    // return;
     var fb = this.props.firebase;
     var storage = this.storage;
     let artworks = this.artworks;
@@ -326,18 +346,23 @@ class EditArtwork extends React.Component {
       });
   };
 
-  updateContextualDescription = i => {
+  updateContextualDescription = () => {
     let contexts = this.state.oldContextuals;
-    let modifying = contexts[i];
-    let newDescription = this.state.oldContextuals[i][`desc`];
-    modifying.description = newDescription;
-    contexts[i] = modifying;
-    this.setState({ oldContextuals: contexts });
 
-    let contextualId = contexts[i].id;
-    var fb = this.props.firebase;
+    for (var i = 0; i < contexts.length; i++) {
+      let modifying = contexts[i];
+      let newDescription = this.state.oldContextuals[i][`desc`];
+      if (newDescription.length == 0) {
+        continue;
+      }
+      modifying.description = newDescription;
+      contexts[i] = modifying;
+      this.setState({ oldContextuals: contexts });
 
-    this.contextualMedia
+      let contextualId = contexts[i].id;
+      var fb = this.props.firebase;
+
+      this.contextualMedia
       .child(contextualId)
       .once("value")
       .then(contextual => {
@@ -345,11 +370,14 @@ class EditArtwork extends React.Component {
         contextualData.desc = newDescription;
         fb.setContextualWithId(contextualId, contextualData);
       });
+    }
   };
 
   deleteContextual = i => {
     let contexts = this.state.contextImages;
+    contexts.splice(i, 1);
     let contextUrls = this.state.contextUrls;
+    contextUrls.splice(i, 1);
     this.setState({ contextImages: contexts, contextUrls: contextUrls });
   };
 
@@ -411,7 +439,7 @@ class EditArtwork extends React.Component {
   render() {
     const classes = this.useStyles();
     const noError = this.state.noError;
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <React.Fragment>
         <CssBaseline />
@@ -610,17 +638,7 @@ class EditArtwork extends React.Component {
                           variant="contained"
                           color="primary"
                           fullWidth
-                          onClick={() => this.updateContextualDescription(i)}
-                        >
-                          Update Description
-                        </Button>
-                      </div>
-                      <div style={{ paddingBottom: 10 }}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                          onClick={() => this.deleteOldContextual(i)}
+                          onClick={() => this.enqueueDeleteOldContextual(i)}
                         >
                           Delete Contextual Artwork
                         </Button>
@@ -630,19 +648,6 @@ class EditArtwork extends React.Component {
                   ))
                 )}
               </div>
-            </form>
-          </div>
-        </Container>
-        <Container maxWidth="sm">
-          <div className={classes.paper}>
-            <form>
-              <ImageUploader
-                label="Contextual Media Images"
-                buttonText="Choose Images"
-                onChange={this.onContextImagesDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-                maxFileSize={5242880}
-              />
               <div>
                 {this.state.contextImages.length === 0 ? (
                   <p></p>
@@ -681,7 +686,13 @@ class EditArtwork extends React.Component {
                   ))
                 )}
               </div>
-              <br />
+              <ImageUploader
+                label="Add Contextual Media Images"
+                buttonText="Choose Images"
+                onChange={this.onContextImagesDrop}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                maxFileSize={5242880}
+              />
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
@@ -715,7 +726,8 @@ class EditArtwork extends React.Component {
               <BackButton history={this.props.history} />
             </form>
           </div>
-          <br />
+        </Container>
+        <Container maxWidth="sm">
           <Box mt={8}>
             <Copyright />
           </Box>
