@@ -199,6 +199,29 @@ class NewArtwork extends React.Component {
           </div>
           <div className={classes.paper}>
             <form className={classes.form} noValidate>
+            <ImageUploader
+                label="Artwork Image"
+                buttonText="Choose Image"
+                onChange={this.onArtworkImageDrop}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                maxFileSize={5242880}
+                singleImage={true}
+              />
+
+              <div>
+                {!this.state.artworkImage ? (
+                  <p></p>
+                ) : (
+                  <img
+                    src={this.state.artworkUrl}
+                    alt="artwork image"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
+                )}
+              </div>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -264,30 +287,18 @@ class NewArtwork extends React.Component {
                 name="creditLine"
                 onChange={this.handleForm}
               />
-
-              <ImageUploader
-                label="Artwork Image"
-                buttonText="Choose Image"
-                onChange={this.onArtworkImageDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-                maxFileSize={5242880}
-                singleImage={true}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                multiline
+                id="description"
+                label="Description"
+                name="description"
+                onChange={this.handleForm}
               />
 
-              <div>
-                {!this.state.artworkImage ? (
-                  <p></p>
-                ) : (
-                  <img
-                    src={this.state.artworkUrl}
-                    alt="artwork image"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%"
-                    }}
-                  />
-                )}
-              </div>
+
               <ImageUploader
                 label="Contextual Media Images"
                 buttonText="Choose Images"
