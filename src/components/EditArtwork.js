@@ -460,6 +460,49 @@ class EditArtwork extends React.Component {
           <br />
           <div className={classes.paper}>
             <form className={classes.form} noValidate>
+              {this.state.oldArtwork != null && !this.state.artworkImage && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingBottom: 10
+                  }}
+                >
+                  <img
+                    src={this.state.oldArtwork}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
+                </div>
+              )}
+
+              <div style={{ paddingBottom: 10 }}>
+                {!this.state.artworkImage ? (
+                  <p></p>
+                ) : (
+                  <img
+                    src={this.state.artworkUrl}
+                    alt="Cannot be displayed"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%"
+                    }}
+                  />
+                )}
+              </div>
+              <ImageUploader
+                label="Update Artwork Image"
+                buttonText="Choose Image"
+                onChange={this.onArtworkImageDrop}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
+                maxFileSize={5242880}
+                singleImage={true}
+              />
+
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -471,17 +514,6 @@ class EditArtwork extends React.Component {
                 onChange={this.handleForm}
                 autoFocus
                 value={this.state.name}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                id="desc"
-                label="Description"
-                multiline
-                onChange={this.handleForm}
-                name="description"
-                value={this.state.description}
               />
               <TextField
                 variant="outlined"
@@ -545,67 +577,17 @@ class EditArtwork extends React.Component {
                 value={this.state.creditLine}
                 onChange={this.handleForm}
               />
-            </form>
-          </div>
-        </Container>
-        <br />
-        <Container maxWidth="sm">
-          <div className={classes.paper}>
-            <form>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingBottom: 30
-                }}
-              >
-                <Typography component="h1" variant="h5">
-                  Artwork Image
-                </Typography>
-              </div>
 
-              {this.state.oldArtwork != null && !this.state.artworkImage && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingBottom: 30
-                  }}
-                >
-                  <img
-                    src={this.state.oldArtwork}
-                    alt="Cannot be displayed"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%"
-                    }}
-                  />
-                </div>
-              )}
-
-              <div style={{ paddingBottom: 10 }}>
-                {!this.state.artworkImage ? (
-                  <p></p>
-                ) : (
-                  <img
-                    src={this.state.artworkUrl}
-                    alt="Cannot be displayed"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%"
-                    }}
-                  />
-                )}
-              </div>
-              <ImageUploader
-                label="Update Artwork Image"
-                buttonText="Choose Image"
-                onChange={this.onArtworkImageDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
-                maxFileSize={5242880}
-                singleImage={true}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                id="desc"
+                label="Description"
+                multiline
+                onChange={this.handleForm}
+                name="description"
+                value={this.state.description}
               />
 
               <div
@@ -620,55 +602,48 @@ class EditArtwork extends React.Component {
                   Contextual Media
                 </Typography>
               </div>
-
-              {/* <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingBottom: 30
-                }}
-              > */}
-              {this.state.oldContextuals.length === 0 ? (
-                <p></p>
-              ) : (
-                this.state.oldContextuals.map((obj, i) => (
-                  <div key={i}>
-                    <img
-                      src={obj.image}
-                      alt={`contextual media ${i}`}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%"
-                      }}
-                    />
-                    <div style={{ paddingBottom: 10 }}>
-                      <TextField
-                        variant="outlined"
-                        margin="dense"
-                        required
-                        fullWidth
-                        label="Description"
-                        defaultValue={obj.description}
-                        name={`${i} desc`}
-                        onChange={this.handleOldContextForm}
+              <div>
+                {this.state.oldContextuals.length === 0 ? (
+                  <p></p>
+                ) : (
+                  this.state.oldContextuals.map((obj, i) => (
+                    <div key={i}>
+                      <img
+                        src={obj.image}
+                        alt={`contextual media ${i}`}
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "100%"
+                        }}
                       />
+                      <div style={{ paddingBottom: 10 }}>
+                        <TextField
+                          variant="outlined"
+                          margin="dense"
+                          required
+                          fullWidth
+                          label="Description"
+                          defaultValue={obj.description}
+                          name={`${i} desc`}
+                          onChange={this.handleOldContextForm}
+                        />
+                      </div>
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.enqueueDeleteOldContextual(i)}
+                        >
+                          Delete Contextual Artwork
+                        </Button>
+                      </div>
+                      <Box p={2}></Box>
                     </div>
-                    <div style={{ paddingBottom: 10 }}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        onClick={() => this.enqueueDeleteOldContextual(i)}
-                      >
-                        Delete Contextual Artwork
-                      </Button>
-                    </div>
-                    <Box p={2}></Box>
-                  </div>
-                ))
-              )}
-              {/* </div> */}
+                  ))
+                )}
+              </div>
+
               <div>
                 {this.state.contextImages.length === 0 ? (
                   <p></p>
@@ -699,7 +674,7 @@ class EditArtwork extends React.Component {
                           fullWidth
                           onClick={() => this.deleteContextual(i)}
                         >
-                          Delete Contextual Artwork
+                          Delete Contextual Artworks
                         </Button>
                       </div>
                       <Box p={2}></Box>

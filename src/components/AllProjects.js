@@ -200,13 +200,7 @@ class AllProjects extends React.Component {
                 key={tile.projectId}
                 onClick={() => this.handleTileClick(tile.projectId)}
               >
-                {tile.image && (
-                  <img
-                    src={tile.image}
-                    alt={tile.name}
-                    onClick={() => this.handleTileClick(tile.projectId)}
-                  />
-                )}
+                {tile.image && <img src={tile.image} alt={tile.name} />}
                 <Link
                   key={tile.projectId}
                   to={{
@@ -233,7 +227,6 @@ class AllProjects extends React.Component {
             ))}
             {
               <GridListTile>
-                {/*<img src={add} />*/}
                 <Link
                   to="/newproject"
                   style={{

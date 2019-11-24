@@ -166,6 +166,7 @@ class Project extends React.Component {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={this.state.tileData.length == 0}
                   className={classes.button}
                 >
                   <Link
@@ -191,7 +192,7 @@ class Project extends React.Component {
                     }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
-                    Edit Project
+                    Edit Project Name/Image
                   </Link>
                 </Button>
                 <Button

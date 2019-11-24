@@ -141,7 +141,7 @@ class NewProject extends React.Component {
               />
               <ImageUploader
                 withIcon={true}
-                buttonText="Add Project Cover Photo (Optional)"
+                buttonText="Choose Cover Photo"
                 onChange={this.onDrop}
                 imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
                 maxFileSize={5242880}
