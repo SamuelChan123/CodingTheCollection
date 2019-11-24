@@ -183,7 +183,7 @@ class Project extends React.Component {
                     }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
-                    Edit Project
+                    Edit Project Name/Image
                   </Link>
                 </Button>
                 <Button

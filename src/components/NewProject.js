@@ -135,7 +135,7 @@ class NewProject extends React.Component {
               />
               <ImageUploader
                 withIcon={true}
-                buttonText="Choose Images"
+                buttonText="Choose Cover Photo"
                 onChange={this.onDrop}
                 imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                 maxFileSize={5242880}
@@ -157,8 +157,7 @@ class NewProject extends React.Component {
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the project image or the project title must be
-                    updated!
+                    Please include a project name and a cover photo!
                   </p>
                 )}
               </div>

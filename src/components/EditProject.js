@@ -220,7 +220,7 @@ class EditProject extends React.Component {
                 )}
                 <ImageUploader
                   withIcon={true}
-                  buttonText="Choose Images"
+                  buttonText="Choose Cover Photo"
                   onChange={this.onDrop}
                   imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                   maxFileSize={5242880}
