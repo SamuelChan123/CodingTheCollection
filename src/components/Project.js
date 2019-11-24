@@ -53,7 +53,8 @@ class Project extends React.Component {
     this.state = {
       tileData: [],
       exhibit: "",
-      owner: ""
+      owner: "",
+      editor: null,
     };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
@@ -106,6 +107,18 @@ class Project extends React.Component {
                 });
             });
         }
+        
+        this.listener = this.props.firebase.auth.onAuthStateChanged(
+          authUser => {
+            if (authUser) {
+              this.setState({ editor: authUser.uid });
+              console.log(authUser.uid)
+            } else {
+                this.setState({ editor: "" });
+              }
+            }
+        )
+
         setState({
           exhibit: project.val().name,
           owner: project.val().owner
@@ -115,7 +128,10 @@ class Project extends React.Component {
         errorCode: error.code,
         errorMessage: error.message
       }));
-    console.log(this.state.owner);
+  }
+
+  componentWillUnmount() {
+    this.listener();
   }
 
   handleTileClick = artId => {
@@ -181,34 +197,38 @@ class Project extends React.Component {
                     Present Project
                   </Link>
                 </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                >
-                  <Link
-                    to={{
-                      pathname: `/editproject/${this.projectId}`
-                    }}
-                    style={{ textDecoration: "none", color: "white" }}
+                {this.state.owner == this.state.editor &&   
+                  <div>       
+                    <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
                   >
-                    Edit Project Name/Image
-                  </Link>
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                >
-                  <Link
-                    to={{
-                      pathname: `/shareproject/${this.projectId}`
-                    }}
-                    style={{ textDecoration: "none", color: "white" }}
+                    <Link
+                      to={{
+                        pathname: `/editproject/${this.projectId}`
+                      }}
+                      style={{ textDecoration: "none", color: "white" }}
+                    >
+                      Edit Project Name/Image
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
                   >
-                    Share Project
-                  </Link>
-                </Button>
+                    <Link
+                      to={{
+                        pathname: `/shareproject/${this.projectId}`
+                      }}
+                      style={{ textDecoration: "none", color: "white" }}
+                    >
+                      Share Project
+                    </Link>
+                  </Button>
+                  </div>
+                }
               </div>
             </GridListTile>
             {this.state.tileData.map(tile => (
