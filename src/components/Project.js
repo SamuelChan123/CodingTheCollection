@@ -157,6 +157,7 @@ class Project extends React.Component {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={this.state.tileData.length == 0}
                   className={classes.button}
                 >
                   <Link
