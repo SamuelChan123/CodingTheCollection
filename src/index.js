@@ -18,6 +18,11 @@ function App() {
       secondary: {
         main: "#a9a9a9"
       }
+    },
+    typography: {
+      fontFamily: ["Neue Helvetica", "Helvetica", "Arial", "sans-serif"].join(
+        ","
+      )
     }
   });
 

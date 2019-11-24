@@ -7,8 +7,6 @@ import {
   Redirect
 } from "react-router-dom";
 
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-
 import Register from "./components/Register";
 import Signin from "./components/Signin.js";
 import AllProjects from "./components/AllProjects.js";
@@ -24,14 +22,6 @@ import Presentation from "./components/Presentation.js";
 import Model from "./components/Model";
 import HowItWorks from "./components/HowItWorks";
 import { withAuthentication } from "./components/Session";
-
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: ["liberation-sans", "Helvetica", "Arial", "sans-serif"].join(
-      ","
-    )
-  }
-});
 
 class AppRouter extends Component {
   render() {
