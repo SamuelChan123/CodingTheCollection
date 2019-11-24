@@ -67,15 +67,20 @@ class EditProject extends React.Component {
       .child(projectId)
       .once("value")
       .then(project => {
-        storage
-          .child(project.val().image)
-          .getDownloadURL()
-          .then(url => {
-            setState({
-              oldProjectName: project.val().name,
-              oldProjectImage: url
+        setState({
+          oldProjectName: project.val().name,
+          oldProjectImage: ""
+        });
+        if (project.val().image) {
+          storage
+            .child(project.val().image)
+            .getDownloadURL()
+            .then(url => {
+              setState({
+                oldProjectImage: url
+              });
             });
-          });
+        }
       });
   }
 
@@ -96,14 +101,26 @@ class EditProject extends React.Component {
         .child(this.projectId)
         .once("value")
         .then(project => {
-          var imageUrl = project.val().image;
-          this.storage
-            .child(`${imageUrl}`)
-            .put(updatedProjectImage)
-            .then(function(snapshot) {
-              fb.updateProjectWithId(id, data);
-              history.push("/allprojects");
-            });
+          if (project.val().image) {
+            var imageUrl = project.val().image;
+            this.storage
+              .child(`${imageUrl}`)
+              .put(updatedProjectImage)
+              .then(function(snapshot) {
+                fb.updateProjectWithId(id, data);
+                history.push("/allprojects");
+              });
+          } else {
+            let uuid = this.uuidv4();
+            data.image = `projects/${uuid}`;
+            this.storage
+              .child(`projects/${uuid}`)
+              .put(this.state.projectImage)
+              .then(function(snapshot) {
+                fb.setProject(data);
+                history.push("/allprojects");
+              });
+          }
         });
     } else if (this.state.projectName) {
       const updated = {
@@ -112,22 +129,43 @@ class EditProject extends React.Component {
       fb.updateProjectWithId(this.projectId, updated);
       history.push("/allprojects");
     } else if (this.state.projectImage) {
+      var data = {};
       let updatedProjectImage = this.state.projectImage;
       this.projects
         .child(this.projectId)
         .once("value")
         .then(project => {
-          var imageUrl = project.val().image;
-          this.storage
-            .child(`${imageUrl}`)
-            .put(updatedProjectImage)
-            .then(function(snapshot) {
-              history.push("/allprojects");
-            });
+          if (imageUrl) {
+            var imageUrl = project.val().image;
+            this.storage
+              .child(`${imageUrl}`)
+              .put(updatedProjectImage)
+              .then(function(snapshot) {
+                history.push("/allprojects");
+              });
+          } else {
+            let uuid = this.uuidv4();
+            data.image = `projects/${uuid}`;
+            this.storage
+              .child(`projects/${uuid}`)
+              .put(this.state.projectImage)
+              .then(function(snapshot) {
+                fb.updateProjectWithId(id, data);
+                history.push("/allprojects");
+              });
+          }
         });
     } else {
       console.log("Either the image or the project name must be updated!");
     }
+  };
+
+  uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
   };
 
   onDelete = e => {
@@ -208,19 +246,20 @@ class EditProject extends React.Component {
                   onChange={this.handleName}
                   autoFocus
                 />
-                {this.state.oldProjectImage != null && (
-                  <img
-                    src={this.state.oldProjectImage}
-                    alt="Cannot be displayed"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "100%"
-                    }}
-                  />
-                )}
+                {this.state.oldProjectImage != null &&
+                  this.state.oldProjectImage !== "" && (
+                    <img
+                      src={this.state.oldProjectImage}
+                      alt="Cannot be displayed"
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%"
+                      }}
+                    />
+                  )}
                 <ImageUploader
                   withIcon={true}
-                  buttonText="Choose Images"
+                  buttonText="Edit Project Cover Photo (Optional)"
                   onChange={this.onDrop}
                   imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                   maxFileSize={5242880}

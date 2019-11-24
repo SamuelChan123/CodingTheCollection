@@ -403,7 +403,7 @@ class EditArtwork extends React.Component {
   onContextImagesDrop = (images, urls) => {
     this.setState({
       contextImages: images.map(img => ({
-        desc: "",
+        desc: " ",
         image: img
       })),
       contextUrls: urls
@@ -613,7 +613,7 @@ class EditArtwork extends React.Component {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  paddingBottom: 30
+                  paddingBottom: 10
                 }}
               >
                 <Typography component="h1" variant="h5">
@@ -621,54 +621,54 @@ class EditArtwork extends React.Component {
                 </Typography>
               </div>
 
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   paddingBottom: 30
                 }}
-              >
-                {this.state.oldContextuals.length === 0 ? (
-                  <p></p>
-                ) : (
-                  this.state.oldContextuals.map((obj, i) => (
-                    <div key={i}>
-                      <img
-                        src={obj.image}
-                        alt={`contextual media ${i}`}
-                        style={{
-                          maxWidth: "100%",
-                          maxHeight: "100%"
-                        }}
+              > */}
+              {this.state.oldContextuals.length === 0 ? (
+                <p></p>
+              ) : (
+                this.state.oldContextuals.map((obj, i) => (
+                  <div key={i}>
+                    <img
+                      src={obj.image}
+                      alt={`contextual media ${i}`}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%"
+                      }}
+                    />
+                    <div style={{ paddingBottom: 10 }}>
+                      <TextField
+                        variant="outlined"
+                        margin="dense"
+                        required
+                        fullWidth
+                        label="Description"
+                        defaultValue={obj.description}
+                        name={`${i} desc`}
+                        onChange={this.handleOldContextForm}
                       />
-                      <div style={{ paddingBottom: 10 }}>
-                        <TextField
-                          variant="outlined"
-                          margin="dense"
-                          required
-                          fullWidth
-                          label="Description"
-                          defaultValue={obj.description}
-                          name={`${i} desc`}
-                          onChange={this.handleOldContextForm}
-                        />
-                      </div>
-                      <div style={{ paddingBottom: 10 }}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                          onClick={() => this.enqueueDeleteOldContextual(i)}
-                        >
-                          Delete Contextual Artwork
-                        </Button>
-                      </div>
-                      <Box p={2}></Box>
                     </div>
-                  ))
-                )}
-              </div>
+                    <div style={{ paddingBottom: 10 }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        onClick={() => this.enqueueDeleteOldContextual(i)}
+                      >
+                        Delete Contextual Artwork
+                      </Button>
+                    </div>
+                    <Box p={2}></Box>
+                  </div>
+                ))
+              )}
+              {/* </div> */}
               <div>
                 {this.state.contextImages.length === 0 ? (
                   <p></p>

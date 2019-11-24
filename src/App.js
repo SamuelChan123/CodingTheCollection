@@ -7,8 +7,7 @@ import {
   Redirect
 } from "react-router-dom";
 
-import { createMuiTheme } from "@material-ui/core/styles";
-import { ThemeProvider } from "@material-ui/styles";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 
 import Register from "./components/Register";
 import Signin from "./components/Signin.js";
@@ -37,54 +36,52 @@ const theme = createMuiTheme({
 class AppRouter extends Component {
   render() {
     return (
-      <ThemeProvider theme={theme}>
-        <Router>
-          <div>
-            <Navbar />
-            <Switch>
-              <Route path="/welcome" component={Home} />
-              <Route path="/signin" component={Signin} />
-              <Route path="/register" component={Register} />
-              <Route path="/allprojects" component={AllProjects} />
-              <Route path="/project/:projectId" exact component={Project} />
-              <Route path="/newproject" exact component={NewProject} />
-              <Route path="/howitworks" exact component={HowItWorks} />
-              <Route
-                path="/project/:projectId/present"
-                exact
-                component={Presentation}
-              />
-              <Route
-                path="/project/:projectId/present/:artId"
-                exact
-                component={Presentation}
-              />
-              <Route path="/model" component={Model} />
-              <Route
-                path="/project/:projectId/newartwork"
-                exact
-                component={NewArtwork}
-              />
-              <Route
-                path="/project/:projectId/editartwork/:artworkId"
-                exact
-                component={EditArtwork}
-              />
-              <Route
-                path="/editproject/:projectId"
-                exact
-                component={EditProject}
-              />
-              <Route
-                path="/shareproject/:projectId"
-                exact
-                component={ShareProject}
-              />
-              <Redirect exact from="/" to="/welcome" />
-            </Switch>
-          </div>
-        </Router>
-      </ThemeProvider>
+      <Router>
+        <div>
+          <Navbar />
+          <Switch>
+            <Route path="/welcome" component={Home} />
+            <Route path="/signin" component={Signin} />
+            <Route path="/register" component={Register} />
+            <Route path="/allprojects" component={AllProjects} />
+            <Route path="/project/:projectId" exact component={Project} />
+            <Route path="/newproject" exact component={NewProject} />
+            <Route path="/howitworks" exact component={HowItWorks} />
+            <Route
+              path="/project/:projectId/present"
+              exact
+              component={Presentation}
+            />
+            <Route
+              path="/project/:projectId/present/:artId"
+              exact
+              component={Presentation}
+            />
+            <Route path="/model" component={Model} />
+            <Route
+              path="/project/:projectId/newartwork"
+              exact
+              component={NewArtwork}
+            />
+            <Route
+              path="/project/:projectId/editartwork/:artworkId"
+              exact
+              component={EditArtwork}
+            />
+            <Route
+              path="/editproject/:projectId"
+              exact
+              component={EditProject}
+            />
+            <Route
+              path="/shareproject/:projectId"
+              exact
+              component={ShareProject}
+            />
+            <Redirect exact from="/" to="/welcome" />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }

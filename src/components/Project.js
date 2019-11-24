@@ -16,7 +16,16 @@ import { withAuthorization } from "./Session";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/styles";
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#84BD00"
+    },
+    secondary: {
+      main: "#a9a9a9"
+    }
+  }
+});
 
 const styles = {
   root: {

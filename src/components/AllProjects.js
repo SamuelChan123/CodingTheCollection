@@ -38,11 +38,11 @@ const styles = {
 class AllProjects extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       tileData: [],
       sharedTileData: [],
       authUser: null,
-      loading: false,
+      loading: false
     };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
@@ -50,25 +50,31 @@ class AllProjects extends React.Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    this.listener = this.props.firebase.auth.onAuthStateChanged(
-      authUser => {
-        if (authUser) {
-          this.setState({ authUser: authUser, });
-          this.projects = this.props.firebase.projects().orderByChild("owner").equalTo(authUser.uid)
-          let emailKey = (authUser.email).replace(/\./g, ",")
-          this.sharedProjects = this.props.firebase.projects().orderByChild("collaborators/" + emailKey).equalTo(true)
+    this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
+      if (authUser) {
+        this.setState({ authUser: authUser });
+        this.projects = this.props.firebase
+          .projects()
+          .orderByChild("owner")
+          .equalTo(authUser.uid);
+        let emailKey = authUser.email.replace(/\./g, ",");
+        this.sharedProjects = this.props.firebase
+          .projects()
+          .orderByChild("collaborators/" + emailKey)
+          .equalTo(true);
 
-          let setState = this.setState.bind(this);
-          let { storage } = this;
-          let promises = []; // list of project promises
-          let sharedPromises = [];
-          this.projects.on(
-            "value",
-            snapshot => {
-              snapshot.forEach(project => {
-                promises.push(
-                  new Promise((resolve, reject) => {
-                    // create a new promise for the each project
+        let setState = this.setState.bind(this);
+        let { storage } = this;
+        let promises = []; // list of project promises
+        let sharedPromises = [];
+        this.projects.on(
+          "value",
+          snapshot => {
+            snapshot.forEach(project => {
+              promises.push(
+                new Promise((resolve, reject) => {
+                  // create a new promise for the each project
+                  if (project.val().image) {
                     storage
                       .child(project.val().image)
                       .getDownloadURL()
@@ -80,29 +86,38 @@ class AllProjects extends React.Component {
                           image: url
                         });
                       });
-                  })
-                );
+                  } else {
+                    resolve({
+                      // return the data of the project from the promise
+                      projectId: project.key,
+                      name: project.val().name,
+                      image: ""
+                    });
+                  }
+                })
+              );
+            });
+            Promise.all(promises).then(tileData => {
+              // runs once all the project promises are resolved
+              setState({
+                tileData: tileData.sort((a, b) =>
+                  a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1
+                )
               });
-              Promise.all(promises).then(tileData => {
-                // runs once all the project promises are resolved
-                setState({
-                  tileData: tileData.sort((a, b) =>
-                    a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1
-                  )
-                });
-              });
-            },
-            errorObject => {
-              return errorObject.code;
-            }
-          );
-          this.sharedProjects.on(
-            "value",
-            snapshot => {
-              snapshot.forEach(project => {
-                sharedPromises.push(
-                  new Promise((resolve, reject) => {
-                    // create a new promise for the each project
+            });
+          },
+          errorObject => {
+            return errorObject.code;
+          }
+        );
+        this.sharedProjects.on(
+          "value",
+          snapshot => {
+            snapshot.forEach(project => {
+              sharedPromises.push(
+                new Promise((resolve, reject) => {
+                  // create a new promise for the each project
+                  if (project.val().image) {
                     storage
                       .child(project.val().image)
                       .getDownloadURL()
@@ -114,28 +129,35 @@ class AllProjects extends React.Component {
                           image: url
                         });
                       });
-                  })
-                );
+                  } else {
+                    resolve({
+                      // return the data of the project from the promise
+                      projectId: project.key,
+                      name: project.val().name,
+                      image: ""
+                    });
+                  }
+                })
+              );
+            });
+            Promise.all(sharedPromises).then(tileData => {
+              // runs once all the project promises are resolved
+              setState({
+                sharedTileData: tileData.sort((a, b) =>
+                  a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1
+                )
               });
-              Promise.all(sharedPromises).then(tileData => {
-                // runs once all the project promises are resolved
-                setState({
-                  sharedTileData: tileData.sort((a, b) =>
-                    a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1
-                  )
-                });
-              });
-            },
-            errorObject => {
-              return errorObject.code;
-            }
-          );
-    this.setState({ loading: false });
-        } else {
-          this.setState({ authUser: null });
-        }
+            });
+          },
+          errorObject => {
+            return errorObject.code;
+          }
+        );
+        this.setState({ loading: false });
+      } else {
+        this.setState({ authUser: null });
       }
-    );
+    });
   }
 
   componentWillUnmount() {
@@ -152,7 +174,7 @@ class AllProjects extends React.Component {
 
   render() {
     const { classes } = this.props;
-  
+
     const { loading } = this.state;
 
     return (
@@ -174,12 +196,17 @@ class AllProjects extends React.Component {
             {}
             {loading && <div>Loading ...</div>}
             {this.state.tileData.map(tile => (
-              <GridListTile key={tile.projectId}>
-                <img
-                  src={tile.image}
-                  alt={tile.name}
-                  onClick={() => this.handleTileClick(tile.projectId)}
-                />
+              <GridListTile
+                key={tile.projectId}
+                onClick={() => this.handleTileClick(tile.projectId)}
+              >
+                {tile.image && (
+                  <img
+                    src={tile.image}
+                    alt={tile.name}
+                    onClick={() => this.handleTileClick(tile.projectId)}
+                  />
+                )}
                 <Link
                   key={tile.projectId}
                   to={{
@@ -241,16 +268,17 @@ class AllProjects extends React.Component {
               >
                 Projects Shared With You
               </h1>
-            {this.state.sharedTileData.length == 0 &&
-              <h3 
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}>
-                There are currently no projects shared with you.
-              </h3>
-            }
+              {this.state.sharedTileData.length == 0 && (
+                <h3
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  There are currently no projects shared with you.
+                </h3>
+              )}
             </GridListTile>
             {}
             {loading && <div>Loading ...</div>}
