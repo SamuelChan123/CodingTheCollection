@@ -1,5 +1,18 @@
 import React from "react";
 import { Button } from "@material-ui/core";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { createMuiTheme } from "@material-ui/core/styles";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#84BD00"
+    },
+    secondary: {
+      main: "#a9a9a9"
+    }
+  }
+});
 
 class BackButton extends React.Component {
   goBack = () => {
@@ -14,12 +27,14 @@ class BackButton extends React.Component {
     return (
       <div style={{ paddingBottom: 10 }}>
         <Button
-          fullWidth
           variant="contained"
-          color="primary"
+          color="secondary"
+          fullWidth
           onClick={this.goBack}
+          style={{ color: "white", opacity: 0.9 }}
+          startIcon={<ArrowBackIcon />}
         >
-          Go Back
+          Back
         </Button>
       </div>
     );

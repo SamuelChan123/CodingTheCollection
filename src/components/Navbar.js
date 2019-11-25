@@ -72,27 +72,31 @@ function NavbarAuth() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{ backgroundColor: "#9ACD32" }}>
+      <AppBar
+        position="static"
+        style={{ backgroundColor: "#9ACD32", opacity: 0.9 }}
+      >
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link
               to="/welcome"
-              style={{ textDecoration: "none", color: "white" }}
+              style={{
+                textDecoration: "none",
+                color: "white"
+              }}
             >
               CodingTheCollection
             </Link>
+            {/* <img
+                src={NasherLogo}
+                layout-fill
+                alt=""
+                style={{
+                  height: "inherit",
+                  width: "inherit"
+                }}
+              /> */}
           </Typography>
-
-          {/* <div style={{ backgroundImage: `url(${NasherLogo})` }}></div> */}
-          <a>
-            <Image src={NasherLogo} className={classes.logo} alt="" />
-          </a>
-
-          <Link
-            to="/allprojects"
-            style={{ textDecoration: "none", color: "white" }}
-          ></Link>
-
           <Link
             to="/allprojects"
             style={{ textDecoration: "none", color: "white" }}

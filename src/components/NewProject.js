@@ -71,27 +71,33 @@ class NewProject extends React.Component {
 
   onCreate = e => {
     this.setState({
-      noError: this.state.projectName && this.state.projectImage
+      noError: this.state.projectName
     });
-    if (this.state.projectName && this.state.projectImage) {
-      let uuid = this.uuidv4();
+    e.preventDefault();
+    if (this.state.projectName) {
       var data = {
         name: this.state.projectName,
-        image: `projects/${uuid}`,
+        image: "",
         artworks: []
       };
-      var fb = this.props.firebase;
       var history = this.props.history;
-      this.storage
-        .child(`projects/${uuid}`)
-        .put(this.state.projectImage)
-        .then(function(snapshot) {
-          fb.setProject(data);
-          history.push("/allprojects");
-        });
-      e.preventDefault();
+      var fb = this.props.firebase;
+      if (this.state.projectImage) {
+        let uuid = this.uuidv4();
+        data.image = `projects/${uuid}`;
+        this.storage
+          .child(`projects/${uuid}`)
+          .put(this.state.projectImage)
+          .then(function(snapshot) {
+            fb.setProject(data);
+            history.push("/allprojects");
+          });
+      } else {
+        fb.setProject(data);
+        history.push("/allprojects");
+      }
     } else {
-      console.log("Both name and image must be filled in");
+      console.log("The project name must be filled in");
     }
   };
 
@@ -135,9 +141,9 @@ class NewProject extends React.Component {
               />
               <ImageUploader
                 withIcon={true}
-                buttonText="Choose Images"
+                buttonText="Choose Cover Photo"
                 onChange={this.onDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
                 maxFileSize={5242880}
               />
               <div>
@@ -157,8 +163,7 @@ class NewProject extends React.Component {
               <div>
                 {!noError && (
                   <p style={{ color: "red" }}>
-                    Either the project image or the project title must be
-                    updated!
+                    The project name must be filled in!
                   </p>
                 )}
               </div>
