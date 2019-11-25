@@ -74,7 +74,7 @@ function NavbarAuth() {
     <div className={classes.root}>
       <AppBar
         position="static"
-        style={{ backgroundColor: "#9ACD32", opacity: 0.8 }}
+        style={{ backgroundColor: "#9ACD32", opacity: 0.9 }}
       >
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
