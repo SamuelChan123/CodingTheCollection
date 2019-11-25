@@ -3,13 +3,18 @@ import {
   Button,
   CssBaseline,
   TextField,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  IconButton,
   Box,
   Typography,
   makeStyles,
   Container
 } from "@material-ui/core";
-import ImageUploader from "react-images-upload";
 
+import DeleteIcon from "@material-ui/icons/Delete";
 import Copyright from "./Copyright";
 import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
@@ -18,9 +23,9 @@ class ShareProject extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        text: '',
-        loading: false,
-        collaborators: [],
+      text: "",
+      loading: false,
+      collaborators: []
     };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
@@ -34,12 +39,15 @@ class ShareProject extends React.Component {
   };
 
   onAddCollaborator = event => {
-    this.props.firebase.getCollaborators(this.projectId).child((this.state.text).replace(/\./g, ",")).set(true)
-    
+    this.props.firebase
+      .getCollaborators(this.projectId)
+      .child(this.state.text.replace(/\./g, ","))
+      .set(true);
+
     // push({
     //   email: this.state.text,
     // });
-    this.setState({ text: '' });
+    this.setState({ text: "" });
     event.preventDefault();
   };
 
@@ -77,35 +85,34 @@ class ShareProject extends React.Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    this.props.firebase.getCollaborators(this.projectId).on('value', snapshot => {
+    this.props.firebase
+      .getCollaborators(this.projectId)
+      .on("value", snapshot => {
         // convert collaborators list from snapshot
         const collaboratorObject = snapshot.val();
 
         // console.log(this.projectId);
 
-
         if (collaboratorObject) {
-
           const collaboratorList = Object.keys(collaboratorObject).map(key => ({
             ...collaboratorObject[key],
-            uid: key,
+            uid: key
           }));
           // console.log(collaboratorList);
 
-          this.setState({ 
+          this.setState({
             collaborators: collaboratorList,
-            loading: false,
+            loading: false
           });
         } else {
           this.setState({ collaborators: null, loading: false });
         }
-    });
+      });
   }
 
   componentWillUnmount() {
     this.props.firebase.getCollaborators().off();
   }
-
 
   render() {
     const classes = this.useStyles();
@@ -128,31 +135,34 @@ class ShareProject extends React.Component {
               Share Project
             </Typography>
           </div>
+          <br />
 
           <div className={classes.paper}>
-          <form 
-                className={classes.form}
-                onSubmit={this.onAddCollaborator} 
-            >
-            <TextField 
-                name="todo" 
+            <form className={classes.form} onSubmit={this.onAddCollaborator}>
+              <TextField
+                name="todo"
                 variant="outlined"
                 fullWidth
-                type="text" 
+                type="text"
                 value={text}
                 onChange={this.onChangeText}
-                placeholder="Enter collaborator email here... [Press Enter]" 
-                autoComplete="off" />
-          </form>
+                placeholder="Enter collaborator email here... [Press Enter]"
+                autoComplete="off"
+              />
+            </form>
+            <br />
 
-          <div>
-            {loading && <div>Loading ...</div>}
-            {collaborators ? (
-              <CollaboratorList collaborators={collaborators} onRemoveCollaborator={this.onRemoveCollaborator} />
-            ) : (
-              <div>There are currently no collaborators.</div>
-            )}
-          </div>
+            <div>
+              {loading && <div>Loading ...</div>}
+              {collaborators ? (
+                <CollaboratorList
+                  collaborators={collaborators}
+                  onRemoveCollaborator={this.onRemoveCollaborator}
+                />
+              ) : (
+                <div>There are currently no collaborators.</div>
+              )}
+            </div>
           </div>
           <br />
 
@@ -166,23 +176,32 @@ class ShareProject extends React.Component {
   }
 }
 
-const CollaboratorList = ({ collaborators, onRemoveCollaborator  }) => (
-  <ul>
-    {collaborators.map(collaborator => (
-      <CollaboratorItem key={collaborator.uid} collaborator={collaborator} onRemoveCollaborator={onRemoveCollaborator}/>
-    ))}
-  </ul>
+const CollaboratorList = ({ collaborators, onRemoveCollaborator }) => (
+  <>
+    <List>
+      {collaborators.map(collaborator => (
+        <CollaboratorItem
+          key={collaborator.uid}
+          collaborator={collaborator}
+          onRemoveCollaborator={onRemoveCollaborator}
+        />
+      ))}
+    </List>
+  </>
 );
 const CollaboratorItem = ({ collaborator, onRemoveCollaborator }) => (
-  <li>
-    <strong>{(collaborator.uid).replace(/,/g, ".")}</strong>
-    <button
-    type="button"
-    onClick={() => onRemoveCollaborator(collaborator.uid)}
-  >
-    Remove
-  </button>
-  </li>
+  <ListItem>
+    <ListItemText primary={collaborator.uid.replace(/,/g, ".")} />
+    <ListItemSecondaryAction>
+      <IconButton
+        edge="end"
+        aria-label="delete"
+        onClick={() => onRemoveCollaborator(collaborator.uid)}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </ListItemSecondaryAction>
+  </ListItem>
 );
 
 export default withAuthorization(ShareProject);
