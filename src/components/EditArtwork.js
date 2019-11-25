@@ -634,6 +634,7 @@ class EditArtwork extends React.Component {
                           color="primary"
                           fullWidth
                           onClick={() => this.enqueueDeleteOldContextual(i)}
+                          style={{ opacity: 0.9 }}
                         >
                           Delete Contextual Artwork
                         </Button>
@@ -673,6 +674,7 @@ class EditArtwork extends React.Component {
                           color="primary"
                           fullWidth
                           onClick={() => this.deleteContextual(i)}
+                          style={{ opacity: 0.9 }}
                         >
                           Delete Contextual Artworks
                         </Button>
@@ -704,6 +706,7 @@ class EditArtwork extends React.Component {
                   color="primary"
                   onClick={e => this.onUpdate(e)}
                   className={classes.submit}
+                  style={{ opacity: 0.9 }}
                 >
                   {this.state.uploadText}
                 </Button>

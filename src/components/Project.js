@@ -40,7 +40,8 @@ const styles = {
     height: "100%"
   },
   button: {
-    margin: theme.spacing(0.5)
+    margin: theme.spacing(0.5),
+    opacity: 0.9
   },
   icon: {
     color: "rgba(255, 255, 255, 0.54)"
@@ -54,7 +55,7 @@ class Project extends React.Component {
       tileData: [],
       exhibit: "",
       owner: "",
-      editor: null,
+      editor: null
     };
     this.projects = this.props.firebase.projects(); // get projects ref
     this.storage = this.props.firebase.storage(); // get storage bucket for images
@@ -107,17 +108,17 @@ class Project extends React.Component {
                 });
             });
         }
-        
+
         this.listener = this.props.firebase.auth.onAuthStateChanged(
           authUser => {
             if (authUser) {
               this.setState({ editor: authUser.uid });
-              console.log(authUser.uid)
+              console.log(authUser.uid);
             } else {
-                this.setState({ editor: "" });
-              }
+              this.setState({ editor: "" });
             }
-        )
+          }
+        );
 
         setState({
           exhibit: project.val().name,
@@ -184,6 +185,7 @@ class Project extends React.Component {
                   color="primary"
                   disabled={this.state.tileData.length == 0}
                   className={classes.button}
+                  style={{ opacity: 0.9 }}
                 >
                   <Link
                     to={{
@@ -197,38 +199,40 @@ class Project extends React.Component {
                     Present Project
                   </Link>
                 </Button>
-                {this.state.owner == this.state.editor &&   
-                  <div>       
+                {this.state.owner == this.state.editor && (
+                  <div>
                     <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                  >
-                    <Link
-                      to={{
-                        pathname: `/editproject/${this.projectId}`
-                      }}
-                      style={{ textDecoration: "none", color: "white" }}
+                      variant="contained"
+                      color="primary"
+                      className={classes.button}
+                      style={{ opacity: 0.9 }}
                     >
-                      Edit Project Name/Image
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                  >
-                    <Link
-                      to={{
-                        pathname: `/shareproject/${this.projectId}`
-                      }}
-                      style={{ textDecoration: "none", color: "white" }}
+                      <Link
+                        to={{
+                          pathname: `/editproject/${this.projectId}`
+                        }}
+                        style={{ textDecoration: "none", color: "white" }}
+                      >
+                        Edit Project Name/Image
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className={classes.button}
+                      style={{ opacity: 0.9 }}
                     >
-                      Share Project
-                    </Link>
-                  </Button>
+                      <Link
+                        to={{
+                          pathname: `/shareproject/${this.projectId}`
+                        }}
+                        style={{ textDecoration: "none", color: "white" }}
+                      >
+                        Share Project
+                      </Link>
+                    </Button>
                   </div>
-                }
+                )}
               </div>
             </GridListTile>
             {this.state.tileData.map(tile => (
