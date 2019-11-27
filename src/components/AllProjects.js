@@ -282,28 +282,17 @@ class AllProjects extends React.Component {
                   alt={tile.name}
                   onClick={() => this.handleTileClick(tile.projectId)}
                 />
-                <Link
-                  key={tile.projectId}
-                  to={{
-                    pathname: `project/${tile.projectId}`
-                  }}
-                  style={{
-                    textDecoration: "none",
-                    color: "rgba(255, 255, 255, 0.54)"
-                  }}
-                >
-                  <GridListTileBar
-                    title={tile.name}
-                    actionIcon={
-                      <IconButton
-                        aria-label={`info about ${tile.title}`}
-                        className={classes.icon}
-                      >
-                        <InfoIcon />
-                      </IconButton>
-                    }
-                  />
-                </Link>
+                <GridListTileBar
+                  title={tile.name}
+                  actionIcon={
+                    <IconButton
+                      aria-label={`info about ${tile.title}`}
+                      className={classes.icon}
+                    >
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
               </GridListTile>
             ))}
           </GridList>
