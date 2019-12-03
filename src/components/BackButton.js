@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button, Container } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { createMuiTheme } from "@material-ui/core/styles";
 
@@ -25,7 +25,7 @@ class BackButton extends React.Component {
 
   render() {
     return (
-      <div style={{ paddingBottom: 10 }}>
+      <Container component="main" maxWidth="xs">
         <Button
           variant="contained"
           color="secondary"
@@ -36,7 +36,7 @@ class BackButton extends React.Component {
         >
           Back
         </Button>
-      </div>
+      </Container>
     );
   }
 }
