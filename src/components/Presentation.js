@@ -45,12 +45,8 @@ const styles = theme => ({
     overflowY: "auto"
   },
   mainDisplay: {
-    flex: 8,
-    padding: 3,
-    background: "white",
-    float: "right",
-    height: "100%",
-    justifyContent: "center"
+    width:"100%",
+    height:"100%"
   },
   textField: {
     flex: 3,
@@ -263,6 +259,7 @@ class Presentation extends React.Component {
     // https://stackoverflow.com/questions/55276560/react-array-in-state-updating-late
     this.setState(oldState => {
       let currentArtwork = oldState.artInfo.get(tileId)
+      console.log(currentArtwork)
       return {
         artId: tileId, 
         artName: currentArtwork.name,
@@ -383,13 +380,23 @@ class Presentation extends React.Component {
             </GridList>
           </Drawer>
 
-          <main>
+          <main
+            style={{
+              width: "100%",
+              height: "100%",
+            }}>
             {this.state.tileData.length > 0 && this.state.currentSlide < this.state.tileData.length &&
               <div className={classes.mainDisplay} >
-                <img src={this.state.tileData[this.state.currentSlide].image} />
+                <img style={{
+                  height: "100%",
+                  width: "100%",
+                  margin: "0 auto",
+                  display: "block",
+                  objectFit: "contain"
+                }} src={this.state.tileData[this.state.currentSlide].image} />
               </div>
             }
-
+          </main>
           <Drawer
             className={classes.drawer}
             variant="persistent"
@@ -408,11 +415,15 @@ class Presentation extends React.Component {
                 {this.state.tileData.map((tile, index) => (
                   <GridListTile 
                     key={tile.image}
-                    onClick={() => this.setState({currentSlide: index})}
+                    onClick={() => {
+                      this.setState({
+                        currentSlide: index,
+                        description: tile.description
+                      })
+                    }}
                   >
                     <img src={tile.image} />
                     <GridListTileBar
-                      title={tile.description}
                       classes={{
                         root: classes.titleBar,
                         title: classes.title,
@@ -447,7 +458,6 @@ class Presentation extends React.Component {
             </div>
             </Drawer>      
 
-          </main>
         </div >
     </React.Fragment >
     );
