@@ -87,13 +87,13 @@ class NewArtwork extends React.Component {
   onCreate = e => {
     if (!this.state.artworkImage || !this.state.name || this.state.uploading) {
       this.setState({
-        noError: false,
-      })
+        noError: false
+      });
     } else {
       this.setState({
         uploading: true,
-        uploadText: `Uploading ${this.state.contextImages.length+1} images...`
-      })
+        uploadText: `Uploading ${this.state.contextImages.length + 1} images...`
+      });
       var mainImage = this.state.artworkImage;
       var imageUrl = `artworks/${this.uuidv4()}`;
 
@@ -151,7 +151,7 @@ class NewArtwork extends React.Component {
             history.push(`/project/${projectId}`);
           });
         });
-    } 
+    }
     e.preventDefault();
   };
 
@@ -177,6 +177,14 @@ class NewArtwork extends React.Component {
     this.setState({ contextImages });
   };
 
+  deleteContextual = i => {
+    let contexts = this.state.contextImages;
+    contexts.splice(i, 1);
+    let contextUrls = this.state.contextUrls;
+    contextUrls.splice(i, 1);
+    this.setState({ contextImages: contexts, contextUrls: contextUrls });
+  };
+
   render() {
     const classes = this.useStyles();
     let noError = this.state.noError;
@@ -199,7 +207,7 @@ class NewArtwork extends React.Component {
           </div>
           <div className={classes.paper}>
             <form className={classes.form} noValidate>
-            <ImageUploader
+              <ImageUploader
                 label="Artwork Image"
                 buttonText="Choose Image"
                 onChange={this.onArtworkImageDrop}
@@ -298,7 +306,6 @@ class NewArtwork extends React.Component {
                 onChange={this.handleForm}
               />
 
-
               <ImageUploader
                 label="Contextual Media Images"
                 buttonText="Choose Images"
@@ -320,15 +327,28 @@ class NewArtwork extends React.Component {
                           maxHeight: "100%"
                         }}
                       />
-                      <TextField
-                        variant="outlined"
-                        margin="dense"
-                        required
-                        fullWidth
-                        label="Description"
-                        name={`${i} desc`}
-                        onChange={this.handleContextForm}
-                      />
+                      <div style={{ paddingBottom: 10 }}>
+                        <TextField
+                          variant="outlined"
+                          margin="dense"
+                          required
+                          fullWidth
+                          label="Description"
+                          name={`${i} desc`}
+                          onChange={this.handleContextForm}
+                        />
+                      </div>
+                      <div style={{ paddingBottom: 10 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={() => this.deleteContextual(i)}
+                          style={{ opacity: 0.9 }}
+                        >
+                          Delete Contextual Artwork
+                        </Button>
+                      </div>
                       <Box p={2}></Box>
                     </div>
                   ))

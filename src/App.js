@@ -21,6 +21,7 @@ import Home from "./components/Home.js";
 import Presentation from "./components/Presentation.js";
 import Model from "./components/Model";
 import HowItWorks from "./components/HowItWorks";
+import About from "./components/About";
 import { withAuthentication } from "./components/Session";
 
 class AppRouter extends Component {
@@ -31,6 +32,7 @@ class AppRouter extends Component {
           <Navbar />
           <Switch>
             <Route path="/welcome" component={Home} />
+            <Route path="/about" component={About} />
             <Route path="/signin" component={Signin} />
             <Route path="/register" component={Register} />
             <Route path="/allprojects" component={AllProjects} />

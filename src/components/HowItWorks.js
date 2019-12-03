@@ -42,7 +42,7 @@ class HowItWorks extends React.Component {
               With You". <br /> <hr />
             </li>
             <li>
-              Click on the "Add New Project" button to create your first
+              Click on the "Add New Project" button to create your first{" "}
               <strong>project</strong>. A project is a grouping of artworks and
               their related contextual medias. You must give a project a name,
               and you can add a cover photo if you like.
