@@ -308,6 +308,7 @@ class EditArtwork extends React.Component {
   };
 
   deleteOldContextual = removingId => {
+    console.log(removingId);
     // console.log(removingId);
     // return;
     var fb = this.props.firebase;
@@ -333,13 +334,20 @@ class EditArtwork extends React.Component {
                   let artworkData = artwork.val();
 
                   let conMedias = artworkData.contextualmedia;
+                  let toDelete = null;
                   for (var cm in conMedias) {
                     if (conMedias[cm].contextualMediaId === removingId) {
-                      conMedias[cm].contextualMediaId = null;
+                      toDelete = cm;
                     }
                   }
-                  artworkData.contextualmedia = conMedias;
-                  fb.setArtworkWithId(artworkId, artworkData);
+                  console.log(toDelete);
+                  // artworkData.contextualmedia = conMedias;
+                  // fb.setArtworkWithId(artworkId, artworkData);
+                  if (toDelete) {
+                    artworks
+                      .child(`${artworkId}/contextualmedia/${toDelete}`)
+                      .remove();
+                  }
                 });
             });
           });

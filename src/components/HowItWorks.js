@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
+import { Typography, Container } from "@material-ui/core";
 import NasherLogo from "../images/nashermuseum.svg";
 import BackButton from "./BackButton";
 import Copyright from "./Copyright";
@@ -117,10 +117,12 @@ class HowItWorks extends React.Component {
             paddingBottom: 10
           }}
         >
-          <BackButton
-            backPage="/welcome"
-            history={this.props.history}
-          ></BackButton>
+          <Container maxWidth="xs">
+            <BackButton
+              backPage="/welcome"
+              history={this.props.history}
+            ></BackButton>
+          </Container>
         </div>
         <br />
         <div>

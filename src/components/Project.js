@@ -145,7 +145,12 @@ class Project extends React.Component {
     return (
       <React.Fragment>
         <br />
-        <div className={classes.root}>
+        <div
+          className={classes.root}
+          style={{
+            paddingBottom: 10
+          }}
+        >
           <GridList cellHeight={180} cols={4} className={classes.gridList}>
             <GridListTile key="backButton" cols={1} style={{ height: "auto" }}>
               <BackButton

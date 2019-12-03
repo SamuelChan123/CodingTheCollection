@@ -25,7 +25,7 @@ class BackButton extends React.Component {
 
   render() {
     return (
-      <Container component="main" maxWidth="xs">
+      <div style={{ paddingBottom: 10 }}>
         <Button
           variant="contained"
           color="secondary"
@@ -36,7 +36,7 @@ class BackButton extends React.Component {
         >
           Back
         </Button>
-      </Container>
+      </div>
     );
   }
 }
