@@ -203,9 +203,6 @@ class AllProjects extends React.Component {
                 {tile.image && <img src={tile.image} alt={tile.name} />}
                 <Link
                   key={tile.projectId}
-                  to={{
-                    pathname: `project/${tile.projectId}`
-                  }}
                   style={{
                     textDecoration: "none",
                     color: "rgba(255, 255, 255, 0.54)"
