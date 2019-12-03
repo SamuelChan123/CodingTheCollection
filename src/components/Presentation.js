@@ -423,12 +423,6 @@ class Presentation extends React.Component {
                     }}
                   >
                     <img src={tile.image} />
-                    <GridListTileBar
-                      classes={{
-                        root: classes.titleBar,
-                        title: classes.title,
-                      }}
-                    />
                   </GridListTile>
                 ))}
               </GridList> 
