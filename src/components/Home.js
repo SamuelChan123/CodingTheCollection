@@ -65,16 +65,15 @@ export default function Home() {
             paddingBottom: 10
           }}
         >
-          <Button variant="contained" fullWidth color="primary">
-            <Link
-              to="/about"
+          <Button href="/about" variant="contained" fullWidth color="primary">
+            <div
               style={{
                 textDecoration: "none",
                 color: "white"
               }}
             >
               About Us
-            </Link>
+            </div>
           </Button>
         </div>
       </Container>
