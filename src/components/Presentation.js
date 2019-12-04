@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
 import {
   Button,
   IconButton,
@@ -11,14 +10,15 @@ import Drawer from '@material-ui/core/Drawer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { withStyles, withTheme } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
 import dummyData from "../sample/DummyProject";
 import Copyright from "./Copyright";
 import { withAuthorization, withAuthentication } from "./Session";
 import { withFirebase } from "./Firebase";
+import Fab from '@material-ui/core/Fab';
 
 const drawerWidth = 240;
 const iconWidth = 45;
@@ -32,8 +32,11 @@ const styles = theme => ({
     height: "95vh",
     backgroundColor: "white"
   },
-  gridList: {
+  gridListVertical: {
     width: "100%"
+  },
+  gridListHorizontal: {
+    flexWrap: 'nowrap',
   },
   artSelection: {
     flex: 2,
@@ -42,28 +45,13 @@ const styles = theme => ({
     overflowY: "auto"
   },
   mainDisplay: {
-    flex: 8,
-    padding: 3,
-    background: "white",
-    float: "right",
-    height: "100%",
-    justifyContent: "center"
+    width:"100%",
+    height:"100%"
   },
   textField: {
     flex: 3,
     height: "100%",
     paddingRight: "10%"
-  },
-  carouselTile: {
-    height: "75vh",
-    background: "white",
-    userSelect: "none"
-  },
-  carouselImage: {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    objectFit: "contain",
-    background: "white"
   },
   appBar: {
     backgroundColor: 'white',
@@ -133,6 +121,8 @@ class Presentation extends React.Component {
                    artInfo: new Map(),
                    artTileData: new Map(),
                    leftTileData: [],
+                   open: false,
+                   openRight: false
                   };
 
     this.projects = this.props.firebase.projects(); // get projects ref
@@ -140,6 +130,7 @@ class Presentation extends React.Component {
     this.artworks = this.props.firebase.artworks();
     this.contextualMedia = this.props.firebase.contextualMedia();
     this.projectId = this.props.match.params.projectId;
+
   }
 
 
@@ -268,6 +259,7 @@ class Presentation extends React.Component {
     // https://stackoverflow.com/questions/55276560/react-array-in-state-updating-late
     this.setState(oldState => {
       let currentArtwork = oldState.artInfo.get(tileId)
+      console.log(currentArtwork)
       return {
         artId: tileId, 
         artName: currentArtwork.name,
@@ -300,6 +292,14 @@ class Presentation extends React.Component {
       this.setState({ open: false });
     };
 
+    const handleDrawerOpenRight = () => {
+      this.setState({ openRight: true });
+    };
+
+    const handleDrawerCloseRight = () => {
+      this.setState({ openRight: false });
+    };
+
 
 
     const onClickThumb = item => {
@@ -312,20 +312,39 @@ class Presentation extends React.Component {
 
           {/* Expand Artwork Selection Button */}
 
-          <div
-            position="fixed"
-            className={clsx(classes.appBar, { [classes.hide]: this.state.open })}
+          <Fab color="primary" aria-label="add"
+            style={{
+              position: "absolute",
+              zIndex: "1000",
+              top: "80px",
+              left: "20px"
+            }}
           >
             <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, this.state.open && classes.hide)}
             >
-              <MenuIcon />
+              <ChevronRightIcon />
             </IconButton>
-          </div>
+          </Fab>
+
+          <Fab color="primary" aria-label="add"
+            style={{
+              position: "absolute",
+              zIndex: "1000",
+              top: "80px",
+              right: "20px"
+            }}
+          >
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpenRight}
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+          </Fab>
 
           {/* Artwork Selection Drawer */}
 
@@ -346,11 +365,12 @@ class Presentation extends React.Component {
 
             <Divider />
             
-            <GridList cellHeight={160} className={classes.gridList} cols={1}>
+            <GridList cellHeight={160} className={classes.gridListVertical} cols={1}>
               {this.state.leftTileData.map(tile => (
                 <GridListTile key={tile.id} cols={tile.cols || 1 }
                   onClick = {(e) => {
                     this.selectArt(tile.id);
+                    this.setState({currentSlide: 0})
                   }} 
                 className = {clsx(this.state.artId == tile.id && classes.selected)}>
                   <img src={tile.image} alt={tile.name} 
@@ -361,20 +381,51 @@ class Presentation extends React.Component {
           </Drawer>
 
           <main
-            className={clsx(classes.content, { [classes.contentShift]: this.state.open, })}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}>
+            {this.state.tileData.length > 0 && this.state.currentSlide < this.state.tileData.length &&
+              <div className={classes.mainDisplay} >
+                <img style={{
+                  height: "100%",
+                  width: "100%",
+                  margin: "0 auto",
+                  display: "block",
+                  objectFit: "contain"
+                }} src={this.state.tileData[this.state.currentSlide].image} />
+              </div>
+            }
+          </main>
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="right"
+            open={this.state.openRight}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
           >
-            <div className={classes.mainDisplay} >
-
-
-              <Carousel test={this.state.tileData} showStatus={false} showIndicators={false} emulateTouch onClickThumb={onClickThumb} >
-                {this.state.tileData.map(tile => (
-                  <div className={classes.carouselTile} key={tile.image}>
-                    <img src={tile.image} className={classes.carouselImage} />
-                  </div>
-                ))}
-              </Carousel>
+            <div className={classes.drawerHeader} style={{justifyContent: 'flex-start'}}>
+              <IconButton onClick={handleDrawerCloseRight}>
+                <ChevronRightIcon />
+              </IconButton>
             </div>
-
+              <GridList className={classes.gridListHorizontal} cols={2.5}>
+                {this.state.tileData.map((tile, index) => (
+                  <GridListTile 
+                    key={tile.image}
+                    onClick={() => {
+                      this.setState({
+                        currentSlide: index,
+                        description: tile.description
+                      })
+                    }}
+                  >
+                    <img src={tile.image} />
+                  </GridListTile>
+                ))}
+              </GridList> 
             <div className={classes.textField}>
 
               {this.state.currentArtwork && 
@@ -399,10 +450,10 @@ class Presentation extends React.Component {
               }
 
             </div>
+            </Drawer>      
 
-          </main>
         </div >
-    e </React.Fragment >
+    </React.Fragment >
     );
   }
 }
