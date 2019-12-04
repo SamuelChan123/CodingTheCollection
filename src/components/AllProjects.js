@@ -295,6 +295,7 @@ class AllProjects extends React.Component {
           </GridList>
         </div>
 
+        <br />
         <div>
           <Copyright />
         </div>
