@@ -32,6 +32,13 @@ const styles = theme => ({
     height: "95vh",
     backgroundColor: "white"
   },
+  drawerRight: {
+    width: 350,
+    flexShrink: 0,
+  },
+  drawerPaperRight: {
+    width: 350,
+  },
   gridListVertical: {
     width: "100%"
   },
@@ -398,12 +405,12 @@ class Presentation extends React.Component {
             }
           </main>
           <Drawer
-            className={classes.drawer}
+            className={classes.drawerRight}
             variant="persistent"
             anchor="right"
             open={this.state.openRight}
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaperRight,
             }}
           >
             <div className={classes.drawerHeader} style={{justifyContent: 'flex-start'}}>
@@ -411,21 +418,21 @@ class Presentation extends React.Component {
                 <ChevronRightIcon />
               </IconButton>
             </div>
-              <GridList className={classes.gridListHorizontal} cols={2.5}>
-                {this.state.tileData.map((tile, index) => (
-                  <GridListTile 
-                    key={tile.image}
-                    onClick={() => {
-                      this.setState({
-                        currentSlide: index,
-                        description: tile.description
-                      })
-                    }}
-                  >
-                    <img src={tile.image} />
-                  </GridListTile>
-                ))}
-              </GridList> 
+            <GridList className={classes.gridListHorizontal} cols={2.5}>
+              {this.state.tileData.map((tile, index) => (
+                <GridListTile 
+                  key={tile.image}
+                  onClick={() => {
+                    this.setState({
+                      currentSlide: index,
+                      description: tile.description
+                    })
+                  }}
+                >
+                  <img src={tile.image} />
+                </GridListTile>
+              ))}
+            </GridList> 
             <div className={classes.textField}>
 
               {this.state.currentArtwork && 
