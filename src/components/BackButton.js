@@ -24,14 +24,14 @@ class BackButton extends React.Component {
   };
 
   render() {
+    console.log(this.props)
     return (
       <div style={{ paddingBottom: 10 }}>
         <Button
           variant="contained"
           color="secondary"
-          fullWidth
           onClick={this.goBack}
-          style={{ color: "white", opacity: 0.9 }}
+          style={{ ...this.props.style, color: "white", opacity: 0.9 }}
           startIcon={<ArrowBackIcon />}
         >
           Back

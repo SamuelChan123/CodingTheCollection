@@ -19,6 +19,7 @@ import Copyright from "./Copyright";
 import { withAuthorization, withAuthentication } from "./Session";
 import { withFirebase } from "./Firebase";
 import Fab from '@material-ui/core/Fab';
+import BackButton from './BackButton'
 
 const drawerWidth = 240;
 const iconWidth = 45;
@@ -352,6 +353,17 @@ class Presentation extends React.Component {
               <ChevronLeftIcon />
             </IconButton>
           </Fab>
+
+          <BackButton 
+            history={this.props.history}
+            backPage={`/project/${this.projectId}`}
+            style={{
+              position: "absolute",
+              zIndex: "0",
+              bottom: "20px",
+              right: "20px"
+            }}
+          />
 
           {/* Artwork Selection Drawer */}
 
