@@ -45,16 +45,19 @@ export default function Home() {
             paddingBottom: 10
           }}
         >
-          <Button variant="contained" fullWidth color="primary">
-            <Link
-              to="/howitworks"
+          <Button
+            href="/howitworks"
+            variant="contained"
+            fullWidth
+            color="primary"
+          >
+            <div
               style={{
-                textDecoration: "none",
                 color: "white"
               }}
             >
               How it works
-            </Link>
+            </div>
           </Button>
         </div>
         <div
