@@ -70,6 +70,7 @@ class AppRouter extends Component {
               exact
               component={ShareProject}
             />
+            <Route path="*" component={Home} />
             <Redirect exact from="/" to="/welcome" />
           </Switch>
         </div>
