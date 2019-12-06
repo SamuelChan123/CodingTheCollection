@@ -30,7 +30,6 @@ class BackButton extends React.Component {
         <Button
           variant="contained"
           color="secondary"
-          fullWidth
           onClick={this.goBack}
           style={{ ...this.props.style, color: "white", opacity: 0.9 }}
           startIcon={<ArrowBackIcon />}
