@@ -6,8 +6,7 @@ import Firebase, { FirebaseContext } from "./components/Firebase";
 import * as serviceWorker from "./serviceWorker";
 
 import { ThemeProvider } from "@material-ui/styles";
-import green from "@material-ui/core/colors/green";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 function App() {
   const theme = createMuiTheme({

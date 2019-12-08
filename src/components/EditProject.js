@@ -180,15 +180,19 @@ class EditProject extends React.Component {
           .child(this.projectId)
           .remove()
           .then(function(snapshot) {
-            var storageRef = storage.child(imageUrl);
-            storageRef
-              .delete()
-              .then(function() {
-                history.push("/allprojects");
-              })
-              .catch(function(error) {
-                console.log("Image deletion failed!");
-              });
+            if (imageUrl) {
+              var storageRef = storage.child(imageUrl);
+              storageRef
+                .delete()
+                .then(function() {
+                  history.push("/allprojects");
+                })
+                .catch(function(error) {
+                  console.log("Image deletion failed!");
+                });
+            } else {
+              history.push("/allprojects");
+            }
           })
           .catch(function(snapshot) {
             console.log("Project Deletion failed!");
