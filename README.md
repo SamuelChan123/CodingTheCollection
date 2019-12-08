@@ -37,7 +37,7 @@ yarn start
 
 ## Deployment
 
-Our primary means of deployment is by starting a virtual cloud machine, downloading the repository, and running npm start on the top level of this project. 
+Our primary means of deployment is by starting a virtual cloud machine, downloading the repository, and running npm start or npm run build on the top level of this project. 
 
 
 ## Team Members
