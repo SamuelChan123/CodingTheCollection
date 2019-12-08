@@ -10,7 +10,6 @@ import clsx from "clsx";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
-import dummyData from "../sample/DummyProject";
 import Copyright from "./Copyright";
 import { withAuthorization, withAuthentication } from "./Session";
 import { withFirebase } from "./Firebase";
