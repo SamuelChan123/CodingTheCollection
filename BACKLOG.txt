@@ -1,0 +1,10 @@
+These are the features we hope to implement in the future:
+- Re-order artworks and contextual media
+- 3D modeling of artwork
+- Lockable presentation screen
+- User settings, including changing user credentials and theme colors
+- Additional presentation layout options
+- Email verification
+- Designate privileges when sharing a project
+- Ability to crop images on upload
+- Deleting projects removes all corresponding artwork and contextual media
