@@ -29,6 +29,9 @@ yarn start
 - Firebase
 - Javascript
 - Node.js/NPM
+- React-Images-Upload
+- Boostrap
+- Material UI
 
 ## Roadmap
 
