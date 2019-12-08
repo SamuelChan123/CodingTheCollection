@@ -8,11 +8,7 @@ it('renders without crashing', () => {
 
   const welcome = (
 <Typography>
-  CodingTheCollection helps you create educational presentations with
-  uploaded images of artworks and related contextual media.
-  <br />
-  This is a collaboration between Computer Science 408 and the Nasher
-  Museum of Art at Duke University.
+CodingTheCollection helps you create educational presentations with uploaded images of artworks and related contextual media.
 </Typography>
 );
   // expect(wrapper.contains(welcome)).toBe(true);

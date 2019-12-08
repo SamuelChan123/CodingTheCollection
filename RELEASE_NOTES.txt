@@ -1,0 +1,33 @@
+Project’s Current Functionality:
+- Login/Registration
+- Project Creation 
+- Upload cover image for projects
+- Upload artworks (with corresponding fields)
+- Upload contextual images with descriptions
+- Present pages that displays all artworks in a project with contextual images/descriptions
+- Present page allows user to toggle between artworks
+- Editing artworks/contextual images/corresponding fields
+- Editing Project names/cover photo
+- Deleting Project functionality
+- Deleting Artwork or contextual images functionality
+- About Page for project credentials
+- How It Works page with a video demonstration and instructions on how to use the platform
+- Sharing of projects with other users (but other users do not have share access)
+
+Known Bugs:
+- Sometimes deleting contextual media or artworks does not delete the backend connection between artworks and contextual medias to be deleted, thus creating a front end React bug (essentially a null pointer). Hard to replicate but does happen sometimes
+- Presentation page can be a little bit finicky (sometimes contextual images/descriptions do not appear)
+
+Assumptions:
+- Assume that the user is generally able to navigate a basic web-based user interface
+- Assume the user’s device is generally bigger than the size of a handheld tablet (like an iPad) so that components will not be cut off
+- Assume users are generally not malicious and attempt to delete or edit projects and artworks without the consent of the authors or other curators.
+
+Limitations:
+- Full and complete usability/display may not be available for smaller displays (like small smartphones in vertical orientation)
+
+Platforms Tested On:
+- (Macbook Pro, 13-inch, 2017) MacOS Catalina, Chrome v. 78
+- (ASUS UX330UAK) Windows 10, Chrome v. 78
+- (iPhone 6S) iOS 13.1.3, Chrome, Safari
+- (Pixel 2) Android v. 9, Chrome

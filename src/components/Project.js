@@ -185,57 +185,59 @@ class Project extends React.Component {
                   paddingBottom: 10
                 }}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={this.state.tileData.length == 0}
-                  className={classes.button}
-                  style={{ opacity: 0.9 }}
+                <Link
+                  to={{
+                    pathname: `/project/${this.projectId}/present`,
+                    state: {
+                      projectId: this.projectId
+                    }
+                  }}
+                  style={{ textDecoration: "none", color: "white" }}
                 >
-                  <Link
-                    to={{
-                      pathname: `/project/${this.projectId}/present`,
-                      state: {
-                        projectId: this.projectId
-                      }
-                    }}
-                    style={{ textDecoration: "none", color: "white" }}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={this.state.tileData.length == 0}
+                    className={classes.button}
+                    style={{ opacity: 0.9 }}
                   >
                     Present Project
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
+
                 {this.state.owner == this.state.editor && (
                   <div>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      style={{ opacity: 0.9 }}
+                    <Link
+                      to={{
+                        pathname: `/editproject/${this.projectId}`
+                      }}
+                      style={{ textDecoration: "none", color: "white" }}
                     >
-                      <Link
-                        to={{
-                          pathname: `/editproject/${this.projectId}`
-                        }}
-                        style={{ textDecoration: "none", color: "white" }}
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        style={{ opacity: 0.9 }}
                       >
                         Edit Project Name/Image
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      style={{ opacity: 0.9 }}
+                      </Button>
+                    </Link>
+
+                    <Link
+                      to={{
+                        pathname: `/shareproject/${this.projectId}`
+                      }}
+                      style={{ textDecoration: "none", color: "white" }}
                     >
-                      <Link
-                        to={{
-                          pathname: `/shareproject/${this.projectId}`
-                        }}
-                        style={{ textDecoration: "none", color: "white" }}
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.button}
+                        style={{ opacity: 0.9 }}
                       >
                         Share Project
-                      </Link>
-                    </Button>
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </div>
