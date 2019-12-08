@@ -1,8 +1,8 @@
 # Overall Architecture Design
-Frontend: React, Javascript, and Material UI
-Backend: No backend, just firebase
-Datastore: Firebase (real time database) and firebase storage (Web, JS)
-Deployment: via firebase deployment
+- Frontend: React, Javascript, and Material UI
+- Backend: No backend, just firebase
+- Datastore: Firebase (real time database) and firebase storage (Web, JS)
+- Deployment: via firebase deployment
 
 # Database Schema
 
