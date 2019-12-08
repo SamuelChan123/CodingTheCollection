@@ -20,7 +20,7 @@ Known Bugs:
 
 Assumptions:
 - Assume that the user is generally able to navigate a basic web-based user interface
-- - Assume the user’s device is generally bigger than the size of a handheld tablet (like an iPad) so that components will not be cut off
+- Assume the user’s device is generally bigger than the size of a handheld tablet (like an iPad) so that components will not be cut off
 - Assume users are generally not malicious and attempt to delete or edit projects and artworks without the consent of the authors or other curators.
 
 Limitations:
