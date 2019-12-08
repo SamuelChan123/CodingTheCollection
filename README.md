@@ -31,6 +31,9 @@ yarn start
 - Firebase
 - Javascript
 - Node.js/NPM
+- React-Images-Upload
+- Boostrap
+- Material UI
 
 ## Deployment
 
@@ -38,7 +41,7 @@ Our primary means of deployment is by starting a virtual cloud machine, download
 
 
 ## Team Members
-- Samuel (Sam) Chan
+- Samuel Chan
 - Edward Zhuang
 - Santo Grillo
 - William Ye
