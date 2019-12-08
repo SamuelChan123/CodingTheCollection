@@ -185,13 +185,6 @@ class Project extends React.Component {
                   paddingBottom: 10
                 }}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={this.state.tileData.length == 0}
-                  className={classes.button}
-                  style={{ opacity: 0.9 }}
-                >
                   <Link
                     to={{
                       pathname: `/project/${this.projectId}/present`,
@@ -201,9 +194,16 @@ class Project extends React.Component {
                     }}
                     style={{ textDecoration: "none", color: "white" }}
                   >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={this.state.tileData.length == 0}
+                    className={classes.button}
+                    style={{ opacity: 0.9 }}
+                  >
                     Present Project
+                  </Button>
                   </Link>
-                </Button>
                 {this.state.owner == this.state.editor && (
                   <div>
                     <Button
