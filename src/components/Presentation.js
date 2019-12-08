@@ -112,6 +112,11 @@ const styles = theme => ({
   selected: {
     borderStyle: 'solid',
     borderColor: "#9ACD32"
+  },
+  marginTitle: {
+    marginTop: '5px',
+    marginBottom: '0px',
+    fontWeight: '400'
   }
 });
 
@@ -452,19 +457,12 @@ class Presentation extends React.Component {
               <div style={{
                   padding: '10px'
               }}>
-                <h2>
-                  {this.state.currentArtwork.artist}
-                  <br/>
-                  {this.state.currentArtwork.name}, {this.state.currentArtwork.year}
-                  <br/>
-                  {this.state.currentArtwork.materials}
-                  <br/>
-                  {this.state.currentArtwork.dimensions}
-                  <br/>
-                  {this.state.currentArtwork.creditLine}
-                  <br/>
-                  {this.state.currentArtwork.objectNumber}
-                </h2>
+                <h3 style={{fontWeight: '800'}} className={classes.marginTitle}>{this.state.currentArtwork.artist}</h3>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.name}, {this.state.currentArtwork.year}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.materials}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.dimensions}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.creditLine}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.objectNumber}</h4>
                 <p>
                   {this.state.description}
                 </p>
