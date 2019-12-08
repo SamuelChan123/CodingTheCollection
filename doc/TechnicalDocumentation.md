@@ -4,6 +4,8 @@
 - Datastore: Firebase (real time database) and firebase storage (Web, JS)
 - Deployment: via firebase deployment
 
+![](OverallArchitecture.png)
+
 # Database Schema
 
 - The database itself is a NoSQL database, with the entire data store is separated out into four “tables”: 
