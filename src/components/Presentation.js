@@ -107,6 +107,11 @@ const styles = theme => ({
   selected: {
     borderStyle: "solid",
     borderColor: "#9ACD32"
+  },
+  marginTitle: {
+    marginTop: '5px',
+    marginBottom: '0px',
+    fontWeight: '400'
   }
 });
 
@@ -154,16 +159,17 @@ class Presentation extends React.Component {
     let artInfoMap = new Map();
     let promises = [];
 
+    // get project info
     this.projects
       .child(this.projectId)
       .once("value")
       .then(project => {
         for (var artwork in project.val().artworks) {
+          // add info from each artwork
           promises.push(
             new Promise((resolve, reject) => {
               let contextualArt = [];
               var id = project.val().artworks[artwork].artId;
-              // console.log(id);
               getArtworks
                 .child(id)
                 .once("value")
@@ -181,14 +187,14 @@ class Presentation extends React.Component {
                         image: url,
                         description: art.val().description
                       });
-                      if (!getState().artId) {
+                      if (!getState().artId) { // if project already loaded artwork
                         setState({ artId: artworkTiles.id });
                       }
-                      if (getState().artId == artworkTiles.id) {
+                      if (getState().artId == artworkTiles.id) { // if it is the first artwork
                         setState({ artName: artworkTiles.name });
                       }
                       // console.log(art.val())
-                      if (getState().currentArtwork == null) {
+                      if (getState().currentArtwork == null) { // if artwork not loaded yet
                         setState({ currentArtwork: art.val() });
                       }
 
@@ -326,11 +332,11 @@ class Presentation extends React.Component {
               top: "80px",
               left: "20px"
             }}
+            onClick={handleDrawerOpen}
           >
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpen}
             >
               <ChevronRightIcon />
             </IconButton>
@@ -345,11 +351,11 @@ class Presentation extends React.Component {
               top: "80px",
               right: "20px"
             }}
+            onClick={handleDrawerOpenRight}
           >
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpenRight}
             >
               <ChevronLeftIcon />
             </IconButton>
@@ -447,45 +453,44 @@ class Presentation extends React.Component {
                 <ChevronRightIcon />
               </IconButton>
             </div>
-            <GridList className={classes.gridListHorizontal} cols={2.5}>
-              {this.state.tileData.map((tile, index) => (
-                <GridListTile
-                  key={tile.image}
-                  onClick={() => {
-                    this.setState({
-                      currentSlide: index,
-                      description: tile.description
-                    });
-                  }}
-                >
-                  <img src={tile.image} />
-                </GridListTile>
-              ))}
-            </GridList>
-            <div className={classes.textField}>
-              {this.state.currentArtwork && (
-                <div>
-                  <h2>
-                    {this.state.currentArtwork.artist}
-                    <br />
-                    {this.state.currentArtwork.name},{" "}
-                    {this.state.currentArtwork.year}
-                    <br />
-                    {this.state.currentArtwork.materials}
-                    <br />
-                    {this.state.currentArtwork.dimensions}
-                    <br />
-                    {this.state.currentArtwork.creditLine}
-                    <br />
-                    {this.state.currentArtwork.objectNumber}
-                  </h2>
-                  <p>{this.state.description}</p>
-                </div>
-              )}
+            <div>
+              <GridList className={classes.gridListHorizontal} cols={2.5}>
+                {this.state.tileData.map((tile, index) => (
+                  <GridListTile 
+                    key={tile.image}
+                    onClick={() => {
+                      this.setState({
+                        currentSlide: index,
+                        description: tile.description
+                      })
+                    }}
+                  >
+                    <img src={tile.image} />
+                  </GridListTile>
+                ))}
+              </GridList> 
             </div>
-          </Drawer>
-        </div>
-      </React.Fragment>
+
+            {this.state.currentArtwork && 
+              <div style={{
+                  padding: '10px'
+              }}>
+                <h3 style={{fontWeight: '800'}} className={classes.marginTitle}>{this.state.currentArtwork.artist}</h3>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.name}, {this.state.currentArtwork.year}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.materials}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.dimensions}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.creditLine}</h4>
+                <h4 className={classes.marginTitle}>{this.state.currentArtwork.objectNumber}</h4>
+                <p>
+                  {this.state.description}
+                </p>
+              </div>
+            }
+
+          </Drawer>      
+
+        </div >
+    </React.Fragment >
     );
   }
 }

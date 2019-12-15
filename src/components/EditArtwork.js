@@ -52,10 +52,14 @@ class EditArtwork extends React.Component {
     var setState = this.setState.bind(this);
     var getState = this.getState.bind(this);
     var storage = this.storage;
+
+    // get artwork info
     this.artworks
       .child(this.artworkId)
       .once("value")
       .then(artwork => {
+
+        // get URL of artwork image
         storage
           .child(artwork.val().image)
           .getDownloadURL()
@@ -72,10 +76,9 @@ class EditArtwork extends React.Component {
               creditLine: artwork.val().creditLine || ""
             });
 
+            // get info of each contextual media
             artwork.child("contextualmedia").forEach(mediaRef => {
-              // console.log(artwork.val());
               let contextId = mediaRef.val().contextualMediaId;
-              // console.log(contextId);
               this.contextualMedia
                 .child(contextId)
                 .once("value")
@@ -83,6 +86,7 @@ class EditArtwork extends React.Component {
                   let desc = media.val().desc;
                   let contextualMediaImage = media.val().image;
 
+                  // get contextual media image URL
                   storage
                     .child(contextualMediaImage)
                     .getDownloadURL()
@@ -128,6 +132,7 @@ class EditArtwork extends React.Component {
     }));
   }
 
+  // hitting submit button
   onUpdate = e => {
     e.preventDefault();
 
@@ -153,15 +158,17 @@ class EditArtwork extends React.Component {
 
     var deleteOldContextual = this.deleteOldContextual;
 
-    new Promise(function(resolve, reject) {
-      oldContextualsToDelete.forEach(deleteOldContextual);
-    }).then(function(result) {
-      
-    });
+    let promises = []
+    oldContextualsToDelete.forEach(contextual => {
+      promises.push(new Promise((resolve, reject) => {
+        deleteOldContextual(contextual, resolve)
+      }))
+    })
+    Promise.all(promises).then(() => {
+      this.updateContextualDescription()
+    })
 
-    this.updateContextualDescription();
-
-    if (contextImages.length > 0) {
+    if (contextImages.length > 0) { // multiple contextual images
       this.setState({
         uploadText: `Uploading ${this.state.contextImages.length} images...`
       });
@@ -193,7 +200,7 @@ class EditArtwork extends React.Component {
       });
     }
 
-    if (this.state.name && this.state.artworkImage) {
+    if (this.state.name && this.state.artworkImage) { // update name + image
       this.setState({
         uploadText: `Uploading ${this.state.contextImages.length + 1} images...`
       });
@@ -211,7 +218,7 @@ class EditArtwork extends React.Component {
               history.push(`/project/${projectId}`);
             });
         });
-    } else if (this.state.name) {
+    } else if (this.state.name) { // update just name
       if (this.state.contextImages.length > 0) {
         this.setState({
           uploadText: `Uploading ${this.state.contextImages.length} images...`
@@ -219,7 +226,7 @@ class EditArtwork extends React.Component {
       }
       fb.updateArtworkWithId(this.artworkId, data);
       history.push(`/project/${projectId}`);
-    } else if (this.state.artworkImage) {
+    } else if (this.state.artworkImage) { // update just image
       this.setState({
         uploadText: `Uploading ${this.state.contextImages.length + 1} images...`
       });
@@ -236,7 +243,7 @@ class EditArtwork extends React.Component {
               history.push(`/project/${projectId}`);
             });
         });
-    } else {
+    } else { // invalid input
       this.setState({ noError: false });
       console.log(
         "At least one of the artwork image, contexual images, or artwork name must be updated!"
@@ -252,6 +259,7 @@ class EditArtwork extends React.Component {
     let projects = this.projects;
     let artworkId = this.artworkId;
 
+    // delete artwork itself
     this.artworks
       .child(this.artworkId)
       .once("value")
@@ -262,6 +270,7 @@ class EditArtwork extends React.Component {
           .remove()
           .then(function(snapshot) {
             var storageRef = storage.child(imageUrl);
+            // delete image
             storageRef
               .delete()
               .then(function() {
@@ -290,6 +299,7 @@ class EditArtwork extends React.Component {
     e.preventDefault();
   };
 
+  // create new unique ID
   uuidv4 = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
       var r = (Math.random() * 16) | 0,
@@ -309,7 +319,7 @@ class EditArtwork extends React.Component {
     this.setState({ oldContextuals: contexts });
   };
 
-  deleteOldContextual = removingId => {
+  deleteOldContextual = (removingId, resolve) => {
     console.log(removingId);
     // console.log(removingId);
     // return;
@@ -318,16 +328,20 @@ class EditArtwork extends React.Component {
     let artworks = this.artworks;
     let artworkId = this.artworkId;
 
+    // get contextual media
     this.contextualMedia
       .child(removingId)
       .once("value")
       .then(contextual => {
+        // get URL
         let imageUrl = contextual.val().image;
+        // remove child data
         this.contextualMedia
           .child(removingId)
           .remove()
           .then(value => {
             let storageRef = storage.child(imageUrl);
+            // remove contextual media reference from parent artworks
             storageRef.delete().then(() => {
               artworks
                 .child(artworkId)
@@ -348,7 +362,11 @@ class EditArtwork extends React.Component {
                   if (toDelete) {
                     artworks
                       .child(`${artworkId}/contextualmedia/${toDelete}`)
-                      .remove();
+                      .remove().then(() => {
+                        resolve()
+                      })
+                  } else {
+                    resolve()
                   }
                 });
             });
@@ -358,11 +376,12 @@ class EditArtwork extends React.Component {
 
   updateContextualDescription = () => {
     let contexts = this.state.oldContextuals;
+    console.log(contexts)
 
     for (var i = 0; i < contexts.length; i++) {
       let modifying = contexts[i];
-      let newDescription = this.state.oldContextuals[i][`desc`];
-      if (newDescription.length == 0) {
+      let newDescription = contexts[i]['desc'] || contexts[i]['description']
+      if (!newDescription || newDescription.length == 0) {
         continue;
       }
       modifying.desc = newDescription;
@@ -634,6 +653,7 @@ class EditArtwork extends React.Component {
                           fullWidth
                           label="Description"
                           defaultValue={obj.desc}
+                          value={obj.desc}
                           name={`${i} desc`}
                           onChange={this.handleOldContextForm}
                         />
@@ -686,7 +706,7 @@ class EditArtwork extends React.Component {
                           onClick={() => this.deleteContextual(i)}
                           style={{ opacity: 0.9 }}
                         >
-                          Delete Contextual Artworks
+                          Delete Contextual Artwork
                         </Button>
                       </div>
                       <Box p={2}></Box>

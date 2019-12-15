@@ -1,5 +1,7 @@
 # Coding the Collection: Central American Art
 
+## Purpose
+
 Coding the Collection is a CS 408 (Delivering Software to Clients) project that our team is partnering with the Nasher Museum of Art to streamline, contexualize, and 
 create a better interactive experience for both visitors and curators.
 
@@ -23,7 +25,7 @@ yarn install
 yarn start
 ```
 
-## Requirements
+## Dependencies
 
 - React
 - Firebase
@@ -33,10 +35,13 @@ yarn start
 - Boostrap
 - Material UI
 
-## Roadmap
+## Deployment
+
+Our primary means of deployment is by starting a virtual cloud machine, downloading the repository, and running npm start or npm run build on the top level of this project. 
+
 
 ## Team Members
-- Samuel (Sam) Chan
+- Samuel Chan
 - Edward Zhuang
 - Santo Grillo
 - William Ye
