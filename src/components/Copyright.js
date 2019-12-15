@@ -2,6 +2,11 @@ import React from "react";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
+/*
+Authors: Edward Zhuang, Will Ye, Sam Chan, Santo Grillo
+Copyright to show that it is proprietary work of the CS 408 project group Coding the Collection and the Nasher
+*/
+
 export default function Copyright() {
   return (
     <div
