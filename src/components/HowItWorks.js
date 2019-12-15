@@ -108,7 +108,7 @@ class HowItWorks extends React.Component {
           <iframe
             width="560"
             height="315"
-            src="https://www.youtube.com/embed/0U_3sUbL-ek"
+            src="https://www.youtube.com/embed/CYXysmgxf3U"
             frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
