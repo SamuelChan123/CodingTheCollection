@@ -13,6 +13,11 @@ import Copyright from "./Copyright";
 import { withAuthorization } from "./Session";
 import BackButton from "./BackButton";
 
+/* New Project page
+ * Authors: Sam Chan
+ * This page allows users to create a new project/exhibition
+ */
+
 class NewProject extends React.Component {
   constructor(props) {
     super(props);
@@ -143,7 +148,7 @@ class NewProject extends React.Component {
                 withIcon={true}
                 buttonText="Choose Cover Photo"
                 onChange={this.onDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
+                imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
                 maxFileSize={5242880}
               />
               <div>

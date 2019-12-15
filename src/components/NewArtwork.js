@@ -14,6 +14,12 @@ import Copyright from "./Copyright";
 import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
+/*
+ * New Artwork page
+ * Authors: Will Ye, Sam Chan
+ * This page allows users to upload artwork and contextual media to a project
+ */
+
 class NewArtwork extends React.Component {
   constructor(props) {
     super(props);

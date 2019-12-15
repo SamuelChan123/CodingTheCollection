@@ -14,6 +14,12 @@ import Copyright from "./Copyright";
 import { withAuthorization } from "./Session";
 import BackButton from "./BackButton";
 
+/*
+ * Edit Artwork page
+ * Authors: Sam Chan, Will Ye, Edward Zhuang
+ * This is the page used to edit a user's existing artwork
+ */
+
 class EditArtwork extends React.Component {
   constructor(props) {
     super(props);
