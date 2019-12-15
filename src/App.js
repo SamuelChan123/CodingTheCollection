@@ -24,6 +24,12 @@ import HowItWorks from "./components/HowItWorks";
 import About from "./components/About";
 import { withAuthentication } from "./components/Session";
 
+/*
+ * App.js/App Router
+ * Authors: Edward Zhuang, Will Ye, Sam Chan, Santo Grill
+ * This class defines the routes/URLs and links them to their components
+ */
+
 class AppRouter extends Component {
   render() {
     return (
