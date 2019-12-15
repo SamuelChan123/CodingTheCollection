@@ -3,6 +3,12 @@ import "firebase/auth";
 import "firebase/database";
 import "firebase/storage";
 
+/*
+Authors: Sam Chan, Santo Grillo, Will Ye, Edward Zhuang
+We use the Firebase class to make almost all of our calls to our Firebase backend (ex. adding artwork, updating projects, etc.)
+*/
+
+
 const config = {
   apiKey: "AIzaSyD91vak12Cq2FQNIMmS2xti5ym3bzwOnMk",
   authDomain: "codingthecollectionnasher.firebaseapp.com",

@@ -4,12 +4,17 @@ import NasherLogo from "../images/nashermuseum.svg";
 import BackButton from "./BackButton";
 import Copyright from "./Copyright";
 
+/*
+Authors: Sam Chan, Edward Zhuang
+This is an instructional page that teaches the user how to use CodingTheCollection. Written instructions were created
+by Edward. Video was produced by Sam.
+*/
+
 class HowItWorks extends React.Component {
   render() {
     return (
       <React.Fragment>
         <br />
-
         <div
           style={{
             display: "flex",

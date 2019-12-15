@@ -4,6 +4,11 @@ import NasherLogo from "../images/nashermuseum.svg";
 import BackButton from "./BackButton";
 import Copyright from "./Copyright";
 
+/*
+Authors: Sam Chan
+This page describes the application and who worked on it.
+*/
+
 class About extends React.Component {
   render() {
     return (

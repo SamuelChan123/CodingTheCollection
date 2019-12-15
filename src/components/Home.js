@@ -4,6 +4,13 @@ import { Button, Container, Typography } from "@material-ui/core";
 import NasherLogo from "../images/nashermuseum.svg";
 import Copyright from "./Copyright";
 
+
+/*
+Authors: Sam Chan, Edward Zhuang
+This is our home page which directs users to a "How it works" and "About" page.
+*/
+
+
 export default function Home() {
   return (
     <React.Fragment>

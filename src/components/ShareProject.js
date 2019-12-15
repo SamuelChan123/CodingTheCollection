@@ -19,6 +19,12 @@ import Copyright from "./Copyright";
 import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
+
+/*
+Authors: Edward Zhuang
+This allows users to share projects with others.  
+*/
+
 class ShareProject extends React.Component {
   constructor(props) {
     super(props);

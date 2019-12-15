@@ -3,6 +3,12 @@ import { Button, Container } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { createMuiTheme } from "@material-ui/core/styles";
 
+
+/*
+Authors: Sam Chan
+This is a small version of the back button we include on several pages to provide the user with an easy way to backtrack.
+*/
+
 const theme = createMuiTheme({
   palette: {
     primary: {

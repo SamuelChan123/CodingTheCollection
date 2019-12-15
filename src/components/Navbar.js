@@ -12,6 +12,11 @@ import NasherLogo from "../images/nashermuseum.svg";
 import SignOutButton from "./SignOut";
 import { AuthUserContext } from "./Session";
 
+/*
+Authors: Edward Zhuang
+This is a navbar which is included on every page. Based on whether a user is logged in, the navbar links change.
+*/
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1

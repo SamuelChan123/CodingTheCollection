@@ -2,6 +2,13 @@ import React from "react";
 import AuthUserContext from "./context";
 import { withFirebase } from "../Firebase";
 
+/*
+Authors: Edward Zhuang
+We use this to handle authentication logic. authUser is null if there is no signed in user.
+This code was adapted from a tutorial at https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial.
+*/
+
+
 const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
     constructor(props) {

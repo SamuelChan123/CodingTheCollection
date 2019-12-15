@@ -17,6 +17,13 @@ import { withStyles } from "@material-ui/styles";
 import { LockOutlined as LockOutlinedIcon } from "@material-ui/icons";
 import Copyright from "./Copyright";
 
+
+/*
+Authors: Edward Zhuang
+This is a registration page which allows a user to create a new account with their name, email, and a password.
+*/
+
+
 const useStyles = makeStyles(theme => ({
   "@global": {
     body: {

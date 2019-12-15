@@ -17,6 +17,11 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/styles";
 import { LockOutlined as LockOutlinedIcon } from "@material-ui/icons";
 
+/*
+Authors: Edward Zhuang
+This allows users to sign in.  
+*/
+
 export default function SignInPage() {
   const classes = useStyles();
 
