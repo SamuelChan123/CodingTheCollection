@@ -80,7 +80,7 @@ class EditArtwork extends React.Component {
                 .child(contextId)
                 .once("value")
                 .then(media => {
-                  let description = media.val().desc;
+                  let desc = media.val().desc;
                   let contextualMediaImage = media.val().image;
 
                   storage
@@ -90,7 +90,7 @@ class EditArtwork extends React.Component {
                       var newContextuals = getState().oldContextuals.slice();
                       newContextuals.push({
                         image: contextualUrl,
-                        description: description,
+                        desc: desc,
                         id: contextId
                       });
                       setState({ oldContextuals: newContextuals });
@@ -156,8 +156,10 @@ class EditArtwork extends React.Component {
     new Promise(function(resolve, reject) {
       oldContextualsToDelete.forEach(deleteOldContextual);
     }).then(function(result) {
-      this.updateContextualDescription();
+      
     });
+
+    this.updateContextualDescription();
 
     if (contextImages.length > 0) {
       this.setState({
@@ -363,7 +365,7 @@ class EditArtwork extends React.Component {
       if (newDescription.length == 0) {
         continue;
       }
-      modifying.description = newDescription;
+      modifying.desc = newDescription;
       contexts[i] = modifying;
       this.setState({ oldContextuals: contexts });
 
@@ -631,7 +633,7 @@ class EditArtwork extends React.Component {
                           required
                           fullWidth
                           label="Description"
-                          defaultValue={obj.description}
+                          defaultValue={obj.desc}
                           name={`${i} desc`}
                           onChange={this.handleOldContextForm}
                         />
