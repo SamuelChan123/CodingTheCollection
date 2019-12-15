@@ -15,6 +15,11 @@ import { withFirebase } from "./Firebase";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/styles";
 
+/* All Projects page
+ * Authors: Sam Chan, Edward Zhuang, Will Ye
+ * This page lets users see the projects they created as well as projects shared with them
+ */
+
 const theme = createMuiTheme();
 
 const styles = {
