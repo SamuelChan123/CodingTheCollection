@@ -2,8 +2,9 @@
 
 ## Purpose
 
-Coding the Collection is a CS 408 (Delivering Software to Clients) project that our team is partnering with the Nasher Museum of Art to streamline, contexualize, and 
-create a better interactive experience for both visitors and curators.
+Coding the Collection is a CS 408 (Delivering Software to Clients) project that our team is partnering with the Nasher Museum of Art to develop a web-application which will help 
+highlight works of art which require a great deal of contextual information to fully appreciate. Users can upload images and descriptions of artworks along with relevant contextual
+media and organize them in "projects". Afterwards, they can view these projects in a visually pleasing "presentation mode". 
 
 ## Usage/Running the App
 
@@ -37,7 +38,7 @@ yarn start
 
 ## Deployment
 
-Our primary means of deployment is by starting a virtual cloud machine, downloading the repository, and running npm start or npm run build on the top level of this project. 
+We use Firebase for deployment. Please see "Installation Instructions" in doc/AppMaintenanceDocumentation.md for instructions.
 
 
 ## Team Members

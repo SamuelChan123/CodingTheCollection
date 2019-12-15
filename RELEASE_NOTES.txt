@@ -12,11 +12,10 @@ Project’s Current Functionality:
 - Deleting Artwork or contextual images functionality
 - About Page for project credentials
 - How It Works page with a video demonstration and instructions on how to use the platform
-- Sharing of projects with other users (but other users do not have share access)
+- Sharing of projects with other users
 
 Known Bugs:
 - Sometimes deleting contextual media or artworks does not delete the backend connection between artworks and contextual medias to be deleted, thus creating a front end React bug (essentially a null pointer). Hard to replicate but does happen sometimes
-- Presentation page can be a little bit finicky (sometimes contextual images/descriptions do not appear)
 
 Assumptions:
 - Assume that the user is generally able to navigate a basic web-based user interface
