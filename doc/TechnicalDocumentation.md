@@ -40,7 +40,7 @@
 
 # Design Justification for Primary Design Decisions
 
-## Issue: what frontend framework to use?
+### Issue: what frontend framework to use?
 
 - Choice: React
 - Justification: React is a popular framework with a lot of support, which will let our client continue work onour project after the semester ends.
@@ -50,7 +50,7 @@
 - Dependencies: N/A
 
 
-## Issue: what backend framework to use?
+### Issue: what backend framework to use?
 
 - Choice: No backend — just Firebase
 - Justification: Backend-wise, our app mostly just retrieves and stores data. There's no use for a production - backend since we don't need to modify the data.
@@ -60,7 +60,7 @@
 - Dependencies: Firebase can store all the information we need it to store
 
 
-## Issue: what method of application deployment did we use?
+### Issue: what method of application deployment did we use?
 
 - Choice: VCM (formerly heroku)
 - Justification: After encountering issues with heroku deployment due to Javascript heap out of memory issues, we switched our method of app deployment to a VCM.
@@ -69,7 +69,7 @@
 - Dependencies: CI/CD pipeline is not as straightforward with a VCM deployment as opposed to heroku (in heroku, just do git push heroku master to deploy, whereas for the VCM, we would need to pull from the master branch of the repo)
 
 
-## Issue: What styling?
+### Issue: What styling?
 
 - Choice: Nasher-themed. Material-UI react components. Custom carousel component.
 - Justification: Our app should match the aesthetic of the Nasher Museum. Using a pre-built component library allowed rapid feature implementation. No pre-built carousel components could be found that met our requirements, so a custom solution was utilized.
@@ -79,7 +79,7 @@
 - Dependencies: Material-UI
 
 
-## Issue: What type of application to build?
+### Issue: What type of application to build?
 
 - Choice: Web application
 - - Justification: We chose ultimately to pursue a web application primarily because most of us had more web application experience, and we believed that using a web application would be more scalable and applicable to a variety of use cases in the Nasher (for example, as display on exhibits, as well as used as a teaching tool by curators, browsing and uploading artworks to exhibits).
@@ -89,7 +89,7 @@
 - Dependencies: Quite obviously, this was a big design decision that ultimately very much impacted all the other decisions we took (for example styling, choice of front end and back end frame works, data storage, user authentication, etc.)
 
 
-## Issue: What type of user authentication would work the best?
+### Issue: What type of user authentication would work the best?
 
 - Choice: Sign in on via email and password
 - Justification: Our justification for signing on via email and password was that we wanted to build a minimal viable product that still preserved basic functionality of allowing users (curators) to store their particular projects as well as state and identity.
