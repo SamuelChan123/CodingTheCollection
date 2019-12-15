@@ -16,6 +16,11 @@ import { withAuthorization } from "./Session";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/styles";
 
+/* Project page
+ * Authors: Sam Chan, Edward Zhuang, Will Ye
+ * This page allows users to view, edit, delete and present a project they've created.
+ */
+
 const theme = createMuiTheme({
   palette: {
     primary: {
