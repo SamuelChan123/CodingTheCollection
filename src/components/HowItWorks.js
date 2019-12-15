@@ -91,8 +91,8 @@ class HowItWorks extends React.Component {
         >
           <h3>
             <Typography>
-              Currently, this is a placeholder video. A video explanation of how
-              to use this application will be uploaded soon!
+              This is an instructional video detailing the steps described
+              above.
             </Typography>
           </h3>
           <br />
