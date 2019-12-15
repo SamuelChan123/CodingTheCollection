@@ -1,8 +1,9 @@
 Coding the Collection: Central American Art
 
 Purpose:
-Coding the Collection is a CS 408 (Delivering Software to Clients) project that our team is partnering with the Nasher Museum of Art to streamline, contexualize, and 
-create a better interactive experience for both visitors and curators.
+Coding the Collection is a CS 408 (Delivering Software to Clients) project that our team is partnering with the Nasher Museum of Art to develop a web-application which will help 
+highlight works of art which require a great deal of contextual information to fully appreciate. Users can upload images and descriptions of artworks along with relevant contextual
+media and organize them in "projects". Afterwards, they can view these projects in a visually pleasing "presentation mode". 
 
 Usage/Running the App:
 Either npm or yarn is needed for this project. 
