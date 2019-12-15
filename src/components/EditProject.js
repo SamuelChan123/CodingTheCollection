@@ -14,6 +14,12 @@ import Copyright from "./Copyright";
 import BackButton from "./BackButton";
 import { withAuthorization } from "./Session";
 
+/*
+ * Edit Project page
+ * Author: Sam Chan
+ * This page allows users to edit their project information
+ */
+
 class EditProject extends React.Component {
   constructor(props) {
     super(props);
@@ -63,6 +69,7 @@ class EditProject extends React.Component {
     var projectId = this.projectId;
     var storage = this.storage;
 
+    // get project info
     this.projects
       .child(projectId)
       .once("value")
@@ -72,6 +79,7 @@ class EditProject extends React.Component {
           oldProjectImage: ""
         });
         if (project.val().image) {
+          // get image info
           storage
             .child(project.val().image)
             .getDownloadURL()
@@ -84,6 +92,7 @@ class EditProject extends React.Component {
       });
   }
 
+  // on submit button hit...
   onUpdate = e => {
     e.preventDefault();
     var fb = this.props.firebase;
@@ -92,6 +101,7 @@ class EditProject extends React.Component {
     this.setState({
       noError: this.state.projectName || this.state.projectImage
     });
+    // update project info in firebase
     if (this.state.projectName && this.state.projectImage) {
       var data = {
         name: this.state.projectName
@@ -265,7 +275,7 @@ class EditProject extends React.Component {
                   withIcon={true}
                   buttonText="Choose Cover Photo"
                   onChange={this.onDrop}
-                  imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                  imgExtension={[".jpg", ".gif", ".png", ".jpeg"]}
                   maxFileSize={5242880}
                 />
                 <div>

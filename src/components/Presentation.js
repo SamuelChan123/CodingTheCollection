@@ -16,6 +16,12 @@ import { withFirebase } from "./Firebase";
 import Fab from "@material-ui/core/Fab";
 import BackButton from "./BackButtonSmall";
 
+/*
+ * Presentation page
+ * Authors: Will Ye, Santo Grillo, Edward Zhuang
+ * This page is used for the presentation feature -- it shows the current project with artwork and contextual media to the museum visitor
+ */
+
 const drawerWidth = 240;
 const iconWidth = 45;
 
