@@ -24,7 +24,7 @@ class BackButton extends React.Component {
   };
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <div style={{ paddingBottom: 10 }}>
         <Button

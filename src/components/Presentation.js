@@ -159,16 +159,17 @@ class Presentation extends React.Component {
     let artInfoMap = new Map();
     let promises = [];
 
+    // get project info
     this.projects
       .child(this.projectId)
       .once("value")
       .then(project => {
         for (var artwork in project.val().artworks) {
+          // add info from each artwork
           promises.push(
             new Promise((resolve, reject) => {
               let contextualArt = [];
               var id = project.val().artworks[artwork].artId;
-              // console.log(id);
               getArtworks
                 .child(id)
                 .once("value")
@@ -186,14 +187,14 @@ class Presentation extends React.Component {
                         image: url,
                         description: art.val().description
                       });
-                      if (!getState().artId) {
+                      if (!getState().artId) { // if project already loaded artwork
                         setState({ artId: artworkTiles.id });
                       }
-                      if (getState().artId == artworkTiles.id) {
+                      if (getState().artId == artworkTiles.id) { // if it is the first artwork
                         setState({ artName: artworkTiles.name });
                       }
                       // console.log(art.val())
-                      if (getState().currentArtwork == null) {
+                      if (getState().currentArtwork == null) { // if artwork not loaded yet
                         setState({ currentArtwork: art.val() });
                       }
 
