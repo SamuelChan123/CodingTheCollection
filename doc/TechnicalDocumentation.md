@@ -62,11 +62,11 @@
 
 ### Issue: what method of application deployment did we use?
 
-- Choice: VCM (formerly heroku)
-- Justification: After encountering issues with heroku deployment due to Javascript heap out of memory issues, we switched our method of app deployment to a VCM.
-- Trade-offs: The domain name is no longer pretty (just an IP address) as compared to a herokuapp.com subdomain. Meanwhile, though, it seems to be a bit more stable as compared to heroku as we have not had much trouble hosting it there
-- Assumptions: We assumed that VCM was an easier platform to be able to push out our master branch features with less overhead
-- Dependencies: CI/CD pipeline is not as straightforward with a VCM deployment as opposed to heroku (in heroku, just do git push heroku master to deploy, whereas for the VCM, we would need to pull from the master branch of the repo)
+- Choice: Firebase Hosting (formerly heroku and VCM)
+- Justification: After encountering issues with heroku deployment and VCM deployment, we switched our method of app deployment to firebase hosting.
+- Trade-offs: The domain name is more stable and the hosting is less finicky as compared to heroku and VCM. Furthermore, the domain name is more straightforward than an IP address.
+- Assumptions: We assumed that firebase hosting was an easier platform to be able to push out our master branch features with less overhead
+- Dependencies: CI/CD pipeline is not as straightforward with a firebase app deployment as opposed to heroku (in heroku, just do git push heroku master to deploy, whereas for the firebase app, we would need to pull from the master branch of the repo)
 
 
 ### Issue: What styling?
