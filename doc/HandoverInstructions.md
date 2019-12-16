@@ -1,0 +1,2 @@
+- For firebase pricing, check out [this link](https://firebase.google.com/pricing)
+- For instructions on how to upload your own youtube video, visit  [this link](https://www.wix.com/blog/2019/02/how-to-upload-video-youtube-guide/) using the provided email/password.
