@@ -8,3 +8,6 @@ These are the features we hope to implement in the future:
 - Designate privileges when sharing a project
 - Ability to crop images on upload
 - Deleting projects removes all corresponding artwork and contextual media
+- Potential use of duke storage instead of firebase
+- Send emails when project shared or forgotten passwords
+- Ability to present project without signing in
