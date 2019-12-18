@@ -7,9 +7,6 @@ To install and deploy the application, please follow these steps:
 - In the command line, type “npm update” and “npm install”.
 - Install Firebase CLI.
 - Follow the instructions in https://create-react-app.dev/docs/deployment/#firebase to deploy the application.
-  - NOTE: When signing in, use the following credentials: 
-  - Email: CodingTheCollection@gmail.com
-  - Password: CodingTheCollection1!
 - The deployed website will be available on https://codingthecollectionnasher.firebaseapp.com/.
 ## Changing non-programming components of the app:
 ### Database:
